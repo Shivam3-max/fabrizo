@@ -1,0 +1,60 @@
+<section class="hero" data-hero data-autoplay="{{ section.settings.autoplay }}" style="--hero-h: {{ section.settings.height }}px; --hero-h-m: {{ section.settings.height_mobile }}px" aria-roledescription="carousel" aria-label="Featured">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign b = block.settings
+      assign pi = b.image_n | minus: 1
+      assign im = b.image | default: b.image_product.images[pi]
+    -%}
+    <div class="hero__slide{% if forloop.first %} is-on{% endif %}" data-slide aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ section.blocks.size }}" {{ block.shopify_attributes }}>
+      {%- if im -%}
+        <img class="hero__img" style="--pos: {{ b.focal }}" src="{{ im | image_url: width: 1800 }}" srcset="{{ im | image_url: width: 800 }} 800w, {{ im | image_url: width: 1400 }} 1400w, {{ im | image_url: width: 2000 }} 2000w" sizes="100vw" alt="{{ im.alt | escape }}" width="{{ im.width }}" height="{{ im.height }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+      {%- endif -%}
+      <div class="hero__shade"></div>
+      <div class="page-width" style="height:100%">
+        <div class="hero__content">
+          {%- if b.badge != blank -%}<span class="hero__badge">{{ b.badge }}</span>{%- endif -%}
+          {%- if forloop.first -%}<h1 class="hero__title">{{ b.title }}</h1>{%- else -%}<h2 class="hero__title">{{ b.title }}</h2>{%- endif -%}
+          {%- if b.text != blank -%}<p class="hero__text">{{ b.text }}</p>{%- endif -%}
+          <div class="hero__ctas">
+            {%- if b.btn1 != blank -%}<a href="{{ b.btn1_link }}" class="btn {% if b.btn1_red %}btn--accent{% else %}btn--light{% endif %}">{{ b.btn1 }}</a>{%- endif -%}
+            {%- if b.btn2 != blank -%}<a href="{{ b.btn2_link }}" class="btn btn--ghost-light">{{ b.btn2 }}</a>{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endfor -%}
+  {%- if section.blocks.size > 1 -%}
+    <div class="hero__arrows">
+      <button type="button" class="hero__arrow" data-hero-prev aria-label="Previous slide">{% render 'icon', name: 'chev-left' %}</button>
+      <button type="button" class="hero__arrow" data-hero-next aria-label="Next slide">{% render 'icon', name: 'chev-right' %}</button>
+    </div>
+    <div class="hero__dots">{%- for block in section.blocks -%}<button type="button" class="hero__dot{% if forloop.first %} is-on{% endif %}" data-hero-dot="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>{%- endfor -%}</div>
+  {%- endif -%}
+</section>
+{% schema %}
+{
+  "name": "Hero slider",
+  "settings": [
+    { "type": "range", "id": "height", "label": "Height (desktop)", "min": 380, "max": 760, "step": 4, "unit": "px", "default": 512 },
+    { "type": "range", "id": "height_mobile", "label": "Height (mobile)", "min": 380, "max": 720, "step": 4, "unit": "px", "default": 560 },
+    { "type": "range", "id": "autoplay", "label": "Autoplay seconds (0 = off)", "min": 0, "max": 10, "step": 1, "default": 6 }
+  ],
+  "blocks": [
+    { "type": "slide", "name": "Slide", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image", "info": "2000 x 900 or wider. Subject on the right." },
+      { "type": "product", "id": "image_product", "label": "Or use a product photo", "info": "Used when no image is uploaded" },
+      { "type": "range", "id": "image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 1 },
+      { "type": "select", "id": "focal", "label": "Image focus", "default": "center", "options": [ { "value": "left center", "label": "Left" }, { "value": "center", "label": "Centre" }, { "value": "right center", "label": "Right" }, { "value": "center top", "label": "Top" } ] },
+      { "type": "text", "id": "badge", "label": "Badge", "default": "New drop" },
+      { "type": "text", "id": "title", "label": "Heading", "default": "Wear the mood" },
+      { "type": "text", "id": "text", "label": "Text" },
+      { "type": "text", "id": "btn1", "label": "Button 1", "default": "Shop now" },
+      { "type": "url", "id": "btn1_link", "label": "Button 1 link" },
+      { "type": "checkbox", "id": "btn1_red", "label": "Button 1 red", "default": false },
+      { "type": "text", "id": "btn2", "label": "Button 2" },
+      { "type": "url", "id": "btn2_link", "label": "Button 2 link" }
+    ] }
+  ],
+  "presets": [ { "name": "Hero slider", "blocks": [ { "type": "slide" } ] } ]
+}
+{% endschema %}

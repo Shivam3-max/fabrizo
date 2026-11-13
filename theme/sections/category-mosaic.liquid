@@ -1,0 +1,56 @@
+<section class="section">
+  <div class="page-width">
+    <div class="sec-head"><h2 class="h-sec">{{ section.settings.title }}</h2></div>
+    <div class="mosaic">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign col = block.settings.collection
+          assign pi = block.settings.image_n | minus: 1
+          assign im = block.settings.image | default: block.settings.image_product.images[pi] | default: col.image | default: col.products.first.featured_image
+          assign label = block.settings.label | default: col.title
+          assign cls = ''
+          if forloop.first
+            assign cls = 'mosaic__tile--big'
+          endif
+          if block.type == 'feature'
+            assign cls = 'mosaic__tile--feature'
+          endif
+        -%}
+        <a class="mosaic__tile {{ cls }}" href="{{ block.settings.link | default: col.url }}" {{ block.shopify_attributes }}>
+          {%- if im -%}<img src="{{ im | image_url: width: 900 }}" srcset="{{ im | image_url: width: 500 }} 500w, {{ im | image_url: width: 900 }} 900w" sizes="(min-width: 990px) 33vw, 50vw" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}
+          {%- if block.type == 'feature' -%}
+            <span class="mosaic__feature-text"><span class="k">{{ block.settings.kicker }}</span><br><span class="t">{{ label }}</span>{% if block.settings.bottom != blank %}<br><span class="btn btn--light btn--sm" style="margin-top:14px">{{ block.settings.bottom }}</span>{% endif %}</span>
+          {%- endif -%}
+          <span class="mosaic__label">{% if block.type == 'feature' %}{% else %}{{ label }}{% if col.products_count > 0 %}<small>{{ col.products_count }} styles</small>{% endif %}{% endif %}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Category mosaic",
+  "settings": [ { "type": "text", "id": "title", "label": "Heading", "default": "Shop by category" } ],
+  "blocks": [
+    { "type": "tile", "name": "Tile", "settings": [
+      { "type": "collection", "id": "collection", "label": "Collection" },
+      { "type": "text", "id": "label", "label": "Label" },
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "product", "id": "image_product", "label": "Or use a product photo", "info": "Used when no image is uploaded" },
+      { "type": "range", "id": "image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 1 },
+      { "type": "url", "id": "link", "label": "Link override" }
+    ] },
+    { "type": "feature", "name": "Feature tile", "limit": 1, "settings": [
+      { "type": "text", "id": "kicker", "label": "Kicker", "default": "Design your own" },
+      { "type": "text", "id": "label", "label": "Big label", "default": "Custom Print" },
+      { "type": "text", "id": "bottom", "label": "Bottom label", "default": "Start designing" },
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "product", "id": "image_product", "label": "Or use a product photo", "info": "Used when no image is uploaded" },
+      { "type": "range", "id": "image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 1 },
+      { "type": "url", "id": "link", "label": "Link" }
+    ] }
+  ],
+  "max_blocks": 6,
+  "presets": [ { "name": "Category mosaic" } ]
+}
+{% endschema %}

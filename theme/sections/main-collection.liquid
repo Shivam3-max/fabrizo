@@ -1,0 +1,178 @@
+{%- comment -%}
+  Collection page matched to the reference: "Refine by" sidebar with search-within,
+  accordions (Shopify storefront filters), title, a category thumbnail strip,
+  breadcrumb, sort + grid density, product grid with a promo tile.
+  Fabrizo extra: an "Anime" filter (product metafield fabrizo.universe) and
+  universe badges on every card.
+{%- endcomment -%}
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+  assign active_count = 0
+  for f in collection.filters
+    assign active_count = active_count | plus: f.active_values.size
+    if f.type == 'price_range' and f.min_value.value != nil or f.max_value.value != nil
+      assign active_count = active_count | plus: 1
+    endif
+  endfor
+  assign strip = section.settings.strip_menu
+-%}
+{%- paginate collection.products by section.settings.per_page -%}
+<div class="page-width coll">
+  <aside class="coll__side" data-coll-side aria-label="Filters">
+    <div class="coll__refine"><span>Refine by</span><small>{{ collection.products_count }} styles</small></div>
+    <button type="button" class="hdr__icon coll__close" data-close-filters aria-label="Close filters">{% render 'icon', name: 'close' %}</button>
+    <div class="coll__find">{% render 'icon', name: 'search' %}<input type="search" placeholder="Search within {{ collection.title | escape }}" aria-label="Search within this collection" data-coll-find></div>
+    <form action="{{ collection.url }}" method="get" data-filter-form>
+      {%- for f in collection.filters -%}
+        {%- assign lab = f.label | downcase -%}
+        <details class="facet"{% if f.active_values.size > 0 or forloop.index <= section.settings.open_filters %} open{% endif %}>
+          <summary>{{ f.label }}{% if f.active_values.size > 0 %}<span class="facet__count">{{ f.active_values.size }}</span>{% endif %}</summary>
+          {%- case f.type -%}
+            {%- when 'price_range' -%}
+              <div class="facet__list">
+                <div style="display:flex;gap:6px">
+                  <input class="field" style="width:50%;height:34px;border:1px solid var(--line);padding:0 8px" type="number" name="{{ f.min_value.param_name }}" value="{{ f.min_value.value | money_without_currency | remove: ',' }}" placeholder="0" aria-label="Min price">
+                  <input class="field" style="width:50%;height:34px;border:1px solid var(--line);padding:0 8px" type="number" name="{{ f.max_value.param_name }}" value="{{ f.max_value.value | money_without_currency | remove: ',' }}" placeholder="{{ f.range_max | money_without_currency | remove: ',' }}" aria-label="Max price">
+                </div>
+                <button class="btn btn--sm" style="margin-top:8px" type="submit">Apply</button>
+              </div>
+            {%- else -%}
+              {%- if lab contains 'size' -%}
+                <div class="facet__sizes">
+                  {%- for v in f.values -%}<a class="facet__size{% if v.active %} is-on{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}" rel="nofollow">{{ v.label }}</a>{%- endfor -%}
+                </div>
+              {%- elsif lab contains 'colo' -%}
+                <div class="facet__colors">
+                  {%- for v in f.values -%}
+                    <a class="facet__opt{% if v.active %} is-on{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}" rel="nofollow"><span class="swatch-dot" style="--sw: {% render 'swatch-color', name: v.label %}"></span>{{ v.label }}</a>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="facet__list">
+                  {%- for v in f.values -%}
+                    {%- assign uni_acc = '' -%}
+                    {%- if lab contains 'anime' -%}{%- assign vh = v.label | handleize -%}{%- capture uni_acc -%}{% render 'uni', handle: vh, get: 'accent' %}{%- endcapture -%}{%- endif -%}
+                    <a class="facet__opt{% if v.active %} is-on{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}" rel="nofollow">
+                      <span class="facet__box"></span>{% if uni_acc != blank %}<span class="uni-dot" style="--uni: {{ uni_acc }}"></span>{% endif %}{{ v.label }}<small>{{ v.count }}</small>
+                    </a>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        </details>
+      {%- endfor -%}
+    </form>
+    {%- if active_count > 0 -%}<a class="coll__clear" href="{{ collection.url }}{% if collection.sort_by != blank %}?sort_by={{ collection.sort_by }}{% endif %}">Clear all</a>{%- endif -%}
+    {%- if section.settings.show_anime_side and anime_menu.links.size > 0 -%}
+      <details class="facet" open>
+        <summary>Shop by anime</summary>
+        <div class="facet__list">
+          {%- for u in anime_menu.links -%}
+            <a class="facet__opt" href="{{ u.url }}"><span class="uni-dot" style="--uni: {% render 'uni', handle: u.object.handle, get: 'accent', collection: u.object %}"></span>{{ u.title }}<small>{{ u.object.products_count }}</small></a>
+          {%- endfor -%}
+        </div>
+      </details>
+    {%- endif -%}
+  </aside>
+
+  <div style="min-width:0">
+    {%- if section.settings.show_title -%}
+      <h1 class="coll__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank and section.settings.show_desc -%}<div class="coll__desc">{{ collection.description | strip_html | truncate: 180 }}</div>{%- endif -%}
+    {%- endif -%}
+    {%- if strip.links.size > 0 -%}
+      <nav class="coll__strip" aria-label="Categories">
+        {%- for l in strip.links -%}
+          {%- assign im = l.object.image | default: l.object.products.first.featured_image -%}
+          {%- capture kk -%}{% render 'uni', handle: l.object.handle, get: 'kanji' %}{%- endcapture -%}
+          <a href="{{ l.url }}" class="{% if l.url == collection.url %}is-current{% endif %}" style="--uni: {% render 'uni', handle: l.object.handle, get: 'accent' %}">
+            <span class="coll__strip-img">{%- if im -%}<img src="{{ im | image_url: width: 240 }}" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}{%- if kk != blank -%}<span class="coll__strip-k" aria-hidden="true">{{ kk }}</span>{%- endif -%}</span>
+            {{ l.title }}
+          </a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
+    <div class="coll__toolbar">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/collections/all">Shop</a><span>›</span><span aria-current="page">{{ collection.title }}</span></nav>
+      <div class="coll__tools">
+        <button type="button" class="pill coll__filterbtn" data-open-filters>{% render 'icon', name: 'filter', class: 'ico--sm' %} Filter{% if active_count > 0 %} ({{ active_count }}){% endif %}</button>
+        <label class="coll__sort">Sort
+          <select data-sort aria-label="Sort by">
+            {%- for o in collection.sort_options -%}<option value="{{ o.value }}"{% if o.value == collection.sort_by %} selected{% endif %}>{{ o.name }}</option>{%- endfor -%}
+          </select>
+        </label>
+        <div class="coll__density" role="group" aria-label="Grid size">
+          <button type="button" data-density="2" aria-label="2 per row">{% render 'icon', name: 'grid2', class: 'ico--sm' %}</button>
+          <button type="button" data-density="3" class="{% if section.settings.cols == 3 %}is-on{% endif %}" aria-label="3 per row">{% render 'icon', name: 'grid3', class: 'ico--sm' %}</button>
+          <button type="button" data-density="4" class="{% if section.settings.cols == 4 %}is-on{% endif %}" aria-label="4 per row">{% render 'icon', name: 'grid4', class: 'ico--sm' %}</button>
+        </div>
+      </div>
+    </div>
+
+    {%- if active_count > 0 -%}
+      <div class="coll__chips">
+        {%- for f in collection.filters -%}{%- for v in f.active_values -%}<a href="{{ v.url_to_remove }}" rel="nofollow">{{ v.label }} {% render 'icon', name: 'close', class: 'ico--sm' %}</a>{%- endfor -%}{%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if collection.products.size == 0 -%}
+      <div class="coll__empty">
+        <h3>No styles match</h3>
+        <p class="sub">Try removing a filter, or jump into an anime.</p>
+        <div class="srch__chips" style="justify-content:center;margin-top:16px">{%- for u in anime_menu.links limit: 6 -%}<a class="pill" href="{{ u.url }}">{{ u.title }}</a>{%- endfor -%}</div>
+      </div>
+    {%- else -%}
+      <div class="grid" data-coll-grid style="--cols: {{ section.settings.cols }}">
+        {%- for p in collection.products -%}
+          {%- if forloop.index == section.settings.promo_after and section.settings.promo_title != blank -%}
+            {%- assign pi = section.settings.promo_image_n | minus: 1 -%}
+            {%- assign pim = section.settings.promo_image | default: section.settings.promo_product.images[pi] -%}
+            <a class="coll__promo" href="{{ section.settings.promo_link }}">
+              {%- if pim -%}<img src="{{ pim | image_url: width: 900 }}" alt="" loading="lazy" width="{{ pim.width }}" height="{{ pim.height }}">{%- endif -%}
+              <h3>{{ section.settings.promo_title }}</h3>
+              <p>{{ section.settings.promo_text }}</p>
+              <span class="btn btn--light btn--sm">{{ section.settings.promo_btn }}</span>
+            </a>
+          {%- endif -%}
+          {%- assign eager = false -%}{%- if forloop.index <= 4 -%}{%- assign eager = true -%}{%- endif -%}
+          {% render 'product-card', product: p, eager: eager %}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="ptabs__more" aria-label="Pagination" style="display:flex;gap:8px;justify-content:center">
+          {%- if paginate.previous -%}<a class="btn btn--outline btn--sm" href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+          <span class="pill">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+          {%- if paginate.next -%}<a class="btn btn--sm" href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+{%- endpaginate -%}
+{% schema %}
+{
+  "name": "Collection grid",
+  "settings": [
+    { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
+    { "type": "checkbox", "id": "show_desc", "label": "Show description", "default": true },
+    { "type": "link_list", "id": "strip_menu", "label": "Thumbnail strip menu", "info": "Collections shown as image thumbnails above the grid" },
+    { "type": "range", "id": "cols", "label": "Columns", "min": 3, "max": 4, "step": 1, "default": 4 },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 36 },
+    { "type": "range", "id": "open_filters", "label": "Filters open by default", "min": 0, "max": 6, "step": 1, "default": 3 },
+    { "type": "checkbox", "id": "show_anime_side", "label": "Show \"Shop by anime\" in sidebar", "default": true },
+    { "type": "header", "content": "Promo tile" },
+    { "type": "range", "id": "promo_after", "label": "Insert before product number", "min": 3, "max": 24, "step": 1, "default": 7 },
+    { "type": "text", "id": "promo_title", "label": "Title", "default": "Design your own" },
+    { "type": "text", "id": "promo_text", "label": "Text", "default": "Your art, your name, your anime. Printed in Dubai from AED 39." },
+    { "type": "text", "id": "promo_btn", "label": "Button", "default": "Custom print" },
+    { "type": "url", "id": "promo_link", "label": "Link", "default": "/pages/customize-your-print" },
+    { "type": "image_picker", "id": "promo_image", "label": "Image" },
+    { "type": "product", "id": "promo_product", "label": "Or use a product photo" },
+    { "type": "range", "id": "promo_image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 1 }
+  ]
+}
+{% endschema %}

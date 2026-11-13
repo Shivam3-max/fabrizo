@@ -1,0 +1,50 @@
+{%- comment -%}
+  FABRIZO signature: "Pick your anime". One tile per anime universe (from the
+  anime menu), each in its own colour with its Japanese title and design count,
+  then a row of character shortcuts. Add an anime = add its collection to the menu.
+{%- endcomment -%}
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+-%}
+{%- assign m = section.settings.menu | default: anime_menu -%}
+<section class="section{% if section.settings.tight %} section--tight{% endif %}" id="anime">
+  <div class="page-width">
+    <div class="sec-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="h-sec h-sec--lg">{{ section.settings.title }}</h2>
+        {%- if section.settings.text != blank -%}<p class="sub">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+      {%- if section.settings.link != blank -%}<a class="sec-head__link" href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>{%- endif -%}
+    </div>
+    <div class="uni-hub__rail" style="--cols: {{ m.links.size | at_most: 9 }}">
+      {%- for u in m.links -%}{% render 'uni-tile', link: u %}{%- endfor -%}
+    </div>
+    {%- assign cm = section.settings.characters -%}
+    {%- if cm.links.size > 0 -%}
+      <div class="uni-hub__chars">
+        <span class="uni-hub__chars-label">Shop by character</span>
+        {%- for c in cm.links -%}<a class="char-chip char-chip--plain" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Anime universes",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Anime universe" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Pick your anime" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Every anime has its own home. Tap one to see all its designs." },
+    { "type": "link_list", "id": "menu", "label": "Anime menu", "info": "Defaults to the theme's anime universes menu" },
+    { "type": "link_list", "id": "characters", "label": "Characters menu", "default": "anime-characters" },
+    { "type": "url", "id": "link", "label": "Link", "default": "/pages/anime" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "All anime" },
+    { "type": "checkbox", "id": "tight", "label": "Less spacing", "default": false }
+  ],
+  "presets": [ { "name": "Anime universes" } ]
+}
+{% endschema %}

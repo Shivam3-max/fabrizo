@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "hero": { "type": "collection-anime-hero", "settings": { "eyebrow": "Anime universe", "switcher": false } },
+    "main": { "type": "main-collection", "settings": { "show_title": false, "cols": 4, "show_anime_side": false, "promo_product": "custom-print-oversized-t-shirt", "promo_image_n": 1, "promo_title": "Your anime, your design", "promo_text": "Want a character we don't have yet? Send it on WhatsApp and we print it.", "promo_btn": "Custom print" } },
+    "more": { "type": "anime-universes", "settings": { "eyebrow": "Keep exploring", "title": "More anime", "text": "", "characters": "anime-characters", "tight": true } }
+  },
+  "order": ["hero", "main", "more"]
+}

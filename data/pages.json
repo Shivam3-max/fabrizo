@@ -1,0 +1,31 @@
+{
+  "anime": {
+    "title": "Anime",
+    "template": "page.anime"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "template": "page.reviews"
+  },
+  "about-us": {
+    "title": "About us",
+    "template": "page.about"
+  },
+  "contact": {
+    "title": "Contact us",
+    "template": "page.contact"
+  },
+  "faq": {
+    "title": "FAQs",
+    "template": "page.faq"
+  },
+  "size-guide": {
+    "title": "Size guide",
+    "template": "page.size-guide",
+    "content": "<p><b>Placeholder.</b> Paste FABRIZO's real size chart into the Shopify page “Size guide” and it appears here and in every product's size drawer.</p><table class=\"size-table\"><thead><tr><th>Size</th><th>Oversized chest</th><th>Oversized length</th><th>Regular chest</th><th>Regular length</th></tr></thead><tbody><tr><td>XS</td><td>–</td><td>–</td><td>–</td><td>–</td></tr><tr><td>S</td><td>–</td><td>–</td><td>–</td><td>–</td></tr><tr><td>M</td><td>–</td><td>–</td><td>–</td><td>–</td></tr><tr><td>L</td><td>–</td><td>–</td><td>–</td><td>–</td></tr><tr><td>XL</td><td>–</td><td>–</td><td>–</td><td>–</td></tr><tr><td>2XL</td><td>–</td><td>–</td><td>–</td><td>–</td></tr><tr><td>3XL</td><td>–</td><td>–</td><td>–</td><td>–</td></tr></tbody></table><p>Between sizes? Send your height and weight on WhatsApp and we’ll recommend one.</p>"
+  },
+  "customize-your-print": {
+    "title": "Custom Print",
+    "template": "page.custom-print"
+  }
+}

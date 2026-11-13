@@ -1,0 +1,116 @@
+{%- comment -%}
+  Product card, matched to the reference: 4:5 media with hover image, sale %
+  badge, wishlist heart, size quick-add on hover, red sale price + strike,
+  colour dots. Fabrizo extra: the anime universe label in its own colour.
+  Params: product, show_uni (default true), sizes (default true), eager
+{%- endcomment -%}
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  assign img1 = product.featured_media.preview_image | default: product.featured_image
+  assign img2 = product.media[1].preview_image | default: product.images[1]
+  assign size_index = nil
+  assign color_index = nil
+  assign fit_index = nil
+  for o in product.options_with_values
+    assign n = o.name | downcase
+    if n contains 'size'
+      assign size_index = forloop.index0
+    elsif n contains 'colo'
+      assign color_index = forloop.index0
+    elsif n contains 'fit' or n contains 'type' or n contains 'length'
+      assign fit_index = forloop.index0
+    endif
+  endfor
+  assign uni = ''
+  if show_uni != false
+    capture uni
+      render 'product-universe', product: product
+    endcapture
+  endif
+  assign uni_parts = uni | split: '|'
+  assign is_new = false
+  assign created = product.created_at | date: '%s' | plus: 0
+  assign now_s = 'now' | date: '%s' | plus: 0
+  assign age_days = now_s | minus: created | divided_by: 86400
+  if age_days < 21
+    assign is_new = true
+  endif
+  assign cp = v.compare_at_price
+  assign on_sale = false
+  if cp > v.price
+    assign on_sale = true
+    assign off = cp | minus: v.price | times: 100 | divided_by: cp | floor
+  endif
+-%}
+{%- if uni != blank -%}{%- capture uni_accent -%}{% render 'uni', handle: uni_parts[0], get: 'accent' %}{%- endcapture -%}{%- endif -%}
+<div class="card" data-card data-handle="{{ product.handle }}"{% if uni != blank %} style="--uni: {{ uni_accent }}"{% endif %}>
+  <div class="card__top">
+  <a href="{{ product.url }}" class="card__media" aria-label="{% render 'short-title', title: product.title %}">
+    {%- if img1 -%}
+      <img class="card__img1{% if img2 %} has-alt{% endif %}" src="{{ img1 | image_url: width: 600 }}"
+        srcset="{{ img1 | image_url: width: 360 }} 360w, {{ img1 | image_url: width: 600 }} 600w, {{ img1 | image_url: width: 900 }} 900w"
+        sizes="(min-width: 990px) 25vw, 50vw" alt="{{ img1.alt | default: product.title | escape }}" width="{{ img1.width }}" height="{{ img1.height }}" {% if eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+      {%- if img2 -%}
+        <img class="card__img2" src="{{ img2 | image_url: width: 600 }}" srcset="{{ img2 | image_url: width: 360 }} 360w, {{ img2 | image_url: width: 600 }} 600w" sizes="(min-width: 990px) 25vw, 50vw" alt="" loading="lazy" width="{{ img2.width }}" height="{{ img2.height }}">
+      {%- endif -%}
+    {%- endif -%}
+  </a>
+  <div class="card__badges">
+    {%- if product.available == false -%}<span class="badge badge--soldout">Sold out</span>
+    {%- elsif on_sale -%}<span class="badge badge--sale">-{{ off }}% off</span>{%- endif -%}
+    {%- if is_new and product.available -%}<span class="badge">New</span>{%- endif -%}
+    {%- if product.tags contains 'Limited Edition' -%}<span class="badge">Limited</span>{%- endif -%}
+  </div>
+  {%- if sizes != false and size_index != nil and product.available -%}<button type="button" class="card__bag" data-quick-toggle aria-label="Choose a size">{% render 'icon', name: 'bag', class: 'ico--sm' %}</button>{%- endif -%}
+  {%- if sizes != false and size_index != nil and product.available -%}
+    {%- assign size_opt = product.options_with_values[size_index] -%}
+    <div class="card__quick" data-quick>
+      <div class="card__quick-label"><span>Select size</span>{% if fit_index != nil %}<span>{{ v.options[fit_index] | split: ' ' | first }}</span>{% endif %}</div>
+      <div class="card__sizes">
+        {%- for s in size_opt.values -%}
+          {%- liquid
+            assign match = nil
+            for x in product.variants
+              if x.options[size_index] == s
+                assign ok = true
+                if color_index != nil and x.options[color_index] != v.options[color_index]
+                  assign ok = false
+                endif
+                if fit_index != nil and x.options[fit_index] != v.options[fit_index]
+                  assign ok = false
+                endif
+                if ok
+                  assign match = x
+                  break
+                endif
+              endif
+            endfor
+          -%}
+          {%- if match -%}
+            <button type="button" class="card__size" data-add="{{ match.id }}" {% unless match.available %}disabled{% endunless %} aria-label="Add size {{ s }} to bag">{{ s }}</button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+  </div>
+  <div class="card__info">
+    {%- if uni != blank -%}
+      <a class="card__uni" href="{{ uni_parts[2] }}"><span class="uni-dot"></span>{{ uni_parts[1] }}</a>
+    {%- endif -%}
+    <div class="card__row">
+      <a href="{{ product.url }}" class="card__title">{% render 'short-title', title: product.title %}</a>
+      <button type="button" class="card__wish" aria-pressed="false" aria-label="Add to wishlist" data-wish="{{ product.handle }}">{% render 'icon', name: 'heart', class: 'ico--sm' %}</button>
+    </div>
+    {%- render 'price', product: product, variant: v -%}
+    {%- if color_index != nil -%}
+      {%- assign colors = product.options_with_values[color_index].values -%}
+      {%- if colors.size > 1 -%}
+        <div class="card__swatches" aria-label="{{ colors.size }} colours">
+          {%- for c in colors limit: 5 -%}<span class="swatch-dot" title="{{ c | escape }}" style="--sw: {% render 'swatch-color', name: c %}"></span>{%- endfor -%}
+          {%- if colors.size > 5 -%}<span class="card__swatches-more">+{{ colors.size | minus: 5 }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

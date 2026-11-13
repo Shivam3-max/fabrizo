@@ -1,0 +1,45 @@
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+-%}
+<div class="srch" data-drawer="search" aria-hidden="true" role="dialog" aria-label="Search">
+  <form action="{{ routes.search_url }}" method="get" role="search" class="page-width srch__bar">
+    {% render 'icon', name: 'search' %}
+    <input type="search" name="q" placeholder="Search anime, characters, designs…" aria-label="Search" autocomplete="off" data-search-input>
+    <input type="hidden" name="type" value="product">
+    <button type="button" class="hdr__icon" data-close aria-label="Close search">{% render 'icon', name: 'close' %}</button>
+  </form>
+  <div class="page-width srch__body">
+    <div>
+      <p class="srch__h">Anime</p>
+      <div class="srch__chips" data-search-chips>
+        {%- for u in anime_menu.links -%}
+          <a class="pill pill--uni" style="--uni: {% render 'uni', handle: u.object.handle, get: 'accent', collection: u.object %}" href="{{ u.url }}"><span class="uni-dot"></span>{{ u.title }}</a>
+        {%- endfor -%}
+      </div>
+      <p class="srch__h" style="margin-top:22px">Characters</p>
+      <div class="srch__chips">
+        {%- for c in linklists['anime-characters'].links limit: 10 -%}<a class="pill" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
+      </div>
+      <p class="srch__h" style="margin-top:22px">Popular</p>
+      <div class="srch__chips">
+        {%- assign pops = settings.popular_searches | split: ',' -%}{%- for q in pops -%}<a class="pill" href="{{ routes.search_url }}?q={{ q | strip | url_encode }}&type=product">{{ q | strip }}</a>{%- endfor -%}
+      </div>
+    </div>
+    <div>
+      <p class="srch__h" data-search-heading>Trending now</p>
+      <div class="srch__res" data-search-results>
+        {%- assign trend = settings.search_trending_collection.products | default: collections[settings.search_trending_collection].products -%}
+        {%- for p in trend limit: 6 -%}
+          <a class="srch__item" href="{{ p.url }}">
+            {%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 160 }}" alt="" loading="lazy" width="56" height="70">{%- endif -%}
+            <span><b>{% render 'short-title', title: p.title %}</b>{% render 'price', product: p %}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+      <a class="sec-head__link srch__all" href="{{ routes.search_url }}" data-search-all hidden>See all results</a>
+    </div>
+  </div>
+</div>

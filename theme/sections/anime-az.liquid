@@ -1,0 +1,38 @@
+{%- comment -%} Anime hub: every universe as a row card (image, Japanese title, count, characters). {%- endcomment -%}
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+-%}
+<section class="section">
+  <div class="page-width">
+    <div class="sec-head"><h2 class="h-sec">{{ section.settings.title }}</h2></div>
+    <div class="az">
+      {%- for u in anime_menu.links -%}
+        {%- liquid
+          assign col = u.object
+          capture acc
+            render 'uni', handle: col.handle, get: 'accent', collection: col
+          endcapture
+          capture kj
+            render 'uni', handle: col.handle, get: 'kanji', collection: col
+          endcapture
+          capture chs
+            render 'uni', handle: col.handle, get: 'chars', collection: col
+          endcapture
+          assign im = col.image | default: col.products.first.featured_image
+        -%}
+        <a class="az__item" href="{{ u.url }}" style="--uni: {{ acc }}">
+          <span class="az__img">{%- if im -%}<img src="{{ im | image_url: width: 240 }}" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}</span>
+          <span>
+            <span class="az__t">{{ u.title }}</span>
+            <span class="az__k" style="display:block">{{ kj }}</span>
+            <span class="az__c" style="display:block">{{ col.products_count }} designs{% if chs != blank %} · {{ chs | replace: ',', ', ' }}{% endif %}</span>
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}{ "name": "Anime A–Z", "settings": [ { "type": "text", "id": "title", "label": "Heading", "default": "Every anime, A to Z" } ], "presets": [ { "name": "Anime A–Z" } ] }{% endschema %}

@@ -1,0 +1,47 @@
+<section class="section" data-ptabs>
+  <div class="page-width">
+    <div class="sec-head" style="margin-bottom:0">
+      <h2 class="h-sec h-sec--lg">{{ section.settings.title }}</h2>
+    </div>
+    <div class="ptabs__bar">
+      <div class="ptabs__list" role="tablist">
+        {%- for block in section.blocks -%}
+          {%- assign col = block.settings.collection -%}
+          {%- capture acc -%}{% render 'uni', handle: col.handle, get: 'accent', collection: col %}{%- endcapture -%}
+          <button type="button" role="tab" class="pill{% if block.settings.anime_colour %} pill--uni{% endif %}" style="--uni: {{ acc }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="pt-{{ section.id }}-{{ forloop.index }}" data-ptab="{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {%- if forloop.first -%}{% render 'icon', name: 'sparkle', class: 'ico--sm' %}{%- endif -%}{{ block.settings.label | default: col.title }}
+          </button>
+        {%- endfor -%}
+      </div>
+      <a class="sec-head__link" href="{{ section.blocks.first.settings.collection.url }}" data-ptab-all>View all</a>
+    </div>
+    {%- for block in section.blocks -%}
+      {%- assign col = block.settings.collection -%}
+      <div class="ptabs__panel" role="tabpanel" id="pt-{{ section.id }}-{{ forloop.index }}" data-ptab-panel="{{ forloop.index }}" data-url="{{ col.url }}" {% unless forloop.first %}hidden{% endunless %}>
+        <div class="grid" style="--cols: {{ section.settings.cols }}">
+          {%- for p in col.products limit: section.settings.limit -%}{% render 'product-card', product: p %}{%- endfor -%}
+        </div>
+      </div>
+    {%- endfor -%}
+    <div class="ptabs__more"><a class="btn" href="{{ section.blocks.first.settings.collection.url }}" data-ptab-all>Shop all</a></div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Product tabs",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "Shop the latest" },
+    { "type": "range", "id": "limit", "label": "Products per tab", "min": 4, "max": 24, "step": 4, "default": 8 },
+    { "type": "range", "id": "cols", "label": "Columns", "min": 3, "max": 5, "step": 1, "default": 4 }
+  ],
+  "blocks": [
+    { "type": "tab", "name": "Tab", "settings": [
+      { "type": "collection", "id": "collection", "label": "Collection" },
+      { "type": "text", "id": "label", "label": "Label" },
+      { "type": "checkbox", "id": "anime_colour", "label": "Use the anime's colour when active", "default": false }
+    ] }
+  ],
+  "max_blocks": 8,
+  "presets": [ { "name": "Product tabs" } ]
+}
+{% endschema %}

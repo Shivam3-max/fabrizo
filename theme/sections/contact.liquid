@@ -1,0 +1,23 @@
+<section class="section">
+  <div class="page-width contact-grid">
+    <div>
+      <h2 class="h-sec" style="margin-bottom:16px">{{ section.settings.title }}</h2>
+      {%- form 'contact' -%}
+        <div class="field"><label for="c-name">Name</label><input id="c-name" name="contact[name]" autocomplete="name"></div>
+        <div class="field"><label for="c-email">Email</label><input id="c-email" type="email" name="contact[email]" required autocomplete="email"></div>
+        <div class="field"><label for="c-phone">Phone / WhatsApp</label><input id="c-phone" type="tel" name="contact[phone]" autocomplete="tel"></div>
+        <div class="field"><label for="c-order">Order number (optional)</label><input id="c-order" name="contact[order]"></div>
+        <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="contact[body]" rows="5"></textarea></div>
+        <button class="btn" type="submit">Send</button>
+      {%- endform -%}
+    </div>
+    <div class="contact-card">
+      <h3 style="font-size:15px;text-transform:uppercase">Fastest: WhatsApp</h3>
+      <p class="sub" style="margin:0">{{ section.settings.text }}</p>
+      {%- if settings.whatsapp_number != blank -%}<a class="btn btn--accent" href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp', class: 'ico--sm' %} Chat on WhatsApp</a>{%- endif -%}
+      <p>Email: <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+      {%- if settings.social_instagram != blank -%}<p>Instagram: <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">@fabrizo_fashion</a></p>{%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}{ "name": "Contact", "settings": [ { "type": "text", "id": "title", "label": "Heading", "default": "Write to us" }, { "type": "textarea", "id": "text", "label": "WhatsApp text", "default": "Order tracking, size help and custom print quotes. Send your order number and we’ll reply." } ], "presets": [ { "name": "Contact" } ] }{% endschema %}

@@ -1,0 +1,77 @@
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+-%}
+<section class="news" aria-label="Newsletter">
+  <div class="page-width news__inner">
+    <div>
+      <h2 class="news__t">{{ section.settings.news_title }}</h2>
+      <p class="news__s">{{ section.settings.news_text }}</p>
+    </div>
+    {%- form 'customer', class: 'news__form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label class="visually-hidden" for="news-email">Email</label>
+      <input id="news-email" type="email" name="contact[email]" placeholder="Your email address" required autocomplete="email">
+      <button type="submit">Join</button>
+    {%- endform -%}
+  </div>
+</section>
+<footer class="foot">
+  <div class="page-width">
+    <div class="foot__grid">
+      <div class="foot__brand">
+        <a href="/" class="foot__logo">
+          {%- if section.settings.logo != blank -%}<img src="{{ section.settings.logo | image_url: width: 240 }}" alt="{{ shop.name }}" width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}">{%- else -%}Fabrizo{%- endif -%}
+        </a>
+        <p class="foot__about">{{ section.settings.about }}</p>
+        <div class="foot__social">
+          {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" aria-label="Instagram" target="_blank" rel="noopener">{% render 'icon', name: 'instagram', class: 'ico--sm' %}</a>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<a href="{{ settings.social_tiktok }}" aria-label="TikTok" target="_blank" rel="noopener">{% render 'icon', name: 'tiktok', class: 'ico--sm' %}</a>{%- endif -%}
+          {%- if settings.social_facebook != blank -%}<a href="{{ settings.social_facebook }}" aria-label="Facebook" target="_blank" rel="noopener">{% render 'icon', name: 'facebook', class: 'ico--sm' %}</a>{%- endif -%}
+        </div>
+        {%- if settings.whatsapp_number != blank -%}
+          <a class="btn btn--light btn--sm foot__wa" href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp', class: 'ico--sm' %} WhatsApp us</a>
+        {%- endif -%}
+      </div>
+      {%- assign menu_keys = 'menu_1,menu_2,menu_3,menu_4' | split: ',' -%}
+      {%- for key in menu_keys -%}
+        {%- assign m = section.settings[key] -%}
+        {%- if m.links.size > 0 -%}
+          <details class="foot__col" data-foot-acc open>
+            <summary><h4>{{ m.title }}</h4></summary>
+            {%- for l in m.links -%}
+              {%- assign is_uni = false -%}
+              {%- for u in anime_menu.links -%}{%- if u.url == l.url -%}{%- assign is_uni = true -%}{%- endif -%}{%- endfor -%}
+              <a href="{{ l.url }}">
+                {%- if is_uni -%}<span class="uni-dot" style="--uni: {% render 'uni', handle: l.object.handle, get: 'accent', collection: l.object %}"></span>{%- endif -%}
+                {{- l.title -}}
+              </a>
+            {%- endfor -%}
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="foot__bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}</span>
+      <div class="foot__pay" aria-label="Payment methods"><span>VISA</span><span>MC</span><span>AMEX</span><span>APPLE PAY</span>{% if settings.tabby_enabled %}<span>TABBY</span>{% endif %}<span>COD</span></div>
+    </div>
+  </div>
+</footer>
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "news_title", "label": "Newsletter title", "default": "Get drops first" },
+    { "type": "text", "id": "news_text", "label": "Newsletter text", "default": "Early access to new anime drops and members-only codes." },
+    { "type": "image_picker", "id": "logo", "label": "Footer logo (shown white)" },
+    { "type": "textarea", "id": "about", "label": "About line", "default": "Anime, Arabic calligraphy and streetwear tees, printed in Dubai. New designs every week." },
+    { "type": "link_list", "id": "menu_1", "label": "Column 1", "default": "footer-help" },
+    { "type": "link_list", "id": "menu_2", "label": "Column 2", "default": "footer-shop" },
+    { "type": "link_list", "id": "menu_3", "label": "Column 3", "default": "footer-anime" },
+    { "type": "link_list", "id": "menu_4", "label": "Column 4", "default": "footer-fabrizo" },
+    { "type": "text", "id": "copyright", "label": "Copyright line", "default": "Made in Dubai." }
+  ]
+}
+{% endschema %}

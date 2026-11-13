@@ -1,0 +1,79 @@
+{%- comment -%}
+  Anime collection hero (template collection.anime): the universe's colour,
+  Japanese title, stats and character shortcuts, then a sticky switcher so
+  shoppers can hop Naruto → Jujutsu Kaisen → One Piece without going back.
+{%- endcomment -%}
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+  assign h = collection.handle
+  capture accent
+    render 'uni', handle: h, get: 'accent', collection: collection
+  endcapture
+  capture kanji
+    render 'uni', handle: h, get: 'kanji', collection: collection
+  endcapture
+  capture line
+    render 'uni', handle: h, get: 'line', collection: collection
+  endcapture
+  capture chars
+    render 'uni', handle: h, get: 'chars', collection: collection
+  endcapture
+  assign min_price = collection.products.first.price
+  for p in collection.products
+    if p.price < min_price
+      assign min_price = p.price
+    endif
+  endfor
+  assign total = collection.all_products_count | default: collection.products_count
+-%}
+<section class="ahero" style="--uni: {{ accent }}">
+  <div class="ahero__bg" aria-hidden="true">
+    {%- for p in collection.products limit: 4 -%}{%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 500 }}" alt="" width="{{ p.featured_image.width }}" height="{{ p.featured_image.height }}" {% if forloop.first %}fetchpriority="high"{% endif %}>{%- endif -%}{%- endfor -%}
+  </div>
+  {%- if kanji != blank -%}<span class="ahero__kanji" aria-hidden="true">{{ kanji }}</span>{%- endif -%}
+  <div class="page-width ahero__inner">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="{{ section.settings.hub_url }}">Anime</a><span>/</span><span aria-current="page">{{ collection.title }}</span></nav>
+      <p class="ahero__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1 class="ahero__title">{{ collection.title }}</h1>
+      {%- if line != blank -%}<p class="ahero__line">{{ line }}</p>{%- endif -%}
+      <div class="ahero__meta">
+        <span><b>{{ total }}</b>{% if total == 1 %}design{% else %}designs{% endif %}</span>
+        {%- if min_price -%}<span><b>{{ min_price | money_without_trailing_zeros }}</b>from</span>{%- endif -%}
+        {%- assign ch = chars | split: ',' -%}
+        {%- if ch.size > 0 -%}<span><b>{{ ch.size }}</b>{% if ch.size == 1 %}character{% else %}characters{% endif %}</span>{%- endif -%}
+      </div>
+      {%- if chars != blank -%}
+        <div class="ahero__chars">
+          {%- for c in ch -%}<a href="{{ routes.search_url }}?q={{ c | strip | url_encode }}&type=product">{{ c | strip }}</a>{%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- if section.settings.switcher and anime_menu.links.size > 0 -%}
+<nav class="uni-switch" aria-label="Switch anime">
+  <div class="page-width uni-switch__row" data-uni-switch>
+    <span class="uni-switch__label">Switch anime</span>
+    <a class="pill{% if h == 'anime-collection' %} is-on{% endif %}" href="{{ section.settings.all_url }}">All anime</a>
+    {%- for u in anime_menu.links -%}
+      {%- capture a2 -%}{% render 'uni', handle: u.object.handle, get: 'accent', collection: u.object %}{%- endcapture -%}
+      <a class="pill pill--uni{% if u.object.handle == h %} is-on{% endif %}" style="--uni: {{ a2 }}" href="{{ u.url }}"{% if u.object.handle == h %} aria-current="page"{% endif %}><span class="uni-dot"></span>{{ u.title }}<span class="hdr__sublink-count">{{ u.object.products_count }}</span></a>
+    {%- endfor -%}
+  </div>
+</nav>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Anime collection hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Anime universe" },
+    { "type": "url", "id": "hub_url", "label": "Anime hub link", "default": "/pages/anime" },
+    { "type": "checkbox", "id": "switcher", "label": "Show sticky anime switcher", "default": true },
+    { "type": "url", "id": "all_url", "label": "\"All anime\" link", "default": "/collections/anime-collection" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+<section class="section">
+  <div class="page-width faq-list">
+    {%- if section.settings.title != blank -%}<h2 class="h-sec" style="margin-bottom:14px">{{ section.settings.title }}</h2>{%- endif -%}
+    {%- for block in section.blocks -%}
+      <details class="acc" {{ block.shopify_attributes }}><summary>{{ block.settings.q }}</summary><div class="acc__body">{{ block.settings.a }}</div></details>
+    {%- endfor -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "FAQ", "settings": [ { "type": "text", "id": "title", "label": "Heading", "default": "FAQs" } ],
+  "blocks": [ { "type": "qa", "name": "Question", "settings": [ { "type": "text", "id": "q", "label": "Question" }, { "type": "richtext", "id": "a", "label": "Answer" } ] } ],
+  "presets": [ { "name": "FAQ" } ] }
+{% endschema %}

@@ -1,0 +1,233 @@
+{%- comment -%}
+  Product page matched to the reference: vertical thumbs + main image with
+  arrows, title, red price + strike + %, instalment line, rotating bundle offer,
+  colour tiles, size buttons + size guide, fit tip, free-delivery bar, qty +
+  ADD TO BAG + wishlist, review snippet, order-by countdown, four trust icons,
+  accordions. Fabrizo extras: anime universe link above the title, WhatsApp
+  order button, option names normalised (Color/Colors/Colour, Size/Sizes, Fit/Type).
+{%- endcomment -%}
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  capture uni
+    render 'product-universe', product: product
+  endcapture
+  assign uni_parts = uni | split: '|'
+  if uni != blank
+    capture uni_accent
+      render 'uni', handle: uni_parts[0], get: 'accent'
+    endcapture
+  endif
+  assign crumb = product.collections.first
+  assign cp = v.compare_at_price
+  assign on_sale = false
+  if cp > v.price
+    assign on_sale = true
+    assign off = cp | minus: v.price | times: 100 | divided_by: cp | floor
+  endif
+  assign has_fit = false
+  for o in product.options_with_values
+    assign n = o.name | downcase
+    if n contains 'fit' or n contains 'type' or n contains 'length'
+      assign has_fit = true
+    endif
+  endfor
+  assign b1 = settings.offer_buy_1 | plus: settings.offer_free_1
+  assign b2 = settings.offer_buy_2 | plus: settings.offer_free_2
+  assign tees_price_1 = v.price | times: settings.offer_buy_1
+  assign tees_price_2 = v.price | times: settings.offer_buy_2
+  assign each_1 = tees_price_1 | divided_by: b1
+  assign each_2 = tees_price_2 | divided_by: b2
+-%}
+<div class="page-width pdp" data-pdp{% if uni != blank %} style="--uni: {{ uni_accent }}"{% endif %}>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a><span>/</span>
+    {%- if uni != blank -%}<a href="{{ section.settings.hub_url }}">Anime</a><span>/</span><a href="{{ uni_parts[2] }}">{{ uni_parts[1] }}</a>
+    {%- elsif crumb -%}<a href="{{ crumb.url }}">{{ crumb.title }}</a>{%- endif -%}
+    <span>/</span><span aria-current="page">{% render 'short-title', title: product.title %}</span>
+  </nav>
+
+  <div class="gal">
+    <div class="gal__thumbs" role="list">
+      {%- for m in product.media -%}
+        <button type="button" class="gal__thumb{% if forloop.first %} is-on{% endif %}" data-gal-thumb aria-label="Show image {{ forloop.index }}" role="listitem">
+          <img src="{{ m.preview_image | image_url: width: 140 }}" alt="" loading="lazy" width="64" height="80">
+        </button>
+      {%- endfor -%}
+    </div>
+    <div class="gal__main">
+      <div class="gal__track" data-gal-track>
+        {%- for m in product.media -%}
+          <div class="gal__slide" data-gal-slide>
+            <img src="{{ m.preview_image | image_url: width: 1100 }}" data-full="{{ m.preview_image | image_url }}"
+              srcset="{{ m.preview_image | image_url: width: 600 }} 600w, {{ m.preview_image | image_url: width: 1100 }} 1100w, {{ m.preview_image | image_url: width: 1500 }} 1500w"
+              sizes="(min-width: 990px) 50vw, 100vw" alt="{{ m.alt | default: product.title | escape }}" width="{{ m.preview_image.width }}" height="{{ m.preview_image.height }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="card__badges">
+        {%- if on_sale -%}<span class="badge badge--sale">-{{ off }}% off</span>{%- endif -%}
+        {%- if product.tags contains 'Limited Edition' -%}<span class="badge">Limited edition</span>{%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <button type="button" class="gal__nav gal__nav--prev" data-gal-prev aria-label="Previous image">{% render 'icon', name: 'chev-left', class: 'ico--sm' %}</button>
+        <button type="button" class="gal__nav gal__nav--next" data-gal-next aria-label="Next image">{% render 'icon', name: 'chev-right', class: 'ico--sm' %}</button>
+        <span class="gal__counter" data-gal-counter>1 / {{ product.media.size }}</span>
+      {%- endif -%}
+    </div>
+    {%- if product.media.size > 1 -%}<div class="gal__dots" aria-hidden="true">{%- for m in product.media -%}<i{% if forloop.first %} class="is-on"{% endif %}></i>{%- endfor -%}</div>{%- endif -%}
+  </div>
+
+  <div class="pinfo">
+    {%- if uni != blank -%}<a class="pinfo__uni" href="{{ uni_parts[2] }}"><span class="uni-dot"></span>{{ uni_parts[1] }} universe {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>{%- endif -%}
+    <h1 class="pinfo__title">{% render 'short-title', title: product.title %}</h1>
+    <div class="price{% if on_sale %} price--sale{% endif %}" data-pdp-price>
+      <span class="price__now">{{ v.price | money }}</span>
+      {%- if on_sale -%}<s class="price__was">{{ cp | money }}</s><span class="price__off">-{{ off }}%</span>{%- endif -%}
+    </div>
+    {%- if settings.tabby_enabled -%}<p class="pinfo__tax">Or 4 interest-free payments of <b data-tabby>{{ v.price | divided_by: 4 | money }}</b> with Tabby</p>{%- endif -%}
+
+    {%- assign offer_types = settings.offer_types | default: 'T-Shirt' | downcase -%}{%- assign ptype = product.type | downcase -%}
+    {%- liquid
+      assign tl = product.title | downcase
+      assign not_tee = false
+      if tl contains 'hoodie' or tl contains 'jogger' or tl contains 'polo' or tl contains 'shorts' or tl contains ' set'
+        assign not_tee = true
+      endif
+    -%}
+    {%- if settings.offer_enabled and section.settings.show_offer and ptype != blank and offer_types contains ptype and not_tee == false -%}
+      <div class="offer" data-offer>
+        <div class="offer__slides">
+          <div class="offer__slide is-on">
+            <p class="offer__t">Buy {{ settings.offer_buy_1 }}, get {{ settings.offer_free_1 }} <em>free</em></p>
+            <p class="offer__s">On all tees. Mix any designs. Applied automatically in bag.</p>
+            <p class="offer__calc">{{ b1 }} tees for <b>{{ tees_price_1 | money_without_trailing_zeros }}</b> · just {{ each_1 | money_without_trailing_zeros }} each</p>
+          </div>
+          <div class="offer__slide">
+            <p class="offer__t">Buy {{ settings.offer_buy_2 }}, get {{ settings.offer_free_2 }} <em>free</em></p>
+            <p class="offer__s">Squad deal. Mix any designs. Applied automatically in bag.</p>
+            <p class="offer__calc">{{ b2 }} tees for <b>{{ tees_price_2 | money_without_trailing_zeros }}</b> · just {{ each_2 | money_without_trailing_zeros }} each</p>
+          </div>
+        </div>
+        <div class="offer__dots"><i class="is-on"></i><i></i></div>
+      </div>
+    {%- endif -%}
+
+    {%- form 'product', product, class: 'pdp__form', id: 'pdp-form' -%}
+      <input type="hidden" name="id" value="{{ v.id }}">
+      {%- unless product.has_only_default_variant -%}
+        {%- for o in product.options_with_values -%}
+          {%- assign n = o.name | downcase -%}
+          {%- assign pos = forloop.index0 -%}
+          <div class="opt" data-opt="{{ pos }}">
+            <div class="opt__head">
+              <span style="color:var(--ink);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;font-size:11px">{{ o.name }}: <span data-opt-label style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:12px">{{ v.options[pos] }}</span></span>
+              {%- if n contains 'size' -%}<button type="button" class="opt__guide" data-open="size">{% render 'icon', name: 'ruler', class: 'ico--sm' %}Size guide</button>{%- endif -%}
+            </div>
+            <div class="opt__vals">
+              {%- for val in o.values -%}
+                {%- if n contains 'colo' -%}
+                  {%- assign vimg = nil -%}
+                  {%- for x in product.variants -%}{%- if x.options[pos] == val and x.featured_image -%}{%- assign vimg = x.featured_image -%}{%- break -%}{%- endif -%}{%- endfor -%}
+                  <button type="button" class="opt__sw{% if v.options[pos] == val %} is-on{% endif %}" data-value="{{ val | escape }}" aria-label="{{ o.name }} {{ val | escape }}">
+                    <span class="opt__sw-img" style="--sw: {% render 'swatch-color', name: val %}">{%- if vimg -%}<img src="{{ vimg | image_url: width: 120 }}" alt="" loading="lazy" width="54" height="64">{%- endif -%}</span>
+                    {{ val }}
+                  </button>
+                {%- else -%}
+                  <button type="button" class="opt__btn{% if v.options[pos] == val %} is-on{% endif %}" data-value="{{ val | escape }}">{{ val }}</button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {%- if n contains 'size' and has_fit and section.settings.fit_tip != blank -%}<p class="opt__tip">{{ section.settings.fit_tip }}</p>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- endunless -%}
+
+      <div class="ship-bar">
+        <span data-ship-text>Add {{ settings.free_shipping_threshold | times: 100 | money }} more to unlock free delivery</span>
+        <div class="ship-bar__track"><div class="ship-bar__fill" data-ship-fill></div></div>
+      </div>
+
+      <div class="buy">
+        <div class="qty"><button type="button" data-pdp-q="-1" aria-label="Decrease quantity">−</button><input type="number" name="quantity" value="1" min="1" aria-label="Quantity" data-pdp-qty><button type="button" data-pdp-q="1" aria-label="Increase quantity">+</button></div>
+        <button type="submit" class="btn" data-pdp-add data-label="Add to bag" {% unless v.available %}disabled{% endunless %}>{% if v.available %}Add to bag{% else %}Sold out{% endif %}</button>
+        <button type="button" class="buy__wish" data-wish="{{ product.handle }}" aria-pressed="false" aria-label="Add to wishlist">{% render 'icon', name: 'heart' %}</button>
+      </div>
+      {%- if settings.whatsapp_number != blank -%}
+        <a href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}" class="btn buy__wa" data-wa-order target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp', class: 'ico--sm' %} Order on WhatsApp</a>
+      {%- endif -%}
+    {%- endform -%}
+
+    {%- if section.settings.review_text != blank -%}
+      <div class="pinfo__review">
+        <div class="pinfo__review-top"><span class="stars">★★★★★</span><span>{{ section.settings.review_name }}</span></div>
+        <q>{{ section.settings.review_text }}</q>
+      </div>
+    {%- endif -%}
+
+    <p class="pinfo__eta">{% render 'icon', name: 'truck', class: 'ico--sm' %}<span>Order within <b data-cutoff="{{ section.settings.cutoff_hour }}">–</b> for same-day dispatch · {{ settings.delivery_eta | default: 'Fast UAE delivery' }}</span></p>
+    <div class="pinfo__trust">
+      <div>{% render 'icon', name: 'truck' %}Free delivery over AED {{ settings.free_shipping_threshold }}</div>
+      <div>{% render 'icon', name: 'exchange' %}Easy exchange</div>
+      <div>{% render 'icon', name: 'card' %}Cash on delivery</div>
+      <div>{% render 'icon', name: 'shield' %}Secure checkout</div>
+    </div>
+
+    <details class="acc" open>
+      <summary>Details</summary>
+      <div class="acc__body">{{ product.description }}</div>
+    </details>
+    <details class="acc">
+      <summary>Size & fit</summary>
+      <div class="acc__body">
+        {%- if has_fit -%}<p><b>Oversized</b> is cut wide and dropped at the shoulder. Take your usual size for the relaxed look, one down for a closer fit.</p><p><b>Regular</b> is a classic straight fit.</p>{%- endif -%}
+        <p><button type="button" class="opt__guide" data-open="size">{% render 'icon', name: 'ruler', class: 'ico--sm' %}Open the size guide</button></p>
+      </div>
+    </details>
+    <details class="acc">
+      <summary>Delivery & exchange</summary>
+      <div class="acc__body">{{ section.settings.delivery_text }}</div>
+    </details>
+    <details class="acc">
+      <summary>Print care</summary>
+      <div class="acc__body">{{ section.settings.care_text }}</div>
+    </details>
+  </div>
+
+  <script type="application/json" data-product-json>{{ product | json }}</script>
+</div>
+
+<div class="sticky-buy" data-sticky-buy>
+  {%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 100 }}" alt="" width="40" height="50">{%- endif -%}
+  <div class="sticky-buy__t">{% render 'short-title', title: product.title %}<br><b data-sticky-price>{{ v.price | money }}</b></div>
+  <button type="button" class="btn btn--sm" data-sticky-add>Add to bag</button>
+</div>
+
+<div class="lightbox" data-lightbox role="dialog" aria-label="Image zoom">
+  <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">{% render 'icon', name: 'close' %}</button>
+  <div class="lightbox__track" data-lightbox-track></div>
+</div>
+
+<aside class="drawer" data-drawer="size" aria-hidden="true" aria-label="Size guide" tabindex="-1">
+  <div class="drawer__head"><span class="drawer__title">Size guide</span><button type="button" class="hdr__icon" data-close aria-label="Close">{% render 'icon', name: 'close' %}</button></div>
+  <div class="drawer__body rte" style="padding-top:16px;padding-bottom:24px">
+    {%- assign sg = pages[section.settings.size_page] -%}
+    {%- if sg.content != blank -%}{{ sg.content }}{%- else -%}<p>Size chart coming soon. Send us your height and weight on WhatsApp and we’ll tell you your size.</p>{%- endif -%}
+  </div>
+</aside>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "url", "id": "hub_url", "label": "Anime hub link", "default": "/pages/anime" },
+    { "type": "checkbox", "id": "show_offer", "label": "Show bundle offer box", "default": true },
+    { "type": "text", "id": "fit_tip", "label": "Fit tip under sizes", "default": "Fit tip: Oversized runs big. Take your usual size for the relaxed, boxy look." },
+    { "type": "range", "id": "cutoff_hour", "label": "Same-day dispatch cut-off (24h)", "min": 10, "max": 22, "step": 1, "default": 16 },
+    { "type": "text", "id": "review_text", "label": "Review snippet", "info": "Use a real review" },
+    { "type": "text", "id": "review_name", "label": "Reviewer", "default": "Verified buyer" },
+    { "type": "richtext", "id": "delivery_text", "label": "Delivery & exchange", "default": "<p>Delivery across all seven emirates, with cash on delivery. Wrong size? Message us on WhatsApp and we will arrange an exchange.</p>" },
+    { "type": "richtext", "id": "care_text", "label": "Print care", "default": "<p>Wash inside out in cold water. Do not iron directly on the print. Do not tumble dry.</p>" },
+    { "type": "text", "id": "size_page", "label": "Size guide page handle", "default": "size-guide" }
+  ]
+}
+{% endschema %}

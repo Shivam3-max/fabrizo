@@ -1,0 +1,10 @@
+<section class="section">
+  <div class="page-width">
+    <div class="rte" style="margin:0 auto;text-align:{{ section.settings.align }}">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.title != blank -%}<h2 class="h-sec h-sec--lg" style="margin:8px 0 14px">{{ section.settings.title }}</h2>{%- endif -%}
+      {{ section.settings.text }}
+    </div>
+  </div>
+</section>
+{% schema %}{ "name": "Rich text", "settings": [ { "type": "text", "id": "eyebrow", "label": "Eyebrow" }, { "type": "text", "id": "title", "label": "Heading" }, { "type": "richtext", "id": "text", "label": "Text" }, { "type": "select", "id": "align", "label": "Align", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Centre" } ] } ], "presets": [ { "name": "Rich text" } ] }{% endschema %}

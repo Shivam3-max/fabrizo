@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-search" }, "anime": { "type": "anime-universes", "settings": { "eyebrow": "Or browse by anime", "title": "Pick your anime", "text": "", "characters": "anime-characters", "tight": true } } }, "order": ["main", "anime"] }

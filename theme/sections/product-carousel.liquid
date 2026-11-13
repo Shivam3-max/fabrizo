@@ -1,0 +1,33 @@
+{%- assign col = section.settings.collection -%}
+<section class="section{% if section.settings.tight %} section--tight{% endif %}">
+  <div class="page-width">
+    <div class="sec-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="h-sec">{{ section.settings.title | default: col.title }}</h2>
+      </div>
+      {%- if col -%}<a class="sec-head__link" href="{{ col.url }}">View all</a>{%- endif -%}
+    </div>
+    <div class="rail" data-rail>
+      <div class="rail__track" style="--per: {{ section.settings.per_row }}" data-rail-track>
+        {%- for p in col.products limit: section.settings.limit -%}{% render 'product-card', product: p %}{%- endfor -%}
+      </div>
+      <button type="button" class="rail__btn rail__btn--prev" data-rail-prev aria-label="Previous" disabled>{% render 'icon', name: 'chev-left', class: 'ico--sm' %}</button>
+      <button type="button" class="rail__btn rail__btn--next" data-rail-next aria-label="Next">{% render 'icon', name: 'chev-right', class: 'ico--sm' %}</button>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Product carousel",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "New launch" },
+    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 24, "step": 1, "default": 12 },
+    { "type": "range", "id": "per_row", "label": "Cards visible (desktop)", "min": 3, "max": 6, "step": 1, "default": 5 },
+    { "type": "checkbox", "id": "tight", "label": "Less spacing", "default": false }
+  ],
+  "presets": [ { "name": "Product carousel" } ]
+}
+{% endschema %}

@@ -1,0 +1,1 @@
+{ "sections": { "hero": { "type": "page-hero", "settings": { "eyebrow": "Help", "title": "Size guide" } }, "main": { "type": "main-page", "settings": { "show_title": false } } }, "order": ["hero", "main"] }

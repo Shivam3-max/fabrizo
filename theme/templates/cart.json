@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "main-cart" }, "new": { "type": "product-carousel", "settings": { "collection": "new-arrivals", "title": "Add one more", "eyebrow": "Buy 3 get 1 free", "limit": 10, "per_row": 5, "tight": true } } }, "order": ["main", "new"] }

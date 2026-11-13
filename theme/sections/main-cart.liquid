@@ -1,0 +1,35 @@
+<div class="page-width section" style="padding-top:30px">
+  <h1 class="coll__title">Your bag</h1>
+  {%- if cart.item_count == 0 -%}
+    <div class="cart-empty"><h3>Your bag is empty</h3><p>Start with your favourite anime.</p><a class="btn" href="/pages/anime">Pick your anime</a></div>
+  {%- else -%}
+    <div class="pdp" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);padding-top:20px">
+      <div>
+        {%- for item in cart.items -%}
+          <div class="line" data-line="{{ forloop.index }}" style="grid-template-columns:110px 1fr">
+            <a class="line__img" href="{{ item.url }}">{%- if item.image -%}<img src="{{ item.image | image_url: width: 240 }}" alt="" width="110" height="138">{%- endif -%}</a>
+            <div>
+              <a class="line__t" href="{{ item.url }}">{% render 'short-title', title: item.product_title %}</a>
+              {%- if item.variant_title -%}<p class="line__v">{{ item.variant_title }}</p>{%- endif -%}
+              <div class="line__row">
+                <div class="qty"><button type="button" data-q="-1" aria-label="Decrease">−</button><input type="number" min="0" value="{{ item.quantity }}" aria-label="Quantity" data-qin><button type="button" data-q="1" aria-label="Increase">+</button></div>
+                <span class="price"><span class="price__now">{{ item.final_line_price | money }}</span></span>
+              </div>
+              <button type="button" class="line__rm" data-rm>Remove</button>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      <div>
+        <div class="contact-card">
+          <div class="cart-progress" style="margin:-22px -22px 0"><span data-ship-text>Free delivery over AED {{ settings.free_shipping_threshold }}</span><div class="ship-bar__track"><div class="ship-bar__fill" data-ship-fill></div></div></div>
+          <div class="cart-sum"><span>Subtotal</span><span data-cart-total>{{ cart.total_price | money }}</span></div>
+          <p class="cart-note">Tax included. Bundle offers and delivery are calculated at checkout.</p>
+          <form action="{{ routes.cart_url }}" method="post"><button class="btn btn--block" name="checkout" type="submit">Checkout</button></form>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+<script>document.addEventListener('click', (e) => { if (e.target.closest('[data-line] [data-q], [data-line] [data-rm]')) setTimeout(() => location.reload(), 400); });</script>
+{% schema %}{ "name": "Cart" }{% endschema %}

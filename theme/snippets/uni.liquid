@@ -1,0 +1,85 @@
+{%- comment -%}
+  Anime universe look-up. Prints one value for a universe collection handle.
+  get: 'accent' | 'kanji' | 'line' | 'chars'. A collection metafield (fabrizo.accent /
+  fabrizo.kanji / fabrizo.tagline) overrides the built-in default.
+  Usage: {%- capture c -%}{% render 'uni', handle: col.handle, get: 'accent', collection: col %}{%- endcapture -%}
+{%- endcomment -%}
+{%- liquid
+  assign accent = '#0a0a0a'
+  assign kanji = ''
+  assign line = ''
+  assign chars = ''
+  case handle
+    when 'naruto'
+      assign chars = 'Itachi,Naruto,Minato'
+      assign accent = '#f26b1d'
+      assign kanji = 'ナルト'
+      assign line = 'Hidden Leaf legends. Itachi, Minato and the Nine-Tails.'
+    when 'jujutsu-kaisen'
+      assign chars = 'Sukuna,Gojo,Maki'
+      assign accent = '#6b2fd6'
+      assign kanji = '呪術廻戦'
+      assign line = 'Sukuna, Gojo and the cursed-energy drops.'
+    when 'one-piece'
+      assign chars = 'Zoro,Luffy'
+      assign accent = '#d62828'
+      assign kanji = 'ワンピース'
+      assign line = 'Straw Hat crew. Luffy, Zoro and the Pirate King.'
+    when 'dragon-ball'
+      assign chars = 'Goku'
+      assign accent = '#f5a300'
+      assign kanji = 'ドラゴンボール'
+      assign line = 'Ultra Instinct, Super Saiyan Blue, pure power.'
+    when 'demon-slayer'
+      assign chars = 'Zenitsu,Giyu'
+      assign accent = '#1f8a70'
+      assign kanji = '鬼滅の刃'
+      assign line = 'Breathing styles. Zenitsu, Giyu and the Sun.'
+    when 'attack-on-titan'
+      assign chars = 'Levi'
+      assign accent = '#7a5c3a'
+      assign kanji = '進撃の巨人'
+      assign line = 'Survey Corps. Levi Ackerman, humanity’s strongest.'
+    when 'bleach'
+      assign chars = 'Ichigo'
+      assign accent = '#3b3b3b'
+      assign kanji = 'ブリーチ'
+      assign line = 'Soul Reapers. Ichigo Kurosaki.'
+    when 'blue-lock'
+      assign chars = 'Bachira'
+      assign accent = '#1d4ed8'
+      assign kanji = 'ブルーロック'
+      assign line = 'Ego first. Meguru Bachira.'
+    when 'tokyo-revengers'
+      assign accent = '#e11d74'
+      assign kanji = '東京卍'
+      assign line = 'Toman racing drift.'
+    when 'anime-collection'
+      assign chars = 'Itachi,Sukuna,Gojo,Zoro,Goku,Luffy'
+      assign accent = '#c40500'
+      assign kanji = 'アニメ'
+      assign line = 'Every anime drop in one place.'
+  endcase
+  if collection.metafields.fabrizo.accent.value != blank
+    assign accent = collection.metafields.fabrizo.accent.value
+  endif
+  if collection.metafields.fabrizo.kanji.value != blank
+    assign kanji = collection.metafields.fabrizo.kanji.value
+  endif
+  if collection.metafields.fabrizo.characters.value != blank
+    assign chars = collection.metafields.fabrizo.characters.value | join: ','
+  endif
+  if collection.metafields.fabrizo.tagline.value != blank
+    assign line = collection.metafields.fabrizo.tagline.value
+  endif
+  case get
+    when 'accent'
+      echo accent
+    when 'kanji'
+      echo kanji
+    when 'line'
+      echo line
+    when 'chars'
+      echo chars
+  endcase
+-%}

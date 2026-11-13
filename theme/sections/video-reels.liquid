@@ -1,0 +1,57 @@
+<section class="section">
+  <div class="page-width">
+    <div class="sec-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="h-sec h-sec--lg">{{ section.settings.title }}</h2>
+        {%- if section.settings.text != blank -%}<p class="sub">{{ section.settings.text }}</p>{%- endif -%}
+      </div>
+    </div>
+    <div class="reels">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign pi = block.settings.image_n | minus: 1
+          assign poster = block.settings.poster | default: p.images[pi] | default: p.featured_image
+        -%}
+        <div class="reel" data-reel {{ block.shopify_attributes }}>
+          {%- if block.settings.video_url != blank -%}
+            <video src="{{ block.settings.video_url }}" {% if poster %}poster="{{ poster | image_url: width: 600 }}"{% endif %} muted loop playsinline preload="none"></video>
+          {%- elsif poster -%}
+            <img src="{{ poster | image_url: width: 600 }}" alt="" loading="lazy" width="{{ poster.width }}" height="{{ poster.height }}">
+          {%- endif -%}
+          {%- if block.settings.views != blank -%}<span class="reel__views">{{ block.settings.views }}</span>{%- endif -%}
+          {%- if block.settings.video_url != blank -%}<button type="button" class="reel__play" data-reel-play aria-label="Play video">{% render 'icon', name: 'play', class: 'ico--sm' %}</button>{%- endif -%}
+          {%- if p -%}
+            <div class="reel__prod">
+              {%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 120 }}" alt="" loading="lazy" width="38" height="46">{%- endif -%}
+              <a href="{{ p.url }}" style="min-width:0"><span class="reel__prod-t">{% render 'short-title', title: p.title %}</span>{% render 'price', product: p %}</a>
+              <a class="reel__add" href="{{ p.url }}" aria-label="Shop this look">{% render 'icon', name: 'bag', class: 'ico--sm' %}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Watch & shop",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Live from the street" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Watch & shop" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Tap a reel for sound. Shop the fit underneath." }
+  ],
+  "blocks": [
+    { "type": "reel", "name": "Reel", "settings": [
+      { "type": "url", "id": "video_url", "label": "MP4 link", "info": "Upload the reel in Content > Files and paste its link" },
+      { "type": "image_picker", "id": "poster", "label": "Poster image" },
+      { "type": "product", "id": "product", "label": "Product" },
+      { "type": "range", "id": "image_n", "label": "Product photo used as poster", "min": 1, "max": 10, "step": 1, "default": 1 },
+      { "type": "text", "id": "views", "label": "Views label" }
+    ] }
+  ],
+  "max_blocks": 10,
+  "presets": [ { "name": "Watch & shop" } ]
+}
+{% endschema %}

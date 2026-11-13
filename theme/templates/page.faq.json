@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "hero": { "type": "page-hero", "settings": { "eyebrow": "Help", "title": "FAQs" } },
+    "faq": { "type": "faq", "settings": { "title": "" },
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "q": "How do I find all designs from one anime?", "a": "<p>Use the Anime tab at the top. Every anime has its own page, for example Naruto or Jujutsu Kaisen, and you can also search a character like Itachi or Sukuna.</p>" } },
+        "q2": { "type": "qa", "settings": { "q": "What is the difference between Oversized and Regular fit?", "a": "<p>Oversized is wider with dropped shoulders. Regular is a classic straight fit. Each product page shows the price for each fit.</p>" } },
+        "q3": { "type": "qa", "settings": { "q": "Do you deliver across the UAE?", "a": "<p>Yes, to all emirates. Delivery is free over the amount shown in the bag.</p>" } },
+        "q4": { "type": "qa", "settings": { "q": "Can I pay cash on delivery?", "a": "<p>Yes. You can also pay by card or Apple Pay at checkout.</p>" } },
+        "q5": { "type": "qa", "settings": { "q": "How do exchanges work?", "a": "<p>Message us on WhatsApp with your order number. Replace this answer with FABRIZO’s exact exchange policy.</p>" } },
+        "q6": { "type": "qa", "settings": { "q": "Can you print my own design?", "a": "<p>Yes. Open Custom Print, pick the garment, print area and size, and upload or send your design.</p>" } }
+      }, "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"] }
+  },
+  "order": ["hero", "faq"]
+}

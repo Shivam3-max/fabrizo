@@ -1,0 +1,59 @@
+{%- comment -%}
+  Below the product: "More from <anime>" (the product's universe collection),
+  then "You may also like" from its main collection. Server-rendered, no app.
+{%- endcomment -%}
+{%- liquid
+  capture uni
+    render 'product-universe', product: product
+  endcapture
+  assign uni_parts = uni | split: '|'
+  assign uni_col = nil
+  if uni != blank
+    assign uni_col = collections[uni_parts[0]]
+    capture uni_accent
+      render 'uni', handle: uni_parts[0], get: 'accent'
+    endcapture
+  endif
+  assign other = nil
+  for c in product.collections
+    if c.handle != uni_parts[0] and c.handle != 'all' and c.handle != 'all-products' and c.handle != 'new-arrivals'
+      assign other = collections[c.handle]
+      break
+    endif
+  endfor
+-%}
+{%- if uni_col and uni_col.products_count > 1 -%}
+<section class="section section--tight" style="--uni: {{ uni_accent }}">
+  <div class="page-width">
+    <div class="sec-head">
+      <div><p class="eyebrow" style="color:var(--uni)">Same universe</p><h2 class="h-sec">More from {{ uni_parts[1] }}</h2></div>
+      <a class="sec-head__link" href="{{ uni_col.url }}">All {{ uni_col.products_count }} designs</a>
+    </div>
+    <div class="rail" data-rail>
+      <div class="rail__track" style="--per: 5" data-rail-track>
+        {%- for p in uni_col.products limit: 12 -%}{%- if p.handle != product.handle -%}{% render 'product-card', product: p, show_uni: false %}{%- endif -%}{%- endfor -%}
+      </div>
+      <button type="button" class="rail__btn rail__btn--prev" data-rail-prev aria-label="Previous" disabled>{% render 'icon', name: 'chev-left', class: 'ico--sm' %}</button>
+      <button type="button" class="rail__btn rail__btn--next" data-rail-next aria-label="Next">{% render 'icon', name: 'chev-right', class: 'ico--sm' %}</button>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{%- if other and other.products_count > 1 -%}
+<section class="section section--tight">
+  <div class="page-width">
+    <div class="sec-head"><h2 class="h-sec">You may also like</h2><a class="sec-head__link" href="{{ other.url }}">{{ other.title }}</a></div>
+    <div class="rail" data-rail>
+      <div class="rail__track" style="--per: 5" data-rail-track>
+        {%- assign shown = 0 -%}
+        {%- for p in other.products -%}
+          {%- if p.handle != product.handle and shown < 12 -%}{% render 'product-card', product: p %}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+        {%- endfor -%}
+      </div>
+      <button type="button" class="rail__btn rail__btn--prev" data-rail-prev aria-label="Previous" disabled>{% render 'icon', name: 'chev-left', class: 'ico--sm' %}</button>
+      <button type="button" class="rail__btn rail__btn--next" data-rail-next aria-label="Next">{% render 'icon', name: 'chev-right', class: 'ico--sm' %}</button>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}{ "name": "Related products" }{% endschema %}

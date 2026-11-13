@@ -1,0 +1,15 @@
+<section class="page-hero"{% if section.settings.accent != blank %} style="background: {{ section.settings.accent }}"{% endif %}>
+  <div class="page-width">
+    {%- if section.settings.eyebrow != blank -%}<p class="eyebrow" style="color:#fff;opacity:.85">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h1 style="margin-top:8px">{{ section.settings.title | default: page.title }}</h1>
+    {%- if section.settings.text != blank -%}<p>{{ section.settings.text }}</p>{%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Page hero", "settings": [
+  { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+  { "type": "text", "id": "title", "label": "Title (defaults to page title)" },
+  { "type": "textarea", "id": "text", "label": "Text" },
+  { "type": "color", "id": "accent", "label": "Background" } ],
+  "presets": [ { "name": "Page hero" } ] }
+{% endschema %}

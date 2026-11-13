@@ -1,0 +1,12 @@
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+-%}
+<section class="section"><div class="page-width" style="text-align:center;padding:60px 0">
+  <p class="eyebrow">404</p><h1 class="h-sec h-sec--lg" style="margin-top:8px">This page went missing</h1>
+  <p class="sub">Try an anime instead.</p>
+  <div class="srch__chips" style="justify-content:center;margin-top:20px">{%- for u in anime_menu.links -%}<a class="pill" href="{{ u.url }}">{{ u.title }}</a>{%- endfor -%}</div>
+</div></section>
+{% schema %}{ "name": "404" }{% endschema %}

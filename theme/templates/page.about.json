@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "hero": { "type": "page-hero", "settings": { "eyebrow": "About", "title": "Dubai streetwear culture", "text": "FABRIZO prints anime, Arabic calligraphy and street graphics on oversized and regular tees, hoodies, shorts and sets." } },
+    "story": { "type": "rich-text", "settings": { "eyebrow": "Our story", "title": "Made for the ones who wear their fandom", "text": "<p>Replace this with FABRIZO’s own story: who started it, why anime and Arabic calligraphy, and how the prints are made in Dubai.</p>" } },
+    "mosaic": { "type": "category-mosaic", "settings": { "title": "What we make" },
+      "blocks": {
+        "m1": { "type": "tile", "settings": { "collection": "anime-collection", "label": "Anime", "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion", "image_n": 1 } },
+        "m2": { "type": "tile", "settings": { "collection": "new-arrivals-arabic-calligraphy", "label": "Arabic" } },
+        "m3": { "type": "tile", "settings": { "collection": "premium-collection", "label": "Premium" } },
+        "m4": { "type": "tile", "settings": { "collection": "hoodies", "label": "Hoodies" } },
+        "m5": { "type": "tile", "settings": { "collection": "couples-collection", "label": "Couples" } },
+        "m6": { "type": "feature", "settings": { "kicker": "Design your own", "label": "Custom Print", "bottom": "Start designing", "image_product": "custom-print-oversized-t-shirt", "image_n": 1, "link": "/pages/customize-your-print" } }
+      }, "block_order": ["m1", "m2", "m3", "m4", "m5", "m6"] }
+  },
+  "order": ["hero", "story", "mosaic"]
+}

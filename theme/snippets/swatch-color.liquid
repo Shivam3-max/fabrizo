@@ -1,0 +1,38 @@
+{%- comment -%} Colour name -> CSS colour. Handles the store's spellings (Nevy blue, OFF- WHITE, Grey/Gray). {%- endcomment -%}
+{%- liquid
+  assign k = name | downcase | replace: ' ', '' | replace: '-', ''
+  assign c = '#cfcfcf'
+  case k
+    when 'black' or 'jetblack'
+      assign c = '#111111'
+    when 'white'
+      assign c = '#ffffff'
+    when 'offwhite' or 'cream' or 'ivory'
+      assign c = '#f1ead9'
+    when 'beige' or 'sand'
+      assign c = '#d8c3a0'
+    when 'maroon' or 'burgundy' or 'rougebordeaux'
+      assign c = '#6b1d24'
+    when 'red'
+      assign c = '#c8202b'
+    when 'graphite' or 'charcoal'
+      assign c = '#3e4146'
+    when 'grey' or 'gray' or 'lightgrey'
+      assign c = '#9c9c9c'
+    when 'navy' or 'navyblue' or 'nevyblue' or 'neavyblue'
+      assign c = '#1c2541'
+    when 'royalblue' or 'blue' or 'skyblue'
+      assign c = '#2453c9'
+    when 'darkgreen' or 'green' or 'olive'
+      assign c = '#2f4a32'
+    when 'brown'
+      assign c = '#5b3a29'
+    when 'pink'
+      assign c = '#efb3c4'
+    when 'purple'
+      assign c = '#5a2d82'
+    when 'teal'
+      assign c = '#1d6f6f'
+  endcase
+  echo c
+-%}

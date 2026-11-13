@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "hero": { "type": "page-hero", "settings": { "eyebrow": "Anime universe", "title": "Pick your anime", "text": "Every anime FABRIZO prints, each with its own page. Pick a universe, a character, or scroll the spotlights.", "accent": "#0a0a0a" } },
+    "hub": { "type": "anime-universes", "settings": { "eyebrow": "", "title": "Universes", "text": "Tap a universe to see every design from it.", "characters": "anime-characters", "link": "/collections/anime-collection", "link_label": "Shop all anime" } },
+    "naruto": { "type": "anime-spotlight", "settings": { "collection": "naruto", "eyebrow": "Anime universe · 01", "characters": "Itachi, Naruto, Minato", "image_product": "naruto-anime-premium-hoodie-black-fabrizo-fashion", "image_n": 4 } },
+    "jjk": { "type": "anime-spotlight", "settings": { "collection": "jujutsu-kaisen", "eyebrow": "Anime universe · 02", "characters": "Sukuna, Gojo, Maki", "image_product": "gojo-anime-hoodie-electric-blue-edition-premium-fabrizo-fashion", "image_n": 2 } },
+    "onepiece": { "type": "anime-spotlight", "settings": { "collection": "one-piece", "eyebrow": "Anime universe · 03", "characters": "Zoro, Luffy", "image_product": "king-of-hell-oversized-t-shirt-zoro-anime-edition-fabrizo-fashion", "image_n": 1 } },
+    "dragonball": { "type": "anime-spotlight", "settings": { "collection": "dragon-ball", "eyebrow": "Anime universe · 04", "characters": "Goku", "image_product": "goku-ultra-instinct-oversized-t-shirt-dragon-ball-anime-streetwear-fabrizo-fashion", "image_n": 1 } },
+    "demonslayer": { "type": "anime-spotlight", "settings": { "collection": "demon-slayer", "eyebrow": "Anime universe · 05", "characters": "Zenitsu, Giyu", "image_product": "tomioka-giyu-oversized-t-shirt-limited-edition-premium-anime-streetwear-uae", "image_n": 1 } },
+    "az": { "type": "anime-az", "settings": { "title": "Every anime, A to Z" } }
+  },
+  "order": ["hero", "hub", "naruto", "jjk", "onepiece", "dragonball", "demonslayer", "az"]
+}

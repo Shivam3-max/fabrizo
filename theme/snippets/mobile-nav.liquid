@@ -1,0 +1,43 @@
+{%- liquid
+  assign main = linklists['main-menu']
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+-%}
+<aside class="drawer drawer--left" data-drawer="mnav" aria-hidden="true" aria-label="Menu" tabindex="-1">
+  <div class="drawer__head">
+    <span class="drawer__title">Menu</span>
+    <button type="button" class="hdr__icon" data-close aria-label="Close menu">{% render 'icon', name: 'close' %}</button>
+  </div>
+  <div class="drawer__body">
+    <div class="mnav__tabs" role="tablist">
+      <button type="button" class="mnav__tab is-on" role="tab" aria-selected="true" data-mtab="anime">Anime</button>
+      <button type="button" class="mnav__tab" role="tab" aria-selected="false" data-mtab="shop">Shop</button>
+    </div>
+    <div class="mnav__panel" data-mpanel="anime">
+      <div class="mnav__unis">
+        {%- for u in anime_menu.links -%}{% render 'uni-tile', link: u %}{%- endfor -%}
+      </div>
+      <a class="mnav__link" href="/collections/anime-collection">All anime {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>
+      <p class="mnav__h">Shop by character</p>
+      <div class="srch__chips">
+        {%- for c in linklists['anime-characters'].links -%}<a class="pill" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
+      </div>
+    </div>
+    <div class="mnav__panel" data-mpanel="shop" hidden>
+      {%- for link in main.links -%}
+        {%- assign has_anime = false -%}
+        {%- for c in link.links -%}{%- for u in anime_menu.links -%}{%- if u.url == c.url -%}{%- assign has_anime = true -%}{%- endif -%}{%- endfor -%}{%- endfor -%}
+        {%- unless has_anime -%}
+          {%- if link.links.size > 0 -%}
+            {%- for c in link.links -%}<a class="mnav__link" href="{{ c.url }}">{{ c.title }} {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>{%- endfor -%}
+          {%- else -%}
+            <a class="mnav__link" href="{{ link.url }}">{{ link.title }} {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+      <a class="mnav__link" href="/pages/contact">Contact & order tracking {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": { "type": "main-product", "settings": {} },
+    "related": { "type": "product-related" },
+    "anime": { "type": "anime-universes", "settings": { "eyebrow": "Keep exploring", "title": "Pick your anime", "text": "", "characters": "anime-characters", "tight": true } },
+    "usp": { "type": "usp-strip", "blocks": {
+      "u1": { "type": "item", "settings": { "icon": "truck", "title": "Free UAE delivery", "text": "On orders over AED 99" } },
+      "u2": { "type": "item", "settings": { "icon": "card", "title": "Cash on delivery", "text": "Or pay by card and Apple Pay" } },
+      "u3": { "type": "item", "settings": { "icon": "chat", "title": "WhatsApp support", "text": "Real people, fast replies" } },
+      "u4": { "type": "item", "settings": { "icon": "exchange", "title": "Easy exchanges", "text": "Size swap made simple" } } }, "block_order": ["u1", "u2", "u3", "u4"] }
+  },
+  "order": ["main", "related", "anime", "usp"]
+}

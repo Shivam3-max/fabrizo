@@ -1,0 +1,30 @@
+<section class="section">
+  <div class="page-width">
+    <div class="ugc__head">
+      <h2 class="h-sec h-sec--lg">{{ section.settings.title }}</h2>
+      <p class="sub">{{ section.settings.text }}</p>
+    </div>
+    <div class="ugc__grid">
+      {%- for block in section.blocks -%}
+        {%- assign pi = block.settings.image_n | minus: 1 -%}
+        {%- assign im = block.settings.image | default: block.settings.product.images[pi] | default: block.settings.product.featured_image -%}
+        <a class="ugc__item" href="{{ block.settings.link | default: block.settings.product.url | default: settings.social_instagram }}" {{ block.shopify_attributes }}>
+          {%- if im -%}<img src="{{ im | image_url: width: 400 }}" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}
+          {%- if block.settings.product -%}<span class="ugc__tag">Shop look</span>{%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Customer gallery",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "#FabrizoOnYou" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Tag @fabrizo_fashion to be featured. Tap a look to shop it." }
+  ],
+  "blocks": [ { "type": "photo", "name": "Photo", "settings": [ { "type": "image_picker", "id": "image", "label": "Photo" }, { "type": "product", "id": "product", "label": "Product" }, { "type": "range", "id": "image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 2 }, { "type": "url", "id": "link", "label": "Link" } ] } ],
+  "max_blocks": 12,
+  "presets": [ { "name": "Customer gallery" } ]
+}
+{% endschema %}

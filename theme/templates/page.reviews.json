@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "hero": { "type": "page-hero", "settings": { "eyebrow": "Real customers", "title": "Reviews", "text": "Photos and messages from people wearing FABRIZO across the UAE." } },
+    "reviews": { "type": "reviews", "settings": { "eyebrow": "", "title": "Latest reviews", "score": "", "score_text": "" },
+      "blocks": {
+        "v1": { "type": "review", "settings": { "rating": 5, "heading": "Add a real review", "text": "SAMPLE REVIEW — replace with real customer reviews from WhatsApp or a reviews app before launch.", "name": "Customer name", "source": "WhatsApp", "verified": true } },
+        "v2": { "type": "review", "settings": { "rating": 5, "heading": "Add a real review", "text": "SAMPLE REVIEW — replace with real customer reviews from WhatsApp or a reviews app before launch.", "name": "Customer name", "source": "Website", "verified": true } },
+        "v3": { "type": "review", "settings": { "rating": 5, "heading": "Add a real review", "text": "SAMPLE REVIEW — replace with real customer reviews from WhatsApp or a reviews app before launch.", "name": "Customer name", "source": "Instagram", "verified": true } }
+      }, "block_order": ["v1", "v2", "v3"] },
+    "ugc": { "type": "ugc-gallery", "settings": { "title": "#FabrizoOnYou", "text": "Tag @fabrizo_fashion to be featured." },
+      "blocks": {
+        "g1": { "type": "photo", "settings": { "product": "bleach-ichigo-kurosaki-oversized-black-t-shirt-anime-streetwear-edition", "image_n": 4 } },
+        "g2": { "type": "photo", "settings": { "product": "naruto-anime-premium-hoodie-black-fabrizo-fashion", "image_n": 4 } },
+        "g3": { "type": "photo", "settings": { "product": "dubai-heritage-oversized-hoodie-fabrizo-fashion", "image_n": 1 } },
+        "g4": { "type": "photo", "settings": { "product": "tomioka-giyu-oversized-t-shirt-limited-edition-premium-anime-streetwear-uae", "image_n": 2 } },
+        "g5": { "type": "photo", "settings": { "product": "minato-namikaze-fabrizo-anime-t-shirt-golden-lightning-nbsp", "image_n": 2 } },
+        "g6": { "type": "photo", "settings": { "product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection", "image_n": 3 } }
+      }, "block_order": ["g1", "g2", "g3", "g4", "g5", "g6"] }
+  },
+  "order": ["hero", "reviews", "ugc"]
+}

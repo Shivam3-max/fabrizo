@@ -1,0 +1,221 @@
+{%- comment -%}
+  Header matched to the reference: logo, top tabs, pill search, AED/EN, account,
+  bag; a second row with the active tab's links; hover mega menus.
+
+  Fabrizo navigation upgrade: any top tab whose links point at the anime menu's
+  collections renders its row as colour-coded universe chips with design counts,
+  and hovering that tab opens an anime mega menu (universe tiles + characters).
+  The active tab follows the page: anime collections, anime products and the
+  anime hub light up "Anime"; everything else lights up the first tab.
+{%- endcomment -%}
+{%- liquid
+  assign menu = section.settings.menu
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+  assign chars_menu = section.settings.anime_characters_menu
+
+  assign anime_handles = ''
+  for l in anime_menu.links
+    assign anime_handles = anime_handles | append: '|' | append: l.object.handle
+  endfor
+  assign anime_handles = anime_handles | append: '|anime-collection|'
+
+  assign on_anime = false
+  if template.name == 'collection' and anime_handles contains collection.handle
+    assign on_anime = true
+  elsif template.name == 'page' and page.handle == 'anime'
+    assign on_anime = true
+  elsif template.name == 'product'
+    capture puni
+      render 'product-universe', product: product
+    endcapture
+    if puni != blank
+      assign on_anime = true
+    endif
+  endif
+
+  assign active_index = 0
+  assign anime_index = 0
+  for link in menu.links
+    assign ti = forloop.index
+    assign is_anime_tab = false
+    for c in link.links
+      if c.object and anime_handles contains c.object.handle
+        assign is_anime_tab = true
+      endif
+    endfor
+    if is_anime_tab
+      assign anime_index = ti
+    endif
+    for c in link.links
+      if c.url == request.path and on_anime == false
+        assign active_index = ti
+      endif
+    endfor
+  endfor
+  if active_index == 0
+    if on_anime and anime_index > 0
+      assign active_index = anime_index
+    elsif template.name == 'index' and section.settings.anime_first and anime_index > 0
+      assign active_index = anime_index
+    else
+      assign active_index = 1
+    endif
+  endif
+-%}
+<header class="hdr" data-header>
+  <div class="page-wide hdr__top">
+    <button type="button" class="hdr__icon hdr__burger" data-open="mnav" aria-label="Open menu">{% render 'icon', name: 'menu' %}</button>
+    <a href="{{ routes.root_url }}" class="hdr__logo" aria-label="{{ shop.name }} home">
+      {%- if section.settings.logo != blank -%}
+        <img src="{{ section.settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}" width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}" style="height: {{ section.settings.logo_height }}px">
+      {%- else -%}
+        <span class="hdr__word">Fabrizo</span>
+      {%- endif -%}
+    </a>
+    <nav class="hdr__tabs" aria-label="Primary">
+      {%- for link in menu.links -%}
+        {%- liquid
+          assign is_anime_tab = false
+          for c in link.links
+            if c.object and anime_handles contains c.object.handle
+              assign is_anime_tab = true
+            endif
+          endfor
+          assign t = link.title | downcase
+        -%}
+        <a href="{{ link.url }}" class="hdr__tab{% if forloop.index == active_index %} is-active{% endif %}{% if t == 'sale' %} hdr__tab--sale{% endif %}"
+           data-tab="{{ forloop.index }}"{% if is_anime_tab %} data-mega-trigger="anime"{% endif %}>
+          {{- link.title -}}{%- if is_anime_tab -%}<span class="hdr__tab-dot" aria-hidden="true"></span>{%- endif -%}
+        </a>
+      {%- endfor -%}
+    </nav>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="hdr__search" data-hdr-search>
+      {% render 'icon', name: 'search' %}
+      <input type="search" name="q" placeholder="{{ section.settings.search_placeholder | escape }}" aria-label="Search" autocomplete="off" data-search-hint="{{ section.settings.search_hints | escape }}">
+      <input type="hidden" name="type" value="product">
+    </form>
+    <div class="hdr__icons">
+      <div class="hdr__loc">
+        <span class="hdr__loc-flag" aria-hidden="true"></span><span>{{ localization.country.currency.iso_code | default: 'AED' }}</span>
+        <span class="hdr__loc-sep"></span><span>{{ request.locale.iso_code | default: 'en' | upcase }}</span>
+      </div>
+      <button type="button" class="hdr__icon hdr__icon--search-m" data-open="search" aria-label="Search">{% render 'icon', name: 'search' %}</button>
+      <a href="{{ routes.account_url }}" class="hdr__icon" aria-label="Account">{% render 'icon', name: 'user' %}</a>
+      <a href="{{ routes.cart_url }}" class="hdr__icon" data-open="cart" aria-label="Bag">{% render 'icon', name: 'bag' %}<span class="hdr__count" data-cart-count="{{ cart.item_count }}" data-count="{{ cart.item_count }}">{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+
+  <div class="hdr__sub">
+    {%- for link in menu.links -%}
+      {%- if link.links.size > 0 -%}
+        {%- liquid
+          assign ti = forloop.index
+          assign is_anime_tab = false
+          for c in link.links
+            if c.object and anime_handles contains c.object.handle
+              assign is_anime_tab = true
+            endif
+          endfor
+        -%}
+        <nav class="page-wide hdr__subrow{% if forloop.index == active_index %} is-on{% endif %}" data-subrow="{{ forloop.index }}"{% if forloop.index == active_index %} data-mobile{% endif %} aria-label="{{ link.title }}">
+          {%- for c in link.links -%}
+            {%- assign current = false -%}
+            {%- if c.url == request.path -%}{%- assign current = true -%}{%- endif -%}
+            {%- if is_anime_tab and c.object -%}
+              {%- capture acc -%}{% render 'uni', handle: c.object.handle, get: 'accent', collection: c.object %}{%- endcapture -%}
+              <a href="{{ c.url }}" class="hdr__sublink hdr__sublink--uni{% if current %} is-current{% endif %}" style="--uni: {{ acc }}"{% if current %} aria-current="page"{% endif %}>
+                <span class="uni-dot"></span>{{ c.title }}<span class="hdr__sublink-count">{{ c.object.products_count }}</span>
+              </a>
+            {%- else -%}
+              <a href="{{ c.url }}" class="hdr__sublink{% if current %} is-current{% endif %}"{% if c.links.size > 0 %} data-mega-trigger="m{{ ti }}-{{ forloop.index }}"{% endif %}{% if current %} aria-current="page"{% endif %}>{{ c.title }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    {%- endfor -%}
+    <button type="button" class="hdr__subnext" data-subnext aria-label="Scroll menu">{% render 'icon', name: 'chev-right', class: 'ico--sm' %}</button>
+  </div>
+
+  {%- comment -%} Standard mega panels: a sub-link with its own links {%- endcomment -%}
+  {%- for link in menu.links -%}
+    {%- assign ti = forloop.index -%}
+    {%- for c in link.links -%}
+      {%- if c.links.size > 0 -%}
+        <div class="mega" data-mega="m{{ ti }}-{{ forloop.index }}">
+          <div class="page-width mega__inner">
+            <div class="mega__col">
+              <h4>{{ c.title }}</h4>
+              {%- for g in c.links limit: 6 -%}<a href="{{ g.url }}">{{ g.title }}</a>{%- endfor -%}
+            </div>
+            <div class="mega__col">
+              <h4>Shop by anime</h4>
+              {%- for u in anime_menu.links limit: 6 -%}<a href="{{ u.url }}">{{ u.title }}</a>{%- endfor -%}
+            </div>
+            {%- assign fi = c.object.featured_image | default: c.object.products.first.featured_image -%}
+            <a class="mega__feature" href="{{ c.url }}">
+              {%- if fi -%}<img src="{{ fi | image_url: width: 700 }}" alt="" loading="lazy" width="{{ fi.width }}" height="{{ fi.height }}">{%- endif -%}
+              <span>Shop all {{ c.title }}</span>
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+
+  {%- comment -%} Anime mega menu {%- endcomment -%}
+  {%- if anime_menu.links.size > 0 -%}
+    <div class="mega mega--anime" data-mega="anime">
+      <div class="page-width mega__inner">
+        <div>
+          <div class="sec-head" style="margin-bottom:14px">
+            <h4 class="eyebrow">Pick your anime</h4>
+            <a class="sec-head__link" href="{{ section.settings.anime_hub_url }}">All anime</a>
+          </div>
+          <div class="mega__unis">
+            {%- for u in anime_menu.links limit: 10 -%}{% render 'uni-tile', link: u %}{%- endfor -%}
+          </div>
+        </div>
+        <div class="mega__col">
+          <h4>Shop by character</h4>
+          <div class="mega__chars">
+            {%- for ch in chars_menu.links -%}<a class="char-chip char-chip--plain" href="{{ ch.url }}">{{ ch.title }}</a>{%- endfor -%}
+          </div>
+          {%- assign pi = section.settings.mega_image_n | minus: 1 -%}
+          {%- assign mi = section.settings.mega_image | default: section.settings.mega_image_product.images[pi] -%}
+          {%- if mi -%}
+            <a class="mega__feature" href="{{ section.settings.mega_image_link }}" style="margin-top:18px">
+              <img src="{{ mi | image_url: width: 600 }}" alt="" loading="lazy" width="{{ mi.width }}" height="{{ mi.height }}">
+              <span>{{ section.settings.mega_image_label }}</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "shopify-section--header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Leave empty to use the FAB mark + wordmark. A wide logo works best." },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 56, "step": 2, "unit": "px", "default": 38 },
+    { "type": "link_list", "id": "menu", "label": "Main menu", "default": "main-menu", "info": "Top level = tabs. Second level = the row under the tabs. Third level = hover mega menu." },
+    { "type": "link_list", "id": "anime_characters_menu", "label": "Characters menu (anime mega menu)" },
+    { "type": "checkbox", "id": "anime_first", "label": "Home page opens on the Anime tab", "info": "The row under the tabs shows anime chips on the home page", "default": true },
+    { "type": "url", "id": "anime_hub_url", "label": "\"All anime\" link", "default": "/pages/anime" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search Naruto, Sukuna, Arabic tees…" },
+    { "type": "text", "id": "search_hints", "label": "Rotating search hints", "default": "Itachi,Gojo,Zoro,Goku,Arabic calligraphy,Oversized hoodie", "info": "Comma separated" },
+    { "type": "header", "content": "Anime mega menu" },
+    { "type": "image_picker", "id": "mega_image", "label": "Feature image" },
+    { "type": "product", "id": "mega_image_product", "label": "Or use a product photo" },
+    { "type": "range", "id": "mega_image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 1 },
+    { "type": "text", "id": "mega_image_label", "label": "Feature label", "default": "New drop" },
+    { "type": "url", "id": "mega_image_link", "label": "Feature link" }
+  ]
+}
+{% endschema %}

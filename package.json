@@ -1,0 +1,18 @@
+{
+  "name": "fabrizo-theme",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Custom Shopify Online Store 2.0 theme for FABRIZO FASHION (UAE)",
+  "scripts": {
+    "dev": "node dev/server.mjs",
+    "catalog": "node scripts/build-catalog.mjs",
+    "shopify:push": "shopify theme push --path theme --unpublished",
+    "shopify:dev": "shopify theme dev --path theme",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "liquidjs": "^10.21.0"
+  }
+}

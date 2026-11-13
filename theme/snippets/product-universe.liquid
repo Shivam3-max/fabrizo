@@ -1,0 +1,20 @@
+{%- comment -%}
+  Prints "handle|title|url" of the first anime universe the product belongs to,
+  found by matching product.collections against the anime menu
+  (theme setting "Anime universes menu"). Prints nothing if none.
+{%- endcomment -%}
+{%- liquid
+  assign anime_menu = settings.anime_menu
+  if anime_menu.links == blank
+    assign anime_menu = linklists[settings.anime_menu]
+  endif
+  assign found = ''
+  for c in product.collections
+    for l in anime_menu.links
+      if l.object.handle == c.handle and found == blank
+        assign found = c.handle | append: '|' | append: c.title | append: '|' | append: c.url
+      endif
+    endfor
+  endfor
+  echo found
+-%}

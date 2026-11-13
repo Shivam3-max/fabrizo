@@ -1,0 +1,15 @@
+<div class="page-width section">
+  <h1 class="coll__title" style="margin-bottom:20px">All collections</h1>
+  <div class="grid" style="--cols: 4">
+    {%- for c in collections -%}
+      {%- assign im = c.image | default: c.products.first.featured_image -%}
+      {%- if c.products_count > 0 -%}
+      <a class="cat-tile" href="{{ c.url }}" style="aspect-ratio:4/5">
+        {%- if im -%}<img src="{{ im | image_url: width: 500 }}" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}
+        <span class="cat-tile__label">{{ c.title }}</span><span class="cat-tile__count">{{ c.products_count }}</span>
+      </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+{% schema %}{ "name": "Collections list" }{% endschema %}

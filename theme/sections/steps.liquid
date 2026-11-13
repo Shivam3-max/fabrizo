@@ -1,0 +1,11 @@
+<section class="section">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}<div class="sec-head"><h2 class="h-sec">{{ section.settings.title }}</h2></div>{%- endif -%}
+    <div class="steps">
+      {%- for block in section.blocks -%}<div class="step" {{ block.shopify_attributes }}><b>0{{ forloop.index }}</b><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></div>{%- endfor -%}
+    </div>
+    {%- if section.settings.btn != blank -%}<div class="ptabs__more"><a class="btn btn--accent" href="{{ section.settings.link }}">{{ section.settings.btn }}</a></div>{%- endif -%}
+  </div>
+</section>
+{% schema %}{ "name": "Steps", "settings": [ { "type": "text", "id": "title", "label": "Heading" }, { "type": "text", "id": "btn", "label": "Button" }, { "type": "url", "id": "link", "label": "Button link" } ],
+  "blocks": [ { "type": "step", "name": "Step", "settings": [ { "type": "text", "id": "title", "label": "Title" }, { "type": "textarea", "id": "text", "label": "Text" } ] } ], "max_blocks": 6, "presets": [ { "name": "Steps" } ] }{% endschema %}

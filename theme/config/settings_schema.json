@@ -1,0 +1,36 @@
+[
+  { "name": "theme_info", "theme_name": "Fabrizo", "theme_version": "1.0.0", "theme_author": "Rely", "theme_documentation_url": "https://fabrizofashion.com", "theme_support_url": "https://fabrizofashion.com/pages/contact" },
+  { "name": "Colours", "settings": [
+    { "type": "color", "id": "color_ink", "label": "Ink", "default": "#0a0a0a" },
+    { "type": "color", "id": "color_accent", "label": "Accent", "default": "#c40500" },
+    { "type": "color", "id": "color_sale", "label": "Sale price", "default": "#c40500" }
+  ] },
+  { "name": "Anime navigation", "settings": [
+    { "type": "paragraph", "content": "Every link in this menu is an anime universe: it powers the Anime tab chips, the anime mega menu, \"Pick your anime\", universe badges on cards and \"More from …\" on product pages." },
+    { "type": "link_list", "id": "anime_menu", "label": "Anime universes menu", "default": "anime" }
+  ] },
+  { "name": "Offers & delivery", "settings": [
+    { "type": "checkbox", "id": "offer_enabled", "label": "Show bundle offer", "default": true },
+    { "type": "number", "id": "offer_buy_1", "label": "Tier 1: buy", "default": 3 },
+    { "type": "number", "id": "offer_free_1", "label": "Tier 1: free", "default": 1 },
+    { "type": "number", "id": "offer_buy_2", "label": "Tier 2: buy", "default": 5 },
+    { "type": "number", "id": "offer_free_2", "label": "Tier 2: free", "default": 2 },
+    { "type": "text", "id": "offer_types", "label": "Offer applies to product types", "default": "T-Shirt", "info": "Comma separated, e.g. T-Shirt, Polo" },
+    { "type": "paragraph", "content": "The theme only shows the offer. Create the matching automatic discount in Shopify > Discounts." },
+    { "type": "number", "id": "free_shipping_threshold", "label": "Free delivery over (AED)", "default": 99 },
+    { "type": "text", "id": "delivery_eta", "label": "Delivery promise", "default": "Delivered in 1–3 days across the UAE" },
+    { "type": "checkbox", "id": "tabby_enabled", "label": "Show Tabby instalments (only if Tabby is installed)", "default": false }
+  ] },
+  { "name": "Search", "settings": [
+    { "type": "text", "id": "popular_searches", "label": "Popular searches", "default": "Oversized, Arabic calligraphy, Hoodie, Couples, Porsche" },
+    { "type": "collection", "id": "search_trending_collection", "label": "Trending in search" }
+  ] },
+  { "name": "Contact & social", "settings": [
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp number", "info": "International format, e.g. +9715XXXXXXXX" },
+    { "type": "url", "id": "social_instagram", "label": "Instagram" },
+    { "type": "url", "id": "social_tiktok", "label": "TikTok" },
+    { "type": "url", "id": "social_facebook", "label": "Facebook" },
+    { "type": "url", "id": "app_link", "label": "Android app link" }
+  ] },
+  { "name": "Favicon", "settings": [ { "type": "image_picker", "id": "favicon", "label": "Favicon" } ] }
+]

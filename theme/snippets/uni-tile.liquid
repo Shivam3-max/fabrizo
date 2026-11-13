@@ -1,0 +1,21 @@
+{%- comment -%} Anime universe tile. Params: link (menu link with .object collection), show_count {%- endcomment -%}
+{%- liquid
+  assign col = link.object
+  assign h = col.handle | default: link.handle
+  capture accent
+    render 'uni', handle: h, get: 'accent', collection: col
+  endcapture
+  capture kanji
+    render 'uni', handle: h, get: 'kanji', collection: col
+  endcapture
+  assign im = col.image | default: col.featured_image | default: col.products.first.featured_image
+-%}
+<a class="uni-tile" href="{{ link.url }}" style="--uni: {{ accent }}">
+  {%- if im -%}<img class="uni-tile__img" src="{{ im | image_url: width: 500 }}" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}
+  {%- if kanji != blank -%}<span class="uni-tile__kanji" aria-hidden="true">{{ kanji }}</span>{%- endif -%}
+  <span class="uni-tile__body">
+    <span class="uni-tile__name">{{ link.title }}</span>
+    {%- if show_count != false and col.products_count -%}<span class="uni-tile__count">{{ col.products_count }} {% if col.products_count == 1 %}design{% else %}designs{% endif %}</span>{%- endif -%}
+  </span>
+  <span class="uni-tile__bar"></span>
+</a>

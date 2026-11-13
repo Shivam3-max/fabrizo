@@ -1,0 +1,16 @@
+{
+  "current": {
+    "color_ink": "#0a0a0a", "color_accent": "#c40500", "color_sale": "#c40500",
+    "anime_menu": "anime",
+    "offer_enabled": true, "offer_buy_1": 3, "offer_free_1": 1, "offer_buy_2": 5, "offer_free_2": 2, "offer_types": "T-Shirt",
+    "free_shipping_threshold": 99, "delivery_eta": "Delivered in 1–3 days across the UAE", "tabby_enabled": false,
+    "popular_searches": "Oversized, Arabic calligraphy, Hoodie, Couples, Porsche",
+    "search_trending_collection": "anime-collection",
+    "whatsapp_number": "",
+    "social_instagram": "https://www.instagram.com/fabrizo_fashion",
+    "social_tiktok": "https://www.tiktok.com/@fabrizofashion_1",
+    "social_facebook": "",
+    "app_link": "https://play.google.com/store/apps/details?id=com.fabrizofashion.appyantra"
+  },
+  "presets": {}
+}

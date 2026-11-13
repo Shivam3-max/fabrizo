@@ -1,0 +1,18 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "a1": { "type": "message", "settings": { "text": "Buy 3 Get 1 Free on all tees", "link": "/collections/t-shirts" } },
+        "a2": { "type": "message", "settings": { "text": "New anime drop: Goku Ultra Instinct is live", "link": "/collections/dragon-ball" } },
+        "a3": { "type": "message", "settings": { "text": "Free UAE delivery over AED 99", "link": "" } },
+        "a4": { "type": "message", "settings": { "text": "Cash on delivery all over the UAE", "link": "" } }
+      },
+      "block_order": ["a1", "a2", "a3", "a4"]
+    },
+    "header": { "type": "header", "settings": { "menu": "main-menu", "anime_characters_menu": "anime-characters", "mega_image_product": "naruto-anime-premium-hoodie-black-fabrizo-fashion", "mega_image_n": 4, "mega_image_label": "Naruto premium hoodie", "mega_image_link": "/collections/naruto" } }
+  },
+  "order": ["announcement", "header"]
+}

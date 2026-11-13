@@ -1,0 +1,96 @@
+{
+  "main-menu": { "title": "Main menu", "links": [
+    { "title": "Shop", "url": "/collections/all", "links": [
+      { "title": "New In", "url": "/collections/new-arrivals", "links": [] },
+      { "title": "T-Shirts", "url": "/collections/t-shirts", "links": [
+        { "title": "Oversized Tees", "url": "/collections/oversized" },
+        { "title": "Graphic Tees", "url": "/collections/graphic-tees" },
+        { "title": "Premium Collection", "url": "/collections/premium-collection" },
+        { "title": "Arabic Calligraphy", "url": "/collections/new-arrivals-arabic-calligraphy" },
+        { "title": "Japanese Streetwear", "url": "/collections/japanese-streetwear" },
+        { "title": "Motorsport & JDM", "url": "/collections/motorsport-jdm" },
+        { "title": "Couples", "url": "/collections/couples-collection" },
+        { "title": "All T-Shirts", "url": "/collections/t-shirts" }
+      ] },
+      { "title": "Hoodies", "url": "/collections/hoodies", "links": [] },
+      { "title": "Shorts", "url": "/collections/shorts", "links": [] },
+      { "title": "Sets & Joggers", "url": "/collections/full-sets", "links": [] },
+      { "title": "Polos", "url": "/collections/fabrizo-polo", "links": [] },
+      { "title": "Arabic", "url": "/collections/new-arrivals-arabic-calligraphy", "links": [] },
+      { "title": "Couples", "url": "/collections/couples-collection", "links": [] },
+      { "title": "Custom Print", "url": "/pages/customize-your-print", "links": [] }
+    ] },
+    { "title": "Anime", "url": "/pages/anime", "links": [
+      { "title": "All Anime", "url": "/collections/anime-collection", "links": [] },
+      { "title": "Naruto", "url": "/collections/naruto", "links": [] },
+      { "title": "Jujutsu Kaisen", "url": "/collections/jujutsu-kaisen", "links": [] },
+      { "title": "One Piece", "url": "/collections/one-piece", "links": [] },
+      { "title": "Dragon Ball", "url": "/collections/dragon-ball", "links": [] },
+      { "title": "Demon Slayer", "url": "/collections/demon-slayer", "links": [] },
+      { "title": "Attack on Titan", "url": "/collections/attack-on-titan", "links": [] },
+      { "title": "Bleach", "url": "/collections/bleach", "links": [] },
+      { "title": "Blue Lock", "url": "/collections/blue-lock", "links": [] },
+      { "title": "Tokyo Revengers", "url": "/collections/tokyo-revengers", "links": [] }
+    ] },
+    { "title": "Reviews", "url": "/pages/reviews", "links": [] },
+    { "title": "Sale", "url": "/collections/sale", "links": [] }
+  ] },
+  "anime": { "title": "Anime universes", "links": [
+    { "title": "Naruto", "url": "/collections/naruto" },
+    { "title": "Jujutsu Kaisen", "url": "/collections/jujutsu-kaisen" },
+    { "title": "One Piece", "url": "/collections/one-piece" },
+    { "title": "Dragon Ball", "url": "/collections/dragon-ball" },
+    { "title": "Demon Slayer", "url": "/collections/demon-slayer" },
+    { "title": "Attack on Titan", "url": "/collections/attack-on-titan" },
+    { "title": "Bleach", "url": "/collections/bleach" },
+    { "title": "Blue Lock", "url": "/collections/blue-lock" },
+    { "title": "Tokyo Revengers", "url": "/collections/tokyo-revengers" }
+  ] },
+  "anime-characters": { "title": "Shop by character", "links": [
+    { "title": "Itachi", "url": "/search?q=Itachi&type=product" },
+    { "title": "Sukuna", "url": "/search?q=Sukuna&type=product" },
+    { "title": "Gojo", "url": "/search?q=Gojo&type=product" },
+    { "title": "Zoro", "url": "/search?q=Zoro&type=product" },
+    { "title": "Goku", "url": "/search?q=Goku&type=product" },
+    { "title": "Naruto", "url": "/search?q=Naruto&type=product" },
+    { "title": "Luffy", "url": "/search?q=Luffy&type=product" },
+    { "title": "Minato", "url": "/search?q=Minato&type=product" },
+    { "title": "Zenitsu", "url": "/search?q=Zenitsu&type=product" },
+    { "title": "Giyu", "url": "/search?q=Giyu&type=product" },
+    { "title": "Levi", "url": "/search?q=Levi&type=product" },
+    { "title": "Maki", "url": "/search?q=Maki&type=product" },
+    { "title": "Ichigo", "url": "/search?q=Ichigo&type=product" },
+    { "title": "Bachira", "url": "/search?q=Bachira&type=product" }
+  ] },
+  "footer-help": { "title": "Help", "links": [
+    { "title": "Track your order", "url": "/pages/contact" },
+    { "title": "Size guide", "url": "/pages/size-guide" },
+    { "title": "FAQs", "url": "/pages/faq" },
+    { "title": "Exchange & returns", "url": "/policies/refund-policy" },
+    { "title": "Shipping policy", "url": "/policies/shipping-policy" },
+    { "title": "Privacy policy", "url": "/policies/privacy-policy" },
+    { "title": "Terms of service", "url": "/policies/terms-of-service" }
+  ] },
+  "footer-shop": { "title": "Shop", "links": [
+    { "title": "New In", "url": "/collections/new-arrivals" },
+    { "title": "Oversized Tees", "url": "/collections/oversized" },
+    { "title": "Hoodies", "url": "/collections/hoodies" },
+    { "title": "Shorts", "url": "/collections/shorts" },
+    { "title": "Sets & Joggers", "url": "/collections/full-sets" },
+    { "title": "Arabic Calligraphy", "url": "/collections/new-arrivals-arabic-calligraphy" },
+    { "title": "Custom Print", "url": "/pages/customize-your-print" }
+  ] },
+  "footer-anime": { "title": "Anime", "links": [
+    { "title": "Naruto", "url": "/collections/naruto" },
+    { "title": "Jujutsu Kaisen", "url": "/collections/jujutsu-kaisen" },
+    { "title": "One Piece", "url": "/collections/one-piece" },
+    { "title": "Dragon Ball", "url": "/collections/dragon-ball" },
+    { "title": "Demon Slayer", "url": "/collections/demon-slayer" },
+    { "title": "All anime", "url": "/pages/anime" }
+  ] },
+  "footer-fabrizo": { "title": "Fabrizo", "links": [
+    { "title": "About us", "url": "/pages/about-us" },
+    { "title": "Reviews", "url": "/pages/reviews" },
+    { "title": "Contact us", "url": "/pages/contact" }
+  ] }
+}

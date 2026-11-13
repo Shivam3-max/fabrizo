@@ -1,0 +1,9 @@
+{%- comment -%} Card-friendly title: drops the SEO tail after " – ", " | " or " - FABRIZO". {%- endcomment -%}
+{%- liquid
+  assign t = title | replace: '&nbsp;', ' ' | split: ' – ' | first | split: ' | ' | first | split: ' — ' | first
+  assign t = t | remove: 'Fabrizo Fashion ' | remove: 'FABRIZO FASHION ' | strip
+  if t == blank or t.size < 4
+    assign t = title
+  endif
+  echo t | escape
+-%}
