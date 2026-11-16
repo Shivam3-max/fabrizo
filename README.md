@@ -2,7 +2,7 @@
 
 A custom Online Store 2.0 theme for fabrizofashion.com. It is laid out like teeser.ae: Montserrat 600 uppercase headings, Italiana and Libre Baskerville italic for editorial blocks, ink #0a0a0a, red #c40500, square corners, and the same section order.
 
-It adds anime-first navigation:
+It adds world navigation. Anime, **Marvel** and **Mood Tees** each get a coloured tab row and a hover menu, and the home page has a "Shop by world" block plus Marvel and Mood Tees spotlights. For anime it adds:
 - An **Anime** tab whose row turns into colour-coded anime chips with design counts.
 - An anime mega menu with universe tiles and character shortcuts.
 - A "Pick your anime" hub and one-anime spotlight blocks (Naruto, Jujutsu Kaisen, One Piece…).

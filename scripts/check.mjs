@@ -88,27 +88,39 @@ async function rendered() {
   const get = async (u) => { const r = await fetch(BASE + u); return { status: r.status, html: await r.text() }; };
   const count = (html, re) => (html.match(re) || []).length;
   const PDP = '/products/goku-ultra-instinct-oversized-t-shirt-dragon-ball-anime-streetwear-fabrizo-fashion';
-  const routes = ['/', '/collections/naruto', '/collections/all', '/collections/anime-collection', '/collections/hoodies', '/collections', PDP, '/products/custom-print-hoodie', '/search?q=itachi', '/search', '/cart', '/pages/anime', '/pages/reviews', '/pages/about-us', '/pages/contact', '/pages/faq', '/pages/size-guide', '/pages/customize-your-print'];
+  const routes = ['/', '/collections/naruto', '/collections/marvel', '/collections/mood-tees', '/collections/all', '/collections/anime-collection', '/collections/hoodies', '/collections', PDP, '/products/custom-print-hoodie', '/search?q=itachi', '/search', '/cart', '/pages/anime', '/pages/reviews', '/pages/about-us', '/pages/contact', '/pages/faq', '/pages/size-guide', '/pages/customize-your-print'];
   for (const r of routes) {
     const { status, html } = await get(r);
     ok(status === 200, `${r}: status ${status}`);
     ok(!/Render error|Liquid error|undefined filter/i.test(html), `${r}: render error`);
-    ok(count(html, /class="hdr__tab[ "]/g) === 4, `${r}: 4 header tabs`);
-    ok(count(html, /hdr__sublink--uni/g) === 10, `${r}: 10 anime chips in header row (All Anime + 9)`);
+    ok(count(html, /class="hdr__tab[ "]/g) === 6, `${r}: 6 header tabs (Shop, Anime, Marvel, Mood Tees, Reviews, Sale)`);
+    ok(count(html, /hdr__sublink hdr__sublink--uni[^"]*" style="--uni/g) === 10, `${r}: 10 anime chips (All Anime + 9)`);
+    ok(/All Marvel<span/.test(html) && /All Mood Tees<span/.test(html), `${r}: Marvel + Mood Tees chip rows`);
+    ok(/data-mega="w3"/.test(html) && /data-mega="w4"/.test(html), `${r}: Marvel + Mood Tees mega menus`);
     ok(count(html, /class="foot__col"/g) === 4, `${r}: 4 footer columns`);
     ok(/data-drawer="cart"/.test(html) && /data-drawer="search"/.test(html) && /data-drawer="mnav"/.test(html), `${r}: drawers present`);
     ok(!/src=""/.test(html), `${r}: empty img src`);
   }
   const home = (await get('/')).html;
-  ok(count(home, /class="hero__slide/g) === 4, 'home: 4 hero slides');
+  ok(count(home, /class="hero__slide/g) === 5, 'home: 5 hero slides');
   ok(count(home, /class="uni-tile"/g) >= 9 * 2, 'home: anime tiles in hub + mega');
-  ok(count(home, /id="spot-/g) === 3, 'home: 3 anime spotlights');
+  ok(count(home, /id="spot-/g) === 5, 'home: 5 spotlights (3 anime + Marvel + Mood Tees)');
+  ok(count(home, /class="world"/g) === 4, 'home: 4 world tiles');
+  ok(/id="spot-marvel"/.test(home) && /id="spot-mood-tees"/.test(home), 'home: Marvel + Mood spotlights');
   ok(count(home, /class="card"/g) > 60, 'home: product cards');
   ok(/hdr__tab is-active" data-tab="2"|hdr__tab is-active"[^>]*data-tab="2"/.test(home), 'home: Anime tab active by default');
   const nar = (await get('/collections/naruto')).html;
   ok(/class="ahero"/.test(nar) && /ナルト/.test(nar), 'naruto: anime hero with kanji');
   ok(count(nar, /class="card"/g) === 10, 'naruto: 10 product cards');
   ok(/hdr__sublink hdr__sublink--uni is-current[^>]*>[\s\S]{0,60}Naruto/.test(nar), 'naruto: Naruto chip current');
+  for (const [h, n, tab] of [['marvel', 13, 'Marvel'], ['mood-tees', 20, 'Mood Tees']]) {
+    const w = (await get(`/collections/${h}`)).html;
+    ok(/class="ahero"/.test(w), `${h}: world hero`);
+    ok(count(w, /class="card"/g) === n, `${h}: ${n} cards`);
+    ok(new RegExp(`hdr__tab is-active"[^>]*>${tab}`).test(w), `${h}: ${tab} tab active`);
+  }
+  const sp = (await get('/products/spider-man-web-oversized-t-shirt-marvel-streetwear-fabrizo-fashion')).html;
+  ok(/Marvel universe/.test(sp) && /More from Marvel/.test(sp), 'marvel pdp: world link + more from');
   const all = (await get('/collections/all')).html;
   ok(/<details class="facet"/.test(all) && /filter\.v\.option\.size/.test(all), 'all: filters render');
   const xl = (await get('/collections/anime-collection?filter.v.option.size=XL')).html;

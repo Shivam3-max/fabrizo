@@ -24,7 +24,7 @@
   <div class="page-width spot">
     <div class="spot__panel">
       {%- if im -%}<img class="spot__panel-img" src="{{ im | image_url: width: 700 }}" alt="" loading="lazy" width="{{ im.width }}" height="{{ im.height }}">{%- endif -%}
-      {%- if kanji != blank -%}<span class="spot__kanji" aria-hidden="true">{{ kanji }}</span>{%- endif -%}
+      {%- if kanji != blank -%}<span class="spot__kanji{% if kanji.size > 5 %} is-long{% endif %}" aria-hidden="true">{{ kanji }}</span>{%- endif -%}
       <p class="spot__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 class="spot__title">{{ title }}</h2>
       {%- if line != blank -%}<p class="spot__line">{{ section.settings.text | default: line }}</p>{%- endif -%}
@@ -49,9 +49,9 @@
 {%- endif -%}
 {% schema %}
 {
-  "name": "Anime spotlight",
+  "name": "World spotlight",
   "settings": [
-    { "type": "collection", "id": "collection", "label": "Anime collection" },
+    { "type": "collection", "id": "collection", "label": "Collection (anime, Marvel, Mood Tees…)" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Anime universe" },
     { "type": "text", "id": "title", "label": "Heading (defaults to collection title)" },
     { "type": "textarea", "id": "text", "label": "Tagline (defaults to the anime's built-in line)" },

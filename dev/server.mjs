@@ -87,7 +87,7 @@ mkCollection('all', 'All Products', newest);
 for (const c of CATALOG.collections) {
   if (c.handle === 'all-products') continue;
   const list = newest.filter((p) => p._cols.includes(c.handle));
-  mkCollection(c.handle, c.title, list, { description: c.description, image: c.image ? { src: c.image, width: 1200, height: 1200, alt: c.title, aspect_ratio: 1 } : null });
+  mkCollection(c.handle, c.title, list, { description: c.description, image: c.image ? { src: c.image, width: 1200, height: 1200, alt: c.title, aspect_ratio: 1 } : null, template_suffix: ['marvel', 'mood-tees'].includes(c.handle) ? 'world' : null });
 }
 for (const u of universes) mkCollection(u.handle, u.title, newest.filter((p) => p._universes.includes(u.handle)), { accent: u.accent, kanji: u.kanji, line: u.line, description: `<p>${u.line}</p>`, template_suffix: 'anime' });
 mkCollection('sale', 'Sale', newest.filter((p) => p.compare_at_price && p.compare_at_price > p.price));

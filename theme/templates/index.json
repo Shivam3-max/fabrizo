@@ -2,134 +2,741 @@
   "sections": {
     "hero": {
       "type": "hero-slider",
-      "settings": { "height": 512, "height_mobile": 560, "autoplay": 6 },
-      "blocks": {
-        "s1": { "type": "slide", "settings": { "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion", "image_n": 5, "focal": "center", "badge": "New anime drop", "title": "Wear your anime", "text": "Naruto, Jujutsu Kaisen, One Piece and more. Oversized fits, printed in Dubai.", "btn1": "Pick your anime", "btn1_link": "/pages/anime", "btn1_red": true, "btn2": "Shop Naruto", "btn2_link": "/collections/naruto" } },
-        "s2": { "type": "slide", "settings": { "image_product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection", "image_n": 1, "focal": "center", "badge": "Arabic calligraphy", "title": "Heritage in every letter", "text": "Sabr, Qalb, Haq. Arabic art you can wear.", "btn1": "Shop Arabic", "btn1_link": "/collections/new-arrivals-arabic-calligraphy", "btn2": "Couples sets", "btn2_link": "/collections/couples-collection" } },
-        "s3": { "type": "slide", "settings": { "image_product": "bleach-ichigo-kurosaki-oversized-black-t-shirt-anime-streetwear-edition", "image_n": 2, "focal": "center", "badge": "Limited time offer", "title": "Buy 3 get 1 free", "text": "Pick your favourite tees. Mix any designs. The 4th one's on us.", "btn1": "Shop now", "btn1_link": "/collections/t-shirts", "btn1_red": true, "btn2": "Explore oversized", "btn2_link": "/collections/oversized" } },
-        "s4": { "type": "slide", "settings": { "image_product": "fabrizo-royal-signature-premium-oversized-t-shirt-black-gold-luxury-streetwear", "image_n": 1, "focal": "center", "badge": "Premium collection", "title": "Gold on black", "text": "Heavyweight cotton, metallic prints, limited runs.", "btn1": "Shop premium", "btn1_link": "/collections/premium-collection", "btn2": "New in", "btn2_link": "/collections/new-arrivals" } }
+      "settings": {
+        "height": 512,
+        "height_mobile": 560,
+        "autoplay": 6
       },
-      "block_order": ["s1", "s2", "s3", "s4"]
+      "blocks": {
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion",
+            "image_n": 5,
+            "focal": "center",
+            "badge": "New anime drop",
+            "title": "Wear your anime",
+            "text": "Naruto, Jujutsu Kaisen, One Piece and more. Oversized fits, printed in Dubai.",
+            "btn1": "Pick your anime",
+            "btn1_link": "/pages/anime",
+            "btn1_red": true,
+            "btn2": "Shop Naruto",
+            "btn2_link": "/collections/naruto"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "image_product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection",
+            "image_n": 1,
+            "focal": "center",
+            "badge": "Arabic calligraphy",
+            "title": "Heritage in every letter",
+            "text": "Sabr, Qalb, Haq. Arabic art you can wear.",
+            "btn1": "Shop Arabic",
+            "btn1_link": "/collections/new-arrivals-arabic-calligraphy",
+            "btn2": "Couples sets",
+            "btn2_link": "/collections/couples-collection"
+          }
+        },
+        "s3": {
+          "type": "slide",
+          "settings": {
+            "image_product": "bleach-ichigo-kurosaki-oversized-black-t-shirt-anime-streetwear-edition",
+            "image_n": 2,
+            "focal": "center",
+            "badge": "Limited time offer",
+            "title": "Buy 3 get 1 free",
+            "text": "Pick your favourite tees. Mix any designs. The 4th one's on us.",
+            "btn1": "Shop now",
+            "btn1_link": "/collections/t-shirts",
+            "btn1_red": true,
+            "btn2": "Explore oversized",
+            "btn2_link": "/collections/oversized"
+          }
+        },
+        "s4": {
+          "type": "slide",
+          "settings": {
+            "image_product": "fabrizo-royal-signature-premium-oversized-t-shirt-black-gold-luxury-streetwear",
+            "image_n": 1,
+            "focal": "center",
+            "badge": "Premium collection",
+            "title": "Gold on black",
+            "text": "Heavyweight cotton, metallic prints, limited runs.",
+            "btn1": "Shop premium",
+            "btn1_link": "/collections/premium-collection",
+            "btn2": "New in",
+            "btn2_link": "/collections/new-arrivals"
+          }
+        },
+        "s5": {
+          "type": "slide",
+          "settings": {
+            "image_product": "thanos-infinity-oversized-t-shirt-marvel-streetwear-fabrizo-fashion",
+            "image_n": 1,
+            "focal": "center",
+            "badge": "New: Marvel",
+            "title": "Assemble your fit",
+            "text": "Iron Man, Spider-Man, Thor, Hulk and the Avengers. Oversized, printed in Dubai.",
+            "btn1": "Shop Marvel",
+            "btn1_link": "/collections/marvel",
+            "btn1_red": true,
+            "btn2": "Mood Tees",
+            "btn2_link": "/collections/mood-tees"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s5",
+        "s2",
+        "s3",
+        "s4"
+      ]
     },
     "categories": {
       "type": "category-tiles",
-      "settings": { "title": "", "show_count": false },
-      "blocks": {
-        "c1": { "type": "tile", "settings": { "collection": "t-shirts", "label": "T-Shirts", "image_product": "goku-ultra-instinct-oversized-t-shirt-dragon-ball-anime-streetwear-fabrizo-fashion", "image_n": 1 } },
-        "c2": { "type": "tile", "settings": { "collection": "hoodies", "label": "Hoodies", "image_product": "fabrizo-graffiti-crown-oversized-hoodie-black-amp-white-streetwear-fabrizo-fashion", "image_n": 1 } },
-        "c3": { "type": "tile", "settings": { "collection": "shorts", "label": "Shorts", "image_product": "fabrizo-flame-shorts-set-premium-streetwear", "image_n": 1 } },
-        "c4": { "type": "tile", "settings": { "collection": "full-sets", "label": "Sets & Joggers", "image_product": "fabrizo-fashion-golden-lion-oversized-joggers-premium-streetwear-collection", "image_n": 1 } }
+      "settings": {
+        "title": "",
+        "show_count": false
       },
-      "block_order": ["c1", "c2", "c3", "c4"]
+      "blocks": {
+        "c1": {
+          "type": "tile",
+          "settings": {
+            "collection": "t-shirts",
+            "label": "T-Shirts",
+            "image_product": "goku-ultra-instinct-oversized-t-shirt-dragon-ball-anime-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "c2": {
+          "type": "tile",
+          "settings": {
+            "collection": "hoodies",
+            "label": "Hoodies",
+            "image_product": "fabrizo-graffiti-crown-oversized-hoodie-black-amp-white-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "c3": {
+          "type": "tile",
+          "settings": {
+            "collection": "shorts",
+            "label": "Shorts",
+            "image_product": "fabrizo-flame-shorts-set-premium-streetwear",
+            "image_n": 1
+          }
+        },
+        "c4": {
+          "type": "tile",
+          "settings": {
+            "collection": "full-sets",
+            "label": "Sets & Joggers",
+            "image_product": "fabrizo-fashion-golden-lion-oversized-joggers-premium-streetwear-collection",
+            "image_n": 1
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ]
     },
     "anime": {
       "type": "anime-universes",
-      "settings": { "eyebrow": "Anime universe", "title": "Pick your anime", "text": "Every anime has its own home. Tap one to see all its designs.", "characters": "anime-characters", "link": "/pages/anime", "link_label": "All anime" }
+      "settings": {
+        "eyebrow": "Anime universe",
+        "title": "Pick your anime",
+        "text": "Every anime has its own home. Tap one to see all its designs.",
+        "characters": "anime-characters",
+        "link": "/pages/anime",
+        "link_label": "All anime"
+      }
     },
     "spot_naruto": {
       "type": "anime-spotlight",
-      "settings": { "collection": "naruto", "eyebrow": "Anime universe · 01", "characters": "Itachi, Naruto, Minato", "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion", "image_n": 5, "limit": 12 }
+      "settings": {
+        "collection": "naruto",
+        "eyebrow": "Anime universe",
+        "characters": "Itachi, Naruto, Minato",
+        "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion",
+        "image_n": 5,
+        "limit": 12
+      }
     },
     "spot_jjk": {
       "type": "anime-spotlight",
-      "settings": { "collection": "jujutsu-kaisen", "eyebrow": "Anime universe · 02", "characters": "Sukuna, Gojo, Maki", "image_product": "gojo-anime-hoodie-electric-blue-edition-premium-fabrizo-fashion", "image_n": 2, "limit": 12 }
+      "settings": {
+        "collection": "jujutsu-kaisen",
+        "eyebrow": "Anime universe",
+        "characters": "Sukuna, Gojo, Maki",
+        "image_product": "gojo-anime-hoodie-electric-blue-edition-premium-fabrizo-fashion",
+        "image_n": 2,
+        "limit": 12
+      }
     },
     "editorial": {
       "type": "editorial-banner",
-      "settings": { "image_product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection", "image_n": 2, "focal": "center", "height": 460, "title": "Desert Nights", "arabic": "صبر · قلب · حق", "kicker": "The art of calligraphy", "kicker_italic": "(worn in Dubai)", "btn": "Shop Arabic", "link": "/collections/new-arrivals-arabic-calligraphy" }
+      "settings": {
+        "image_product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection",
+        "image_n": 2,
+        "focal": "center",
+        "height": 460,
+        "title": "Desert Nights",
+        "arabic": "صبر · قلب · حق",
+        "kicker": "The art of calligraphy",
+        "kicker_italic": "(worn in Dubai)",
+        "btn": "Shop Arabic",
+        "link": "/collections/new-arrivals-arabic-calligraphy"
+      }
     },
     "new_launch": {
       "type": "product-carousel",
-      "settings": { "collection": "new-arrivals", "title": "New launch", "limit": 12, "per_row": 5 }
+      "settings": {
+        "collection": "new-arrivals",
+        "title": "New launch",
+        "limit": 12,
+        "per_row": 5
+      }
     },
     "spot_onepiece": {
       "type": "anime-spotlight",
-      "settings": { "collection": "one-piece", "eyebrow": "Anime universe · 03", "characters": "Zoro, Luffy", "image_product": "king-of-hell-oversized-t-shirt-zoro-anime-edition-fabrizo-fashion", "image_n": 1, "limit": 12 }
+      "settings": {
+        "collection": "one-piece",
+        "eyebrow": "Anime universe",
+        "characters": "Zoro, Luffy",
+        "image_product": "king-of-hell-oversized-t-shirt-zoro-anime-edition-fabrizo-fashion",
+        "image_n": 1,
+        "limit": 12
+      }
     },
     "mosaic": {
       "type": "category-mosaic",
-      "settings": { "title": "Shop by category" },
-      "blocks": {
-        "m1": { "type": "tile", "settings": { "collection": "premium-collection", "label": "Premium", "image_product": "fabrizo-royal-signature-premium-oversized-t-shirt-black-gold-luxury-streetwear", "image_n": 2 } },
-        "m2": { "type": "tile", "settings": { "collection": "couples-collection", "label": "Couples", "image_product": "connected-hearts-premium-couples-oversized-t-shirt-set", "image_n": 1 } },
-        "m3": { "type": "tile", "settings": { "collection": "motorsport-jdm", "label": "Motorsport & JDM", "image_product": "porsche-911-oversized-t-shirt-racing-edition", "image_n": 1 } },
-        "m4": { "type": "tile", "settings": { "collection": "new-arrivals-arabic-calligraphy", "label": "Arabic", "image_product": "qalb-oversized-black-t-shirt-arabic-streetwear-edition", "image_n": 1 } },
-        "m5": { "type": "tile", "settings": { "collection": "japanese-streetwear", "label": "Japanese streetwear", "image_product": "sakura-japanese-cherry-blossom-oversized-t-shirt-unisex-graphic-tee-fabrizo-fashion", "image_n": 1 } },
-        "m6": { "type": "feature", "settings": { "kicker": "Design your own", "label": "Custom Print", "bottom": "Start from AED 39", "image_product": "custom-print-oversized-t-shirt", "image_n": 1, "link": "/pages/customize-your-print" } }
+      "settings": {
+        "title": "Shop by category"
       },
-      "block_order": ["m1", "m2", "m3", "m4", "m5", "m6"]
+      "blocks": {
+        "m1": {
+          "type": "tile",
+          "settings": {
+            "collection": "premium-collection",
+            "label": "Premium",
+            "image_product": "fabrizo-royal-signature-premium-oversized-t-shirt-black-gold-luxury-streetwear",
+            "image_n": 2
+          }
+        },
+        "m2": {
+          "type": "tile",
+          "settings": {
+            "collection": "couples-collection",
+            "label": "Couples",
+            "image_product": "connected-hearts-premium-couples-oversized-t-shirt-set",
+            "image_n": 1
+          }
+        },
+        "m3": {
+          "type": "tile",
+          "settings": {
+            "collection": "motorsport-jdm",
+            "label": "Motorsport & JDM",
+            "image_product": "porsche-911-oversized-t-shirt-racing-edition",
+            "image_n": 1
+          }
+        },
+        "m4": {
+          "type": "tile",
+          "settings": {
+            "collection": "new-arrivals-arabic-calligraphy",
+            "label": "Arabic",
+            "image_product": "qalb-oversized-black-t-shirt-arabic-streetwear-edition",
+            "image_n": 1
+          }
+        },
+        "m5": {
+          "type": "tile",
+          "settings": {
+            "collection": "japanese-streetwear",
+            "label": "Japanese streetwear",
+            "image_product": "sakura-japanese-cherry-blossom-oversized-t-shirt-unisex-graphic-tee-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "m6": {
+          "type": "feature",
+          "settings": {
+            "kicker": "Design your own",
+            "label": "Custom Print",
+            "bottom": "Start from AED 39",
+            "image_product": "custom-print-oversized-t-shirt",
+            "image_n": 1,
+            "link": "/pages/customize-your-print"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6"
+      ]
     },
     "reels": {
       "type": "video-reels",
-      "settings": { "eyebrow": "Seen on the street", "title": "Shop the look", "text": "Real fits from the FABRIZO feed. Tap to shop." },
-      "blocks": {
-        "r1": { "type": "reel", "settings": { "product": "gojo-anime-hoodie-electric-blue-edition-premium-fabrizo-fashion", "image_n": 3 } },
-        "r2": { "type": "reel", "settings": { "product": "fabrizo-fashion-golden-lion-oversized-joggers-premium-streetwear-collection", "image_n": 1 } },
-        "r3": { "type": "reel", "settings": { "product": "fabrizo-money-talks-oversized-t-shirt-red-phone-graphic-streetwear-fabrizo-fashion", "image_n": 1 } },
-        "r4": { "type": "reel", "settings": { "product": "naruto-anime-premium-hoodie-black-fabrizo-fashion", "image_n": 5 } },
-        "r5": { "type": "reel", "settings": { "product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion", "image_n": 1 } }
+      "settings": {
+        "eyebrow": "Seen on the street",
+        "title": "Shop the look",
+        "text": "Real fits from the FABRIZO feed. Tap to shop."
       },
-      "block_order": ["r1", "r2", "r3", "r4", "r5"]
+      "blocks": {
+        "r1": {
+          "type": "reel",
+          "settings": {
+            "product": "gojo-anime-hoodie-electric-blue-edition-premium-fabrizo-fashion",
+            "image_n": 3
+          }
+        },
+        "r2": {
+          "type": "reel",
+          "settings": {
+            "product": "fabrizo-fashion-golden-lion-oversized-joggers-premium-streetwear-collection",
+            "image_n": 1
+          }
+        },
+        "r3": {
+          "type": "reel",
+          "settings": {
+            "product": "fabrizo-money-talks-oversized-t-shirt-red-phone-graphic-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "r4": {
+          "type": "reel",
+          "settings": {
+            "product": "naruto-anime-premium-hoodie-black-fabrizo-fashion",
+            "image_n": 5
+          }
+        },
+        "r5": {
+          "type": "reel",
+          "settings": {
+            "product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+      ]
     },
     "tabs": {
       "type": "product-tabs",
-      "settings": { "title": "Shop the latest", "limit": 8, "cols": 4 },
-      "blocks": {
-        "t1": { "type": "tab", "settings": { "collection": "new-arrivals", "label": "New in" } },
-        "t2": { "type": "tab", "settings": { "collection": "anime-collection", "label": "Anime" } },
-        "t3": { "type": "tab", "settings": { "collection": "new-arrivals-arabic-calligraphy", "label": "Arabic" } },
-        "t4": { "type": "tab", "settings": { "collection": "premium-collection", "label": "Premium" } },
-        "t5": { "type": "tab", "settings": { "collection": "hoodies", "label": "Hoodies" } },
-        "t6": { "type": "tab", "settings": { "collection": "oversized", "label": "Oversized" } }
+      "settings": {
+        "title": "Shop the latest",
+        "limit": 8,
+        "cols": 4
       },
-      "block_order": ["t1", "t2", "t3", "t4", "t5", "t6"]
+      "blocks": {
+        "t1": {
+          "type": "tab",
+          "settings": {
+            "collection": "new-arrivals",
+            "label": "New in"
+          }
+        },
+        "t2": {
+          "type": "tab",
+          "settings": {
+            "collection": "anime-collection",
+            "label": "Anime"
+          }
+        },
+        "t3": {
+          "type": "tab",
+          "settings": {
+            "collection": "new-arrivals-arabic-calligraphy",
+            "label": "Arabic"
+          }
+        },
+        "t4": {
+          "type": "tab",
+          "settings": {
+            "collection": "premium-collection",
+            "label": "Premium"
+          }
+        },
+        "t5": {
+          "type": "tab",
+          "settings": {
+            "collection": "hoodies",
+            "label": "Hoodies"
+          }
+        },
+        "t6": {
+          "type": "tab",
+          "settings": {
+            "collection": "oversized",
+            "label": "Oversized"
+          }
+        },
+        "t7": {
+          "type": "tab",
+          "settings": {
+            "collection": "marvel",
+            "label": "Marvel",
+            "anime_colour": true
+          }
+        },
+        "t8": {
+          "type": "tab",
+          "settings": {
+            "collection": "mood-tees",
+            "label": "Mood Tees",
+            "anime_colour": true
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t7",
+        "t8",
+        "t3",
+        "t4",
+        "t5",
+        "t6"
+      ]
     },
     "trending": {
       "type": "trending-chips",
-      "settings": { "title": "Trending right now" },
-      "blocks": {
-        "k1": { "type": "chip", "settings": { "label": "Itachi", "link": "/search?q=Itachi&type=product" } },
-        "k2": { "type": "chip", "settings": { "label": "Sukuna", "link": "/search?q=Sukuna&type=product" } },
-        "k3": { "type": "chip", "settings": { "label": "Oversized hoodies", "link": "/collections/hoodies" } },
-        "k4": { "type": "chip", "settings": { "label": "Arabic calligraphy", "link": "/collections/new-arrivals-arabic-calligraphy" } },
-        "k5": { "type": "chip", "settings": { "label": "Couples sets", "link": "/collections/couples-collection" } },
-        "k6": { "type": "chip", "settings": { "label": "Porsche & JDM", "link": "/collections/motorsport-jdm" } }
+      "settings": {
+        "title": "Trending right now"
       },
-      "block_order": ["k1", "k2", "k3", "k4", "k5", "k6"]
+      "blocks": {
+        "k1": {
+          "type": "chip",
+          "settings": {
+            "label": "Itachi",
+            "link": "/search?q=Itachi&type=product"
+          }
+        },
+        "k2": {
+          "type": "chip",
+          "settings": {
+            "label": "Sukuna",
+            "link": "/search?q=Sukuna&type=product"
+          }
+        },
+        "k3": {
+          "type": "chip",
+          "settings": {
+            "label": "Oversized hoodies",
+            "link": "/collections/hoodies"
+          }
+        },
+        "k4": {
+          "type": "chip",
+          "settings": {
+            "label": "Arabic calligraphy",
+            "link": "/collections/new-arrivals-arabic-calligraphy"
+          }
+        },
+        "k5": {
+          "type": "chip",
+          "settings": {
+            "label": "Couples sets",
+            "link": "/collections/couples-collection"
+          }
+        },
+        "k6": {
+          "type": "chip",
+          "settings": {
+            "label": "Porsche & JDM",
+            "link": "/collections/motorsport-jdm"
+          }
+        },
+        "k7": {
+          "type": "chip",
+          "settings": {
+            "label": "Spider-Man",
+            "link": "/search?q=Spider-Man&type=product"
+          }
+        },
+        "k8": {
+          "type": "chip",
+          "settings": {
+            "label": "Over Thinker",
+            "link": "/search?q=Over+Thinker&type=product"
+          }
+        }
+      },
+      "block_order": [
+        "k1",
+        "k7",
+        "k2",
+        "k8",
+        "k3",
+        "k4",
+        "k5",
+        "k6"
+      ]
     },
     "reviews": {
       "type": "reviews",
-      "settings": { "eyebrow": "Real customers", "title": "What the UAE is wearing", "score": "", "score_text": "" },
-      "blocks": {
-        "v1": { "type": "review", "settings": { "rating": 5, "heading": "Print quality is top", "text": "SAMPLE REVIEW — replace with a real customer review from WhatsApp or Shopify before launch.", "name": "Customer name", "source": "WhatsApp", "verified": true, "product": "naruto-trust-the-process-premium-limited-edition-oversized-t-shirt-black-anime-streetwear-fabrizo-fashion" } },
-        "v2": { "type": "review", "settings": { "rating": 5, "heading": "Fast delivery in Dubai", "text": "SAMPLE REVIEW — replace with a real customer review from WhatsApp or Shopify before launch.", "name": "Customer name", "source": "Website", "verified": true, "product": "sukuna-neon-red-oversized-t-shirt-jujutsu-kaisen-anime-streetwear-fabrizo-fashion" } },
-        "v3": { "type": "review", "settings": { "rating": 5, "heading": "Perfect oversized fit", "text": "SAMPLE REVIEW — replace with a real customer review from WhatsApp or Shopify before launch.", "name": "Customer name", "source": "Instagram", "verified": true, "product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection" } }
+      "settings": {
+        "eyebrow": "Real customers",
+        "title": "What the UAE is wearing",
+        "score": "",
+        "score_text": ""
       },
-      "block_order": ["v1", "v2", "v3"]
+      "blocks": {
+        "v1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "heading": "Print quality is top",
+            "text": "SAMPLE REVIEW — replace with a real customer review from WhatsApp or Shopify before launch.",
+            "name": "Customer name",
+            "source": "WhatsApp",
+            "verified": true,
+            "product": "naruto-trust-the-process-premium-limited-edition-oversized-t-shirt-black-anime-streetwear-fabrizo-fashion"
+          }
+        },
+        "v2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "heading": "Fast delivery in Dubai",
+            "text": "SAMPLE REVIEW — replace with a real customer review from WhatsApp or Shopify before launch.",
+            "name": "Customer name",
+            "source": "Website",
+            "verified": true,
+            "product": "sukuna-neon-red-oversized-t-shirt-jujutsu-kaisen-anime-streetwear-fabrizo-fashion"
+          }
+        },
+        "v3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "heading": "Perfect oversized fit",
+            "text": "SAMPLE REVIEW — replace with a real customer review from WhatsApp or Shopify before launch.",
+            "name": "Customer name",
+            "source": "Instagram",
+            "verified": true,
+            "product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ]
     },
     "ugc": {
       "type": "ugc-gallery",
-      "settings": { "title": "#FabrizoOnYou", "text": "Tag @fabrizo_fashion to be featured. Tap a look to shop it." },
-      "blocks": {
-        "g1": { "type": "photo", "settings": { "product": "bleach-ichigo-kurosaki-oversized-black-t-shirt-anime-streetwear-edition", "image_n": 4 } },
-        "g2": { "type": "photo", "settings": { "product": "naruto-anime-premium-hoodie-black-fabrizo-fashion", "image_n": 4 } },
-        "g3": { "type": "photo", "settings": { "product": "dubai-heritage-oversized-hoodie-fabrizo-fashion", "image_n": 1 } },
-        "g4": { "type": "photo", "settings": { "product": "tomioka-giyu-oversized-t-shirt-limited-edition-premium-anime-streetwear-uae", "image_n": 2 } },
-        "g5": { "type": "photo", "settings": { "product": "minato-namikaze-fabrizo-anime-t-shirt-golden-lightning-nbsp", "image_n": 2 } },
-        "g6": { "type": "photo", "settings": { "product": "fabrizo-fashion-silver-tribal-shorts", "image_n": 1 } }
+      "settings": {
+        "title": "#FabrizoOnYou",
+        "text": "Tag @fabrizo_fashion to be featured. Tap a look to shop it."
       },
-      "block_order": ["g1", "g2", "g3", "g4", "g5", "g6"]
+      "blocks": {
+        "g1": {
+          "type": "photo",
+          "settings": {
+            "product": "bleach-ichigo-kurosaki-oversized-black-t-shirt-anime-streetwear-edition",
+            "image_n": 4
+          }
+        },
+        "g2": {
+          "type": "photo",
+          "settings": {
+            "product": "naruto-anime-premium-hoodie-black-fabrizo-fashion",
+            "image_n": 4
+          }
+        },
+        "g3": {
+          "type": "photo",
+          "settings": {
+            "product": "dubai-heritage-oversized-hoodie-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "g4": {
+          "type": "photo",
+          "settings": {
+            "product": "tomioka-giyu-oversized-t-shirt-limited-edition-premium-anime-streetwear-uae",
+            "image_n": 2
+          }
+        },
+        "g5": {
+          "type": "photo",
+          "settings": {
+            "product": "minato-namikaze-fabrizo-anime-t-shirt-golden-lightning-nbsp",
+            "image_n": 2
+          }
+        },
+        "g6": {
+          "type": "photo",
+          "settings": {
+            "product": "fabrizo-fashion-silver-tribal-shorts",
+            "image_n": 1
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ]
     },
     "usp": {
       "type": "usp-strip",
       "blocks": {
-        "u1": { "type": "item", "settings": { "icon": "truck", "title": "Free UAE delivery", "text": "On orders over AED 99" } },
-        "u2": { "type": "item", "settings": { "icon": "card", "title": "Cash on delivery", "text": "Or pay by card and Apple Pay" } },
-        "u3": { "type": "item", "settings": { "icon": "chat", "title": "WhatsApp support", "text": "Real people, fast replies" } },
-        "u4": { "type": "item", "settings": { "icon": "exchange", "title": "Easy exchanges", "text": "Size swap made simple" } }
+        "u1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UAE delivery",
+            "text": "On orders over AED 99"
+          }
+        },
+        "u2": {
+          "type": "item",
+          "settings": {
+            "icon": "card",
+            "title": "Cash on delivery",
+            "text": "Or pay by card and Apple Pay"
+          }
+        },
+        "u3": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "title": "WhatsApp support",
+            "text": "Real people, fast replies"
+          }
+        },
+        "u4": {
+          "type": "item",
+          "settings": {
+            "icon": "exchange",
+            "title": "Easy exchanges",
+            "text": "Size swap made simple"
+          }
+        }
       },
-      "block_order": ["u1", "u2", "u3", "u4"]
+      "block_order": [
+        "u1",
+        "u2",
+        "u3",
+        "u4"
+      ]
+    },
+    "worlds": {
+      "type": "world-tiles",
+      "settings": {
+        "eyebrow": "More than anime",
+        "title": "Shop by world",
+        "text": "Anime, Marvel heroes, mood slogans and Arabic calligraphy. Pick your world."
+      },
+      "blocks": {
+        "w1": {
+          "type": "world",
+          "settings": {
+            "collection": "anime-collection",
+            "label": "Anime",
+            "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "w2": {
+          "type": "world",
+          "settings": {
+            "collection": "marvel",
+            "label": "Marvel",
+            "image_product": "spider-man-web-oversized-t-shirt-marvel-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "w3": {
+          "type": "world",
+          "settings": {
+            "collection": "mood-tees",
+            "label": "Mood Tees",
+            "image_product": "mentally-offline-oversized-t-shirt-streetwear-graphic-tee-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "w4": {
+          "type": "world",
+          "settings": {
+            "collection": "new-arrivals-arabic-calligraphy",
+            "label": "Arabic",
+            "image_product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection",
+            "image_n": 3
+          }
+        }
+      },
+      "block_order": [
+        "w1",
+        "w2",
+        "w3",
+        "w4"
+      ]
+    },
+    "spot_marvel": {
+      "type": "anime-spotlight",
+      "settings": {
+        "collection": "marvel",
+        "eyebrow": "Marvel universe",
+        "characters": "Iron Man, Spider-Man, Thor, Hulk, Captain America, Deadpool",
+        "image_product": "iron-man-arc-reactor-oversized-t-shirt-marvel-streetwear-fabrizo-fashion",
+        "image_n": 1,
+        "limit": 13
+      }
+    },
+    "spot_mood": {
+      "type": "anime-spotlight",
+      "settings": {
+        "collection": "mood-tees",
+        "eyebrow": "Mood Tees",
+        "characters": "Offline, Over Thinker, Chill Mode, Social Battery, Yapper",
+        "image_product": "social-battery-low-oversized-t-shirt-funny-slogan-tee-fabrizo-fashion",
+        "image_n": 1,
+        "limit": 20
+      }
     }
   },
-  "order": ["hero", "categories", "anime", "spot_naruto", "editorial", "new_launch", "spot_jjk", "mosaic", "reels", "spot_onepiece", "tabs", "trending", "reviews", "ugc", "usp"]
+  "order": [
+    "hero",
+    "categories",
+    "worlds",
+    "anime",
+    "spot_naruto",
+    "spot_marvel",
+    "editorial",
+    "new_launch",
+    "spot_jjk",
+    "spot_mood",
+    "mosaic",
+    "reels",
+    "spot_onepiece",
+    "tabs",
+    "trending",
+    "reviews",
+    "ugc",
+    "usp"
+  ]
 }

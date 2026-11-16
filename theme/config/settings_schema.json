@@ -5,9 +5,10 @@
     { "type": "color", "id": "color_accent", "label": "Accent", "default": "#c40500" },
     { "type": "color", "id": "color_sale", "label": "Sale price", "default": "#c40500" }
   ] },
-  { "name": "Anime navigation", "settings": [
+  { "name": "Anime & world navigation", "settings": [
     { "type": "paragraph", "content": "Every link in this menu is an anime universe: it powers the Anime tab chips, the anime mega menu, \"Pick your anime\", universe badges on cards and \"More from …\" on product pages." },
-    { "type": "link_list", "id": "anime_menu", "label": "Anime universes menu", "default": "anime" }
+    { "type": "link_list", "id": "anime_menu", "label": "Anime universes menu", "default": "anime" },
+    { "type": "text", "id": "world_collections", "label": "World collections", "default": "marvel, mood-tees", "info": "Collection handles that get the same treatment as anime: their own coloured tab row, hover menu, card label and collection header. Add the collection as a top-level link in the main menu." }
   ] },
   { "name": "Offers & delivery", "settings": [
     { "type": "checkbox", "id": "offer_enabled", "label": "Show bundle offer", "default": true },

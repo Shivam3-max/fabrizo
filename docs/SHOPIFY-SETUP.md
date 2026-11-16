@@ -40,11 +40,17 @@ Also create these collections:
 
 The existing collections keep their current handles.
 
+## 2b. Marvel and Mood Tees (world collections)
+
+The `marvel` and `mood-tees` collections already exist in the store.
+- Set the template of both to **collection.world**. This gives them the coloured header: red for Marvel, teal for Mood Tees.
+- Theme settings › Anime & world navigation › **World collections** is `marvel, mood-tees`. Any collection handle added there gets the same treatment: its own tab row, hover menu, card label and header.
+
 ## 3. Menus (Online Store › Navigation)
 
 | Menu handle | Contents |
 |---|---|
-| `main-menu` | Top level = header tabs (Shop, Anime, Reviews, Sale). Second level = the row under the tabs. Third level = hover mega menu. Put the 9 anime collections (plus "All Anime" → `anime-collection`) under **Anime**. |
+| `main-menu` | Top level = header tabs: Shop, Anime, **Marvel** (→ `/collections/marvel`), **Mood Tees** (→ `/collections/mood-tees`), Reviews, Sale. Second level = the row under the tabs. Third level = hover mega menu. Put the 9 anime collections (plus "All Anime" → `anime-collection`) under **Anime**. Under **Marvel**, add one link per hero (e.g. Iron Man → `/search?q=Iron+Man&type=product`); under **Mood Tees**, one per mood (Offline, Over Thinker, Chill Mode…). These become the chips in the row under the tab. Reviews is hidden on phones (header setting) so five tabs fit. |
 | `anime` | The 9 anime collections in the order you want them shown. **This one menu drives the whole anime system**: tab chips, mega menu, "Pick your anime", card badges, "More from …", the filter sidebar and the mobile menu. To add a new anime, create its collection and add it here. |
 | `anime-characters` | One link per character → `/search?q=Itachi&type=product` (Itachi, Sukuna, Gojo, Zoro, Goku, Naruto, Luffy, Minato, Zenitsu, Giyu, Levi, Maki, Ichigo, Bachira). |
 | `footer-help`, `footer-shop`, `footer-anime`, `footer-fabrizo` | The four footer columns. |

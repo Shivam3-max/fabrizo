@@ -1,6 +1,6 @@
 {%- comment -%}
-  Anime universe look-up. Prints one value for a universe collection handle.
-  get: 'accent' | 'kanji' | 'line' | 'chars'. A collection metafield (fabrizo.accent /
+  World look-up (anime universes, Marvel, Mood Tees). Prints one value for a collection handle.
+  get: 'accent' | 'kanji' (vertical mark) | 'line' | 'chars' | 'eyebrow' | 'chips_label' | 'parent' ("url|title"). A collection metafield (fabrizo.accent /
   fabrizo.kanji / fabrizo.tagline) overrides the built-in default.
   Usage: {%- capture c -%}{% render 'uni', handle: col.handle, get: 'accent', collection: col %}{%- endcapture -%}
 {%- endcomment -%}
@@ -9,6 +9,9 @@
   assign kanji = ''
   assign line = ''
   assign chars = ''
+  assign eyebrow = 'Anime universe'
+  assign chips_label = 'Shop by character'
+  assign parent = '/pages/anime|Anime'
   case handle
     when 'naruto'
       assign chars = 'Itachi,Naruto,Minato'
@@ -59,6 +62,30 @@
       assign accent = '#c40500'
       assign kanji = 'アニメ'
       assign line = 'Every anime drop in one place.'
+    when 'new-arrivals-arabic-calligraphy', 'arabic'
+      assign chars = 'Sabr,Qalb,Haq'
+      assign accent = '#a8741a'
+      assign kanji = 'خط'
+      assign line = 'Sabr, Qalb, Haq. Arabic art you can wear.'
+      assign eyebrow = 'Arabic calligraphy'
+      assign chips_label = 'Shop by word'
+      assign parent = ''
+    when 'marvel'
+      assign chars = 'Iron Man,Spider-Man,Thor,Hulk,Captain America,Doctor Strange,Black Panther,Deadpool,Moon Knight,Thanos'
+      assign accent = '#e0202a'
+      assign kanji = 'AVENGERS'
+      assign line = 'Earth’s mightiest fits. Iron Man, Spider-Man, Thor and the Avengers.'
+      assign eyebrow = 'Marvel universe'
+      assign chips_label = 'Shop by hero'
+      assign parent = ''
+    when 'mood-tees'
+      assign chars = 'Offline,Over Thinker,Chill Mode,Social Battery,Low Key,Yapper,Out Of Office,No Signal'
+      assign accent = '#0d9488'
+      assign kanji = 'MOOD'
+      assign line = 'Say it without saying it. Offline, overthinker, chill mode.'
+      assign eyebrow = 'Mood Tees'
+      assign chips_label = 'Shop by mood'
+      assign parent = ''
   endcase
   if collection.metafields.fabrizo.accent.value != blank
     assign accent = collection.metafields.fabrizo.accent.value
@@ -81,5 +108,11 @@
       echo line
     when 'chars'
       echo chars
+    when 'eyebrow'
+      echo eyebrow
+    when 'chips_label'
+      echo chips_label
+    when 'parent'
+      echo parent
   endcase
 -%}

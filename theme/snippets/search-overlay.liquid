@@ -19,6 +19,11 @@
           <a class="pill pill--uni" style="--uni: {% render 'uni', handle: u.object.handle, get: 'accent', collection: u.object %}" href="{{ u.url }}"><span class="uni-dot"></span>{{ u.title }}</a>
         {%- endfor -%}
       </div>
+      {%- assign wl = settings.world_collections | default: 'marvel, mood-tees' | remove: ' ' | split: ',' -%}
+      <p class="srch__h" style="margin-top:22px">Worlds</p>
+      <div class="srch__chips">
+        {%- for h in wl -%}{%- assign wc = collections[h] -%}{%- if wc.products_count > 0 -%}<a class="pill pill--uni" style="--uni: {% render 'uni', handle: h, get: 'accent', collection: wc %}" href="{{ wc.url }}"><span class="uni-dot"></span>{{ wc.title }}</a>{%- endif -%}{%- endfor -%}
+      </div>
       <p class="srch__h" style="margin-top:22px">Characters</p>
       <div class="srch__chips">
         {%- for c in linklists['anime-characters'].links limit: 10 -%}<a class="pill" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}

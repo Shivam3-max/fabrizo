@@ -11,8 +11,12 @@
     <button type="button" class="hdr__icon" data-close aria-label="Close menu">{% render 'icon', name: 'close' %}</button>
   </div>
   <div class="drawer__body">
+    {%- assign world_handles = settings.world_collections | default: 'marvel, mood-tees' | remove: ' ' | prepend: '|' | append: '|' | replace: ',', '|' -%}
     <div class="mnav__tabs" role="tablist">
       <button type="button" class="mnav__tab is-on" role="tab" aria-selected="true" data-mtab="anime">Anime</button>
+      {%- for link in main.links -%}{%- assign wh = link.object.handle | prepend: '|' | append: '|' -%}{%- if link.object and world_handles contains wh -%}
+        <button type="button" class="mnav__tab" role="tab" aria-selected="false" data-mtab="w{{ forloop.index }}" style="--uni: {% render 'uni', handle: link.object.handle, get: 'accent', collection: link.object %}">{{ link.title }}</button>
+      {%- endif -%}{%- endfor -%}
       <button type="button" class="mnav__tab" role="tab" aria-selected="false" data-mtab="shop">Shop</button>
     </div>
     <div class="mnav__panel" data-mpanel="anime">
@@ -25,10 +29,30 @@
         {%- for c in linklists['anime-characters'].links -%}<a class="pill" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
       </div>
     </div>
+    {%- for link in main.links -%}{%- assign wh = link.object.handle | prepend: '|' | append: '|' -%}{%- if link.object and world_handles contains wh -%}
+      {%- assign wc = link.object -%}
+      <div class="mnav__panel" data-mpanel="w{{ forloop.index }}" hidden style="--uni: {% render 'uni', handle: wc.handle, get: 'accent', collection: wc %}">
+        <div class="mnav__prods">
+          {%- for p in wc.products limit: 6 -%}
+            <a class="mega__prod" href="{{ p.url }}">
+              <span class="mega__prod-img">{%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 240 }}" alt="" loading="lazy" width="{{ p.featured_image.width }}" height="{{ p.featured_image.height }}">{%- endif -%}</span>
+              <span class="mega__prod-t">{% render 'short-title', title: p.title %}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+        <a class="mnav__link" href="{{ link.url }}">All {{ link.title }} ({{ wc.products_count }}) {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>
+        <p class="mnav__h">{% render 'uni', handle: wc.handle, get: 'chips_label', collection: wc %}</p>
+        <div class="srch__chips">
+          {%- for c in link.links -%}<a class="pill" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}{%- endfor -%}
     <div class="mnav__panel" data-mpanel="shop" hidden>
       {%- for link in main.links -%}
         {%- assign has_anime = false -%}
         {%- for c in link.links -%}{%- for u in anime_menu.links -%}{%- if u.url == c.url -%}{%- assign has_anime = true -%}{%- endif -%}{%- endfor -%}{%- endfor -%}
+        {%- assign wh = link.object.handle | prepend: '|' | append: '|' -%}
+        {%- if link.object and world_handles contains wh -%}{%- assign has_anime = true -%}{%- endif -%}
         {%- unless has_anime -%}
           {%- if link.links.size > 0 -%}
             {%- for c in link.links -%}<a class="mnav__link" href="{{ c.url }}">{{ c.title }} {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>{%- endfor -%}

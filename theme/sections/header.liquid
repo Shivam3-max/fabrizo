@@ -2,11 +2,14 @@
   Header matched to the reference: logo, top tabs, pill search, AED/EN, account,
   bag; a second row with the active tab's links; hover mega menus.
 
-  Fabrizo navigation upgrade: any top tab whose links point at the anime menu's
-  collections renders its row as colour-coded universe chips with design counts,
-  and hovering that tab opens an anime mega menu (universe tiles + characters).
-  The active tab follows the page: anime collections, anime products and the
-  anime hub light up "Anime"; everything else lights up the first tab.
+  Fabrizo navigation: three kinds of "world" tab get colour-coded chip rows and
+  their own mega menu, so the store reads as anime + Marvel + mood, not anime only.
+  - Anime tab: its links point at the anime menu's collections → universe chips
+    with counts + the anime mega menu (universe tiles + characters).
+  - World tabs (Marvel, Mood Tees…): the tab links to a collection listed in the
+    theme setting "World collections" → an "All Marvel 13" chip, then the tab's
+    links (heroes / moods) as chips, and a mega menu of that collection's tees.
+  The active tab follows the page (collection, product or hub page).
 {%- endcomment -%}
 {%- liquid
   assign menu = section.settings.menu
@@ -21,6 +24,8 @@
     assign anime_handles = anime_handles | append: '|' | append: l.object.handle
   endfor
   assign anime_handles = anime_handles | append: '|anime-collection|'
+  assign world_handles = settings.world_collections | default: 'marvel, mood-tees' | remove: ' ' | prepend: '|' | append: '|' | replace: ',', '|'
+  assign mobile_hide = section.settings.mobile_hide_tabs | downcase | remove: ' ' | prepend: ',' | append: ','
 
   assign on_anime = false
   if template.name == 'collection' and anime_handles contains collection.handle
@@ -29,7 +34,7 @@
     assign on_anime = true
   elsif template.name == 'product'
     capture puni
-      render 'product-universe', product: product
+      render 'product-universe', product: product, anime_only: true
     endcapture
     if puni != blank
       assign on_anime = true
@@ -38,6 +43,8 @@
 
   assign active_index = 0
   assign anime_index = 0
+  assign world_index = 0
+  assign link_index = 0
   for link in menu.links
     assign ti = forloop.index
     assign is_anime_tab = false
@@ -49,20 +56,34 @@
     if is_anime_tab
       assign anime_index = ti
     endif
+    assign wh = link.object.handle | prepend: '|' | append: '|'
+    if link.object and world_handles contains wh
+      if template.name == 'collection' and collection.handle == link.object.handle
+        assign world_index = ti
+      elsif template.name == 'product'
+        for pc in product.collections
+          if pc.handle == link.object.handle
+            assign world_index = ti
+          endif
+        endfor
+      endif
+    endif
     for c in link.links
-      if c.url == request.path and on_anime == false
-        assign active_index = ti
+      if c.url == request.path
+        assign link_index = ti
       endif
     endfor
   endfor
-  if active_index == 0
-    if on_anime and anime_index > 0
-      assign active_index = anime_index
-    elsif template.name == 'index' and section.settings.anime_first and anime_index > 0
-      assign active_index = anime_index
-    else
-      assign active_index = 1
-    endif
+  if on_anime and anime_index > 0
+    assign active_index = anime_index
+  elsif world_index > 0
+    assign active_index = world_index
+  elsif link_index > 0
+    assign active_index = link_index
+  elsif template.name == 'index' and section.settings.anime_first and anime_index > 0
+    assign active_index = anime_index
+  else
+    assign active_index = 1
   endif
 -%}
 <header class="hdr" data-header>
@@ -84,11 +105,25 @@
               assign is_anime_tab = true
             endif
           endfor
+          assign wh = link.object.handle | prepend: '|' | append: '|'
+          assign is_world_tab = false
+          if link.object and world_handles contains wh
+            assign is_world_tab = true
+          endif
           assign t = link.title | downcase
+          assign tk = t | remove: ' ' | prepend: ',' | append: ','
+          assign dot = ''
+          if is_anime_tab
+            assign dot = '#c40500'
+          elsif is_world_tab
+            capture dot
+              render 'uni', handle: link.object.handle, get: 'accent', collection: link.object
+            endcapture
+          endif
         -%}
-        <a href="{{ link.url }}" class="hdr__tab{% if forloop.index == active_index %} is-active{% endif %}{% if t == 'sale' %} hdr__tab--sale{% endif %}"
-           data-tab="{{ forloop.index }}"{% if is_anime_tab %} data-mega-trigger="anime"{% endif %}>
-          {{- link.title -}}{%- if is_anime_tab -%}<span class="hdr__tab-dot" aria-hidden="true"></span>{%- endif -%}
+        <a href="{{ link.url }}" class="hdr__tab{% if forloop.index == active_index %} is-active{% endif %}{% if t == 'sale' %} hdr__tab--sale{% endif %}{% if mobile_hide contains tk %} hdr__tab--m-hide{% endif %}"
+           data-tab="{{ forloop.index }}"{% if is_anime_tab %} data-mega-trigger="anime"{% elsif is_world_tab %} data-mega-trigger="w{{ forloop.index }}"{% endif %}{% if dot != blank %} style="--uni: {{ dot }}"{% endif %}>
+          {{- link.title -}}{%- if dot != blank -%}<span class="hdr__tab-dot" aria-hidden="true"></span>{%- endif -%}
         </a>
       {%- endfor -%}
     </nav>
@@ -110,17 +145,32 @@
 
   <div class="hdr__sub">
     {%- for link in menu.links -%}
-      {%- if link.links.size > 0 -%}
-        {%- liquid
-          assign ti = forloop.index
-          assign is_anime_tab = false
-          for c in link.links
-            if c.object and anime_handles contains c.object.handle
-              assign is_anime_tab = true
-            endif
-          endfor
-        -%}
-        <nav class="page-wide hdr__subrow{% if forloop.index == active_index %} is-on{% endif %}" data-subrow="{{ forloop.index }}"{% if forloop.index == active_index %} data-mobile{% endif %} aria-label="{{ link.title }}">
+      {%- liquid
+        assign ti = forloop.index
+        assign is_anime_tab = false
+        for c in link.links
+          if c.object and anime_handles contains c.object.handle
+            assign is_anime_tab = true
+          endif
+        endfor
+        assign wh = link.object.handle | prepend: '|' | append: '|'
+        assign is_world_tab = false
+        if link.object and world_handles contains wh
+          assign is_world_tab = true
+          capture wacc
+            render 'uni', handle: link.object.handle, get: 'accent', collection: link.object
+          endcapture
+        endif
+      -%}
+      {%- if link.links.size > 0 or is_world_tab -%}
+        <nav class="page-wide hdr__subrow{% if ti == active_index %} is-on{% endif %}" data-subrow="{{ ti }}"{% if ti == active_index %} data-mobile{% endif %} aria-label="{{ link.title }}"{% if is_world_tab %} style="--uni: {{ wacc }}"{% endif %}>
+          {%- if is_world_tab -%}
+            {%- assign current = false -%}
+            {%- if template.name == 'collection' and collection.handle == link.object.handle -%}{%- assign current = true -%}{%- endif -%}
+            <a href="{{ link.url }}" class="hdr__sublink hdr__sublink--uni{% if current %} is-current{% endif %}"{% if current %} aria-current="page"{% endif %}>
+              <span class="uni-dot"></span>All {{ link.title }}<span class="hdr__sublink-count">{{ link.object.products_count }}</span>
+            </a>
+          {%- endif -%}
           {%- for c in link.links -%}
             {%- assign current = false -%}
             {%- if c.url == request.path -%}{%- assign current = true -%}{%- endif -%}
@@ -129,6 +179,8 @@
               <a href="{{ c.url }}" class="hdr__sublink hdr__sublink--uni{% if current %} is-current{% endif %}" style="--uni: {{ acc }}"{% if current %} aria-current="page"{% endif %}>
                 <span class="uni-dot"></span>{{ c.title }}<span class="hdr__sublink-count">{{ c.object.products_count }}</span>
               </a>
+            {%- elsif is_world_tab -%}
+              <a href="{{ c.url }}" class="hdr__sublink hdr__sublink--uni hdr__sublink--world{% if current %} is-current{% endif %}"{% if current %} aria-current="page"{% endif %}>{{ c.title }}</a>
             {%- else -%}
               <a href="{{ c.url }}" class="hdr__sublink{% if current %} is-current{% endif %}"{% if c.links.size > 0 %} data-mega-trigger="m{{ ti }}-{{ forloop.index }}"{% endif %}{% if current %} aria-current="page"{% endif %}>{{ c.title }}</a>
             {%- endif -%}
@@ -151,8 +203,9 @@
               {%- for g in c.links limit: 6 -%}<a href="{{ g.url }}">{{ g.title }}</a>{%- endfor -%}
             </div>
             <div class="mega__col">
-              <h4>Shop by anime</h4>
-              {%- for u in anime_menu.links limit: 6 -%}<a href="{{ u.url }}">{{ u.title }}</a>{%- endfor -%}
+              <h4>Shop by world</h4>
+              {%- for u in anime_menu.links limit: 4 -%}<a href="{{ u.url }}">{{ u.title }}</a>{%- endfor -%}
+              {%- for w in menu.links -%}{%- assign wh = w.object.handle | prepend: '|' | append: '|' -%}{%- if w.object and world_handles contains wh -%}<a href="{{ w.url }}">{{ w.title }}</a>{%- endif -%}{%- endfor -%}
             </div>
             {%- assign fi = c.object.featured_image | default: c.object.products.first.featured_image -%}
             <a class="mega__feature" href="{{ c.url }}">
@@ -163,6 +216,51 @@
         </div>
       {%- endif -%}
     {%- endfor -%}
+  {%- endfor -%}
+
+  {%- comment -%} World mega menus (Marvel, Mood Tees…): the collection's tees + its chips {%- endcomment -%}
+  {%- for link in menu.links -%}
+    {%- assign wh = link.object.handle | prepend: '|' | append: '|' -%}
+    {%- if link.object and world_handles contains wh -%}
+      {%- liquid
+        assign wc = link.object
+        capture wacc
+          render 'uni', handle: wc.handle, get: 'accent', collection: wc
+        endcapture
+        capture weye
+          render 'uni', handle: wc.handle, get: 'eyebrow', collection: wc
+        endcapture
+        capture wlab
+          render 'uni', handle: wc.handle, get: 'chips_label', collection: wc
+        endcapture
+      -%}
+      <div class="mega mega--world" data-mega="w{{ forloop.index }}" style="--uni: {{ wacc }}">
+        <div class="page-width mega__inner">
+          <div>
+            <div class="sec-head" style="margin-bottom:14px">
+              <h4 class="eyebrow" style="color:var(--uni)">{{ weye | default: link.title }}</h4>
+              <a class="sec-head__link" href="{{ link.url }}">Shop all {{ wc.products_count }}</a>
+            </div>
+            <div class="mega__prods">
+              {%- for p in wc.products limit: 6 -%}
+                <a class="mega__prod" href="{{ p.url }}">
+                  <span class="mega__prod-img">{%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 300 }}" alt="" loading="lazy" width="{{ p.featured_image.width }}" height="{{ p.featured_image.height }}">{%- endif -%}</span>
+                  <span class="mega__prod-t">{% render 'short-title', title: p.title %}</span>
+                  <span class="mega__prod-p">{{ p.price | money }}</span>
+                </a>
+              {%- endfor -%}
+            </div>
+          </div>
+          <div class="mega__col">
+            <h4>{{ wlab | default: 'Shop by style' }}</h4>
+            <div class="mega__chars">
+              {%- for c in link.links -%}<a class="char-chip char-chip--plain" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
+            </div>
+            <a class="btn btn--sm mega__world-btn" href="{{ link.url }}">All {{ link.title }}</a>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
   {%- endfor -%}
 
   {%- comment -%} Anime mega menu {%- endcomment -%}
@@ -206,10 +304,11 @@
     { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 56, "step": 2, "unit": "px", "default": 38 },
     { "type": "link_list", "id": "menu", "label": "Main menu", "default": "main-menu", "info": "Top level = tabs. Second level = the row under the tabs. Third level = hover mega menu." },
     { "type": "link_list", "id": "anime_characters_menu", "label": "Characters menu (anime mega menu)" },
+    { "type": "text", "id": "mobile_hide_tabs", "label": "Tabs hidden on phones", "default": "Reviews", "info": "Comma separated tab titles. They stay in the menu drawer." },
     { "type": "checkbox", "id": "anime_first", "label": "Home page opens on the Anime tab", "info": "The row under the tabs shows anime chips on the home page", "default": true },
     { "type": "url", "id": "anime_hub_url", "label": "\"All anime\" link", "default": "/pages/anime" },
-    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search Naruto, Sukuna, Arabic tees…" },
-    { "type": "text", "id": "search_hints", "label": "Rotating search hints", "default": "Itachi,Gojo,Zoro,Goku,Arabic calligraphy,Oversized hoodie", "info": "Comma separated" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search Naruto, Spider-Man, Overthinker…" },
+    { "type": "text", "id": "search_hints", "label": "Rotating search hints", "default": "Itachi,Spider-Man,Gojo,Iron Man,Overthinker,Arabic calligraphy", "info": "Comma separated" },
     { "type": "header", "content": "Anime mega menu" },
     { "type": "image_picker", "id": "mega_image", "label": "Feature image" },
     { "type": "product", "id": "mega_image_product", "label": "Or use a product photo" },

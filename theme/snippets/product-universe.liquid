@@ -1,7 +1,8 @@
 {%- comment -%}
-  Prints "handle|title|url" of the first anime universe the product belongs to,
-  found by matching product.collections against the anime menu
-  (theme setting "Anime universes menu"). Prints nothing if none.
+  Prints "handle|title|url" of the product's world: first an anime universe
+  (product.collections matched against the anime menu), otherwise a world
+  collection from the theme setting "World collections" (Marvel, Mood Tees…).
+  Pass anime_only: true to skip worlds. Prints nothing if none.
 {%- endcomment -%}
 {%- liquid
   assign anime_menu = settings.anime_menu
@@ -16,5 +17,14 @@
       endif
     endfor
   endfor
+  if found == blank and anime_only != true
+    assign world_handles = settings.world_collections | default: 'marvel, mood-tees' | remove: ' ' | prepend: '|' | append: '|' | replace: ',', '|'
+    for c in product.collections
+      assign wh = c.handle | prepend: '|' | append: '|'
+      if world_handles contains wh and found == blank
+        assign found = c.handle | append: '|' | append: c.title | append: '|' | append: c.url
+      endif
+    endfor
+  endif
   echo found
 -%}

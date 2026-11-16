@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "hero": {
+      "type": "collection-anime-hero",
+      "settings": {
+        "eyebrow": "",
+        "switcher": false
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "show_title": false,
+        "cols": 4,
+        "show_anime_side": false,
+        "promo_product": "custom-print-oversized-t-shirt",
+        "promo_image_n": 1,
+        "promo_title": "Design your own",
+        "promo_text": "Want your own slogan or hero? Send it on WhatsApp and we print it.",
+        "promo_btn": "Custom print"
+      }
+    },
+    "more": {
+      "type": "world-tiles",
+      "settings": {
+        "title": "Shop by world",
+        "eyebrow": "Keep exploring"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "main",
+    "more"
+  ]
+}

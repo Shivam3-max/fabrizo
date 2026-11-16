@@ -16,6 +16,9 @@
     capture uni_accent
       render 'uni', handle: uni_parts[0], get: 'accent'
     endcapture
+    capture uni_parent
+      render 'uni', handle: uni_parts[0], get: 'parent'
+    endcapture
   endif
   assign crumb = product.collections.first
   assign cp = v.compare_at_price
@@ -41,7 +44,7 @@
 <div class="page-width pdp" data-pdp{% if uni != blank %} style="--uni: {{ uni_accent }}"{% endif %}>
   <nav class="crumbs" aria-label="Breadcrumb">
     <a href="/">Home</a><span>/</span>
-    {%- if uni != blank -%}<a href="{{ section.settings.hub_url }}">Anime</a><span>/</span><a href="{{ uni_parts[2] }}">{{ uni_parts[1] }}</a>
+    {%- if uni != blank -%}{%- if uni_parent != blank -%}{%- assign up = uni_parent | split: '|' -%}<a href="{{ up[0] }}">{{ up[1] }}</a><span>/</span>{%- endif -%}<a href="{{ uni_parts[2] }}">{{ uni_parts[1] }}</a>
     {%- elsif crumb -%}<a href="{{ crumb.url }}">{{ crumb.title }}</a>{%- endif -%}
     <span>/</span><span aria-current="page">{% render 'short-title', title: product.title %}</span>
   </nav>
@@ -78,7 +81,7 @@
   </div>
 
   <div class="pinfo">
-    {%- if uni != blank -%}<a class="pinfo__uni" href="{{ uni_parts[2] }}"><span class="uni-dot"></span>{{ uni_parts[1] }} universe {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>{%- endif -%}
+    {%- if uni != blank -%}<a class="pinfo__uni" href="{{ uni_parts[2] }}"><span class="uni-dot"></span>{{ uni_parts[1] }}{% if uni_parent != blank or uni_parts[0] == 'marvel' %} universe{% endif %} {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>{%- endif -%}
     <h1 class="pinfo__title">{% render 'short-title', title: product.title %}</h1>
     <div class="price{% if on_sale %} price--sale{% endif %}" data-pdp-price>
       <span class="price__now">{{ v.price | money }}</span>
