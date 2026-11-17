@@ -1,0 +1,32 @@
+{%- comment -%}
+  Product-type shortcuts for one collection, e.g. Naruto → T-Shirts 7 · Hoodies 1
+  · Shorts 1. Each link opens the collection filtered to that type. Prints
+  nothing when the collection has only one type.
+  Params: col (collection), cls (extra class), heading (optional)
+{%- endcomment -%}
+{%- liquid
+  assign order = 'T-Shirt,Hoodie,Joggers,Shorts,Set,Polo' | split: ','
+  assign found = ''
+  for t in order
+    assign n = 0
+    for p in col.products limit: 250
+      if p.type == t
+        assign n = n | plus: 1
+      endif
+    endfor
+    if n > 0
+      assign found = found | append: t | append: ':' | append: n | append: ','
+    endif
+  endfor
+  assign pairs = found | split: ','
+-%}
+{%- if pairs.size > 1 -%}
+  <div class="tlinks {{ cls }}">
+    {%- if heading != blank -%}<span class="tlinks__h">{{ heading }}</span>{%- endif -%}
+    {%- for pr in pairs -%}
+      {%- assign kv = pr | split: ':' -%}
+      {%- assign tq = kv[0] | url_encode -%}
+      <a class="tlinks__a" href="{{ col.url }}?filter.p.product_type={{ tq }}">{% render 'type-icon', type: kv[0] %}{% render 'type-label', type: kv[0] %}<small>{{ kv[1] }}</small></a>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

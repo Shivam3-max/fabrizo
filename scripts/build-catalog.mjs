@@ -19,6 +19,19 @@ const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/fab-raw.json'), 'ut
 const SKIP_TYPES = /snap cart|rapid cart/i;
 const SKIP_TITLES = /^(gift wrapping|shipping protection)$/i;
 
+/* Garment type from the title. The live store's product_type is blank on most
+   products, so the preview uses this; docs/GARMENT-TYPES.md lists the fix. */
+export const garment = (p) => {
+  const t = p.title.toLowerCase();
+  if (p.product_type === 'Custom Print' || /custom print/.test(t)) return 'Custom Print';
+  if (/hoodie/.test(t)) return 'Hoodie';
+  if (/\bset\b|tracksuit|co-ord/.test(t) && !/reset|t-shirt set|tee set/.test(t)) return 'Set';
+  if (/jogger/.test(t)) return 'Joggers';
+  if (/shorts/.test(t)) return 'Shorts';
+  if (/polo/.test(t)) return 'Polo';
+  return 'T-Shirt';
+};
+
 const text = (p) => `${p.title} ${p.tags.join(' ')}`.toLowerCase();
 const strip = (html) => String(html || '').replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<script[\s\S]*?<\/script>/gi, '');
 
@@ -36,7 +49,8 @@ const products = raw.products
       title: p.title.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim(),
       body_html: strip(p.body_html).slice(0, 4000),
       vendor: p.vendor,
-      type: p.product_type || 'T-Shirt',
+      type: garment(p),
+      store_type: p.product_type || '',
       tags: p.tags,
       created_at: p.created_at,
       options: p.options.map((o) => ({ name: o.name.trim(), values: o.values })),

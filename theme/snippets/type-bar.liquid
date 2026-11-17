@@ -1,0 +1,56 @@
+{%- comment -%}
+  "What are you shopping?" bar: one chip per product type in the current
+  collection or search (T-Shirts, Hoodies, Joggers, Shorts, Sets, Polos…) with
+  counts, built from Shopify's Product type filter so it works across pages
+  and combines with size/colour filters. One type at a time (theme.js), and
+  the links still work without JS.
+
+  Params: filters (collection.filters / search.filters), all_url, label
+  Needs Search & Discovery › Filters › "Product type" switched on, and every
+  product's type filled in (T-Shirt, Hoodie, Joggers, Shorts, Set, Polo).
+{%- endcomment -%}
+{%- liquid
+  assign tf = nil
+  for f in filters
+    if f.param_name == 'filter.p.product_type'
+      assign tf = f
+    endif
+  endfor
+  assign order = 'T-Shirt,Hoodie,Joggers,Shorts,Set,Polo,Custom Print' | split: ','
+  comment
+    Only clothing types get a chip; app products (cart add-ons, gift wrap) are ignored.
+  endcomment
+  assign shown = 0
+  assign total = 0
+  for v in tf.values
+    if order contains v.value
+      assign shown = shown | plus: 1
+      assign total = total | plus: v.count
+    endif
+  endfor
+-%}
+{%- if tf and shown > 1 or tf.active_values.size > 0 -%}
+  {%- liquid
+    assign all_href = all_url
+    if tf.active_values.size == 1
+      assign all_href = tf.active_values.first.url_to_remove
+    endif
+  -%}
+  <nav class="tbar" data-tbar aria-label="Shop by product">
+    <span class="tbar__label">{{ label | default: 'Shop' }}</span>
+    <div class="tbar__row" data-tbar-row>
+      <a class="tbar__chip{% if tf.active_values.size == 0 %} is-on{% endif %}" href="{{ all_href }}" data-type-all rel="nofollow"{% if tf.active_values.size == 0 %} aria-current="true"{% endif %}>
+        {% render 'icon', name: 'grid4', class: 'ico--sm' %}<span>All</span><small>{{ total }}</small>
+      </a>
+      {%- for t in order -%}
+        {%- for v in tf.values -%}
+          {%- if v.value == t -%}
+            <a class="tbar__chip{% if v.active %} is-on{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}" data-type-value="{{ v.value | escape }}" rel="nofollow"{% if v.active %} aria-current="true"{% endif %}>
+              {% render 'type-icon', type: v.value %}<span>{% render 'type-label', type: v.value %}</span><small>{{ v.count }}</small>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </nav>
+{%- endif -%}

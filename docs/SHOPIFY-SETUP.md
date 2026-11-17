@@ -73,7 +73,15 @@ Create these pages and set each one's template:
 
 **Put the real size chart in the `size-guide` page content.** Every product's "Size guide" drawer shows it.
 
-## 5. "Anime" filter on collection pages (optional, recommended)
+## 5. Product-type bar (required)
+
+Every collection page, the Shop page and search results have a bar: **All · T-Shirts · Hoodies · Joggers · Shorts · Sets · Polos**, with counts. Product breadcrumbs (Naruto / Hoodies), spotlight blocks and the anime menu link into it too. To make it work on the live store:
+1. Product types: **done 2026-11-17** (124 products fixed). Keep filling the type on new listings; the list is in `docs/GARMENT-TYPES.md` (and `data/type-fixes.json`).
+2. In **Search & Discovery** › Filters, add **Product type**.
+
+The bar hides itself on collections that only have one type.
+
+## 6. "Anime" filter on collection pages (optional, recommended)
 
 1. Create a product metafield `fabrizo.universe` (single line text).
 2. Fill it per product (e.g. "Naruto"). Bulk edit or a CSV works.
@@ -81,12 +89,12 @@ Create these pages and set each one's template:
 
 The other filters need no setup: Availability, Fit, Size, Color and Product type.
 
-## 6. Theme settings to check before publishing
+## 7. Theme settings to check before publishing
 
 - **Offers & delivery:** the "Buy 3 get 1 / Buy 5 get 2" box is **display only**. Either create the matching automatic discount in Discounts, or switch it off. Also check the free-delivery threshold (AED 99), the delivery promise, and Tabby (off by default; only turn it on if Tabby is installed).
 - **Contact & social:** add the WhatsApp number. This turns on "Order on WhatsApp" and the footer button.
 - **Header:** upload a wide logo if you want the FAB mark instead of the wordmark.
 
-## 7. Content still to replace
+## 8. Content still to replace
 
 See `docs/BEFORE-LAUNCH.md`.

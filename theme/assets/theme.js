@@ -328,6 +328,20 @@
     });
   });
 
+  /* ---------------- product-type bar: one type at a time, keeps other filters ---------------- */
+  document.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-tbar] a');
+    if (!chip || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    const u = new URL(location.href);
+    u.searchParams.delete('filter.p.product_type');
+    u.searchParams.delete('page');
+    if (chip.dataset.typeValue && !chip.classList.contains('is-on')) u.searchParams.append('filter.p.product_type', chip.dataset.typeValue);
+    const qs = u.searchParams.toString();
+    location.href = u.pathname + (qs ? '?' + qs : '');
+  });
+  $$('[data-tbar-row]').forEach((row) => { const on = $('.is-on', row); if (on && on.offsetLeft > row.clientWidth - 60) row.scrollLeft = on.offsetLeft - 20; });
+
   /* ---------------- collection: filters drawer, density, sort, find ---------------- */
   const side = $('[data-coll-side]');
   $('[data-open-filters]')?.addEventListener('click', () => { side?.classList.add('is-open'); overlay?.classList.add('is-on'); openName = 'filters'; document.body.classList.add('is-locked'); });

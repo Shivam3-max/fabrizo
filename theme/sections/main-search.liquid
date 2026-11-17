@@ -11,6 +11,11 @@
     {% render 'icon', name: 'search' %}<input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search anime, characters, designs…" aria-label="Search"><input type="hidden" name="type" value="product">
   </form>
   {%- if search.performed -%}<p class="sub" style="margin-bottom:22px">{{ search.results_count }} {% if search.results_count == 1 %}style{% else %}styles{% endif %}</p>{%- endif -%}
+  {%- if search.performed -%}
+    {%- assign s_terms = search.terms | url_encode -%}
+    {%- assign s_all = routes.search_url | append: '?type=product&q=' | append: s_terms -%}
+    {% render 'type-bar', filters: search.filters, all_url: s_all, label: 'Show' %}
+  {%- endif -%}
   {%- if search.performed and search.results_count > 0 -%}
     {%- paginate search.results by 36 -%}
       <div class="grid" style="--cols: 4">

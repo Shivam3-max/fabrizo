@@ -1076,3 +1076,46 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 749px) { .ahero__chars a:nth-child(n+7) { display: none; } .ahero__chars a { padding: 6px 10px; font-size: 10px; } }
 
 @media (min-width: 990px) and (max-width: 1199px) { .hdr__loc { display: none; } .hdr__top { gap: 14px; } }
+
+/* =====================================================================
+   Product-type navigation: "Shop: All · T-Shirts · Hoodies · Joggers…"
+   ===================================================================== */
+.tbar { display: flex; align-items: center; gap: 12px; margin: 4px 0 16px; padding: 10px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
+.tbar__label { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; }
+.tbar__row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.tbar__row::-webkit-scrollbar { display: none; }
+.tbar__chip { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px 0 11px; border: 1px solid var(--line); border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #fff; transition: border-color .15s, background .15s, color .15s; }
+.tbar__chip small { font-size: 10.5px; font-weight: 700; color: var(--muted); }
+.tbar__chip:hover { border-color: var(--ink); }
+.tbar__chip.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.tbar__chip.is-on small { color: rgba(255,255,255,.75); }
+.tbar__ico { width: 18px; height: 18px; }
+@media (min-width: 990px) { .tbar { position: sticky; top: var(--header-h); z-index: 20; } }
+
+.tlinks { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tlinks__h { width: 100%; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.tlinks__a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px 0 9px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; font-weight: 600; background: #fff; }
+.tlinks__a small { font-size: 10px; font-weight: 700; color: var(--muted); }
+.tlinks__a:hover { border-color: var(--ink); }
+.tlinks--panel { margin-top: 16px; }
+.tlinks--panel .tlinks__a { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.4); color: #fff; backdrop-filter: blur(4px); height: 30px; }
+.tlinks--panel .tlinks__a small { color: rgba(255,255,255,.75); }
+.tlinks--panel .tlinks__a:hover { background: #fff; color: var(--ink); }
+.tlinks--panel .tlinks__a:hover small { color: var(--muted); }
+.tlinks--mega { margin-bottom: 18px; }
+.tlinks--mega .tlinks__h { margin-bottom: 6px; }
+.tlinks--drawer { margin: 14px 0 6px; }
+
+@media (max-width: 989px) {
+  .tbar { margin: 0 0 12px; padding: 8px 0; }
+}
+@media (max-width: 749px) {
+  .tbar { margin: 0 calc(var(--gutter) * -1) 0; padding: 10px var(--gutter); border-top: 0; gap: 0; }
+  .tbar__label { display: none; }
+  .tbar__row { margin-right: calc(var(--gutter) * -1); padding-right: var(--gutter); }
+  .tbar__chip { height: 36px; font-size: 12px; padding: 0 12px 0 9px; }
+  .tlinks--panel { margin-top: 12px; }
+}
+
+.mega__col .tlinks__a { display: inline-flex; padding: 0 12px 0 9px; font-size: 12px; }
+.mega__col .tlinks__a:hover { color: var(--ink); }

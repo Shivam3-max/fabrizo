@@ -13,7 +13,7 @@
           },
           {
             "title": "T-Shirts",
-            "url": "/collections/t-shirts",
+            "url": "/collections/all?filter.p.product_type=T-Shirt",
             "links": [
               {
                 "title": "Oversized Tees",
@@ -50,18 +50,13 @@
             ]
           },
           {
-            "title": "Marvel",
-            "url": "/collections/marvel",
-            "links": []
-          },
-          {
-            "title": "Mood Tees",
-            "url": "/collections/mood-tees",
-            "links": []
-          },
-          {
             "title": "Hoodies",
             "url": "/collections/hoodies",
+            "links": []
+          },
+          {
+            "title": "Joggers",
+            "url": "/collections/joggers",
             "links": []
           },
           {
@@ -70,8 +65,8 @@
             "links": []
           },
           {
-            "title": "Sets & Joggers",
-            "url": "/collections/full-sets",
+            "title": "Sets",
+            "url": "/collections/all?filter.p.product_type=Set",
             "links": []
           },
           {

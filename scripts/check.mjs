@@ -121,6 +121,18 @@ async function rendered() {
   }
   const sp = (await get('/products/spider-man-web-oversized-t-shirt-marvel-streetwear-fabrizo-fashion')).html;
   ok(/Marvel universe/.test(sp) && /More from Marvel/.test(sp), 'marvel pdp: world link + more from');
+  // product-type bar
+  const tb = (html) => [...html.matchAll(/class="tbar__chip[^"]*"[^>]*>[\s\S]*?<span>([^<]+)<\/span><small>(\d+)<\/small>/g)].map((m) => `${m[1]} ${m[2]}`);
+  const allTypes = tb((await get('/collections/all')).html);
+  ok(allTypes.length >= 7 && allTypes.some((x) => x.startsWith('Hoodies')) && allTypes.some((x) => x.startsWith('Joggers')), `type bar on /collections/all: ${allTypes.join(', ')}`);
+  const narTypes = tb(nar);
+  ok(narTypes.includes('Hoodies 1') && narTypes.includes('T-Shirts 8'), `type bar on naruto: ${narTypes.join(', ')}`);
+  const narH = (await get('/collections/naruto?filter.p.product_type=Hoodie')).html;
+  ok(count(narH, /class="card"/g) === 1 && /tbar__chip is-on[^>]*data-type-value="Hoodie"/.test(narH), 'naruto hoodies: 1 card, Hoodies chip active');
+  ok(!/<summary>Product type/.test(narH), 'sidebar has no duplicate Product type facet');
+  const hood = (await get('/products/naruto-anime-premium-hoodie-black-fabrizo-fashion')).html;
+  ok(/\/collections\/naruto\?filter\.p\.product_type=Hoodie">Hoodies</.test(hood), 'pdp breadcrumb: Naruto / Hoodies');
+  ok(/tlinks--panel/.test(home) && /tlinks--mega/.test(home) && /tlinks--drawer/.test(home), 'home: type links in spotlight, mega, drawer');
   const all = (await get('/collections/all')).html;
   ok(/<details class="facet"/.test(all) && /filter\.v\.option\.size/.test(all), 'all: filters render');
   const xl = (await get('/collections/anime-collection?filter.v.option.size=XL')).html;

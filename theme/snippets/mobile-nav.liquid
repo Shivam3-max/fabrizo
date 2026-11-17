@@ -24,6 +24,8 @@
         {%- for u in anime_menu.links -%}{% render 'uni-tile', link: u %}{%- endfor -%}
       </div>
       <a class="mnav__link" href="/collections/anime-collection">All anime {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>
+      {%- assign all_anime = collections['anime-collection'] -%}
+      {% render 'type-links', col: all_anime, cls: 'tlinks--drawer', heading: 'Anime by product' %}
       <p class="mnav__h">Shop by character</p>
       <div class="srch__chips">
         {%- for c in linklists['anime-characters'].links -%}<a class="pill" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
@@ -40,6 +42,7 @@
             </a>
           {%- endfor -%}
         </div>
+        {% render 'type-links', col: wc, cls: 'tlinks--drawer', heading: 'By product' %}
         <a class="mnav__link" href="{{ link.url }}">All {{ link.title }} ({{ wc.products_count }}) {% render 'icon', name: 'chev-right', class: 'ico--sm' %}</a>
         <p class="mnav__h">{% render 'uni', handle: wc.handle, get: 'chips_label', collection: wc %}</p>
         <div class="srch__chips">

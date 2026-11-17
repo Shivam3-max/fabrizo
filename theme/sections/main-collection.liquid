@@ -27,6 +27,7 @@
     <div class="coll__find">{% render 'icon', name: 'search' %}<input type="search" placeholder="Search within {{ collection.title | escape }}" aria-label="Search within this collection" data-coll-find></div>
     <form action="{{ collection.url }}" method="get" data-filter-form>
       {%- for f in collection.filters -%}
+        {%- if f.param_name == 'filter.p.product_type' and section.settings.type_bar -%}{%- continue -%}{%- endif -%}
         {%- assign lab = f.label | downcase -%}
         <details class="facet"{% if f.active_values.size > 0 or forloop.index <= section.settings.open_filters %} open{% endif %}>
           <summary>{{ f.label }}{% if f.active_values.size > 0 %}<span class="facet__count">{{ f.active_values.size }}</span>{% endif %}</summary>
@@ -96,6 +97,8 @@
       </nav>
     {%- endif -%}
 
+    {%- if section.settings.type_bar -%}{% render 'type-bar', filters: collection.filters, all_url: collection.url, label: section.settings.type_bar_label %}{%- endif -%}
+
     <div class="coll__toolbar">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/collections/all">Shop</a><span>›</span><span aria-current="page">{{ collection.title }}</span></nav>
       <div class="coll__tools">
@@ -158,6 +161,8 @@
   "name": "Collection grid",
   "settings": [
     { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
+    { "type": "checkbox", "id": "type_bar", "label": "Show product-type bar (T-Shirts, Hoodies, Joggers…)", "default": true, "info": "Needs the Product type filter switched on in Search & Discovery" },
+    { "type": "text", "id": "type_bar_label", "label": "Product-type bar label", "default": "Shop" },
     { "type": "checkbox", "id": "show_desc", "label": "Show description", "default": true },
     { "type": "link_list", "id": "strip_menu", "label": "Thumbnail strip menu", "info": "Collections shown as image thumbnails above the grid" },
     { "type": "range", "id": "cols", "label": "Columns", "min": 3, "max": 4, "step": 1, "default": 4 },

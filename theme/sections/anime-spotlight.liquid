@@ -35,6 +35,7 @@
           {%- for c in chars -%}<a href="{{ routes.search_url }}?q={{ c | strip | url_encode }}&type=product">{{ c | strip }}</a>{%- endfor -%}
         </div>
       {%- endif -%}
+      {% render 'type-links', col: col, cls: 'tlinks--panel' %}
       <div class="spot__cta"><a href="{{ col.url }}" class="btn btn--light">Shop all {{ title }}</a></div>
     </div>
     <div class="spot__rail rail" data-rail>

@@ -252,6 +252,7 @@
             </div>
           </div>
           <div class="mega__col">
+            {% render 'type-links', col: wc, cls: 'tlinks--mega', heading: 'By product' %}
             <h4>{{ wlab | default: 'Shop by style' }}</h4>
             <div class="mega__chars">
               {%- for c in link.links -%}<a class="char-chip char-chip--plain" href="{{ c.url }}">{{ c.title }}</a>{%- endfor -%}
@@ -277,6 +278,8 @@
           </div>
         </div>
         <div class="mega__col">
+          {%- assign all_anime = collections['anime-collection'] -%}
+          {%- if all_anime.products_count > 0 -%}{% render 'type-links', col: all_anime, cls: 'tlinks--mega', heading: 'Anime by product' %}{%- endif -%}
           <h4>Shop by character</h4>
           <div class="mega__chars">
             {%- for ch in chars_menu.links -%}<a class="char-chip char-chip--plain" href="{{ ch.url }}">{{ ch.title }}</a>{%- endfor -%}

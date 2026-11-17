@@ -46,6 +46,18 @@
     <a href="/">Home</a><span>/</span>
     {%- if uni != blank -%}{%- if uni_parent != blank -%}{%- assign up = uni_parent | split: '|' -%}<a href="{{ up[0] }}">{{ up[1] }}</a><span>/</span>{%- endif -%}<a href="{{ uni_parts[2] }}">{{ uni_parts[1] }}</a>
     {%- elsif crumb -%}<a href="{{ crumb.url }}">{{ crumb.title }}</a>{%- endif -%}
+    {%- if product.type != blank and product.type != 'Custom Print' -%}
+      {%- liquid
+        assign type_base = '/collections/all'
+        if uni != blank
+          assign type_base = uni_parts[2]
+        elsif crumb
+          assign type_base = crumb.url
+        endif
+        assign tq = product.type | url_encode
+      -%}
+      <span>/</span><a href="{{ type_base }}?filter.p.product_type={{ tq }}">{% render 'type-label', type: product.type %}</a>
+    {%- endif -%}
     <span>/</span><span aria-current="page">{% render 'short-title', title: product.title %}</span>
   </nav>
 

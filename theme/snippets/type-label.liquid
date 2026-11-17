@@ -1,0 +1,8 @@
+{%- comment -%} Plural, shopper-facing label for a product type. {%- endcomment -%}
+{%- case type -%}
+  {%- when 'T-Shirt' -%}T-Shirts
+  {%- when 'Hoodie' -%}Hoodies
+  {%- when 'Set' -%}Sets
+  {%- when 'Polo' -%}Polos
+  {%- else -%}{{ type }}
+{%- endcase -%}
