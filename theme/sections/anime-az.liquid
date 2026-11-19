@@ -3,6 +3,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
 -%}
 <section class="section">

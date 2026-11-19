@@ -9,6 +9,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
   assign active_count = 0
   for f in collection.filters
@@ -134,7 +137,7 @@
           {%- if forloop.index == section.settings.promo_after and section.settings.promo_title != blank -%}
             {%- assign pi = section.settings.promo_image_n | minus: 1 -%}
             {%- assign pim = section.settings.promo_image | default: section.settings.promo_product.images[pi] -%}
-            <a class="coll__promo" href="{{ section.settings.promo_link }}">
+            <a class="coll__promo" href="{{ section.settings.promo_link | default: '/pages/customize-your-print' }}">
               {%- if pim -%}<img src="{{ pim | image_url: width: 900 }}" alt="" loading="lazy" width="{{ pim.width }}" height="{{ pim.height }}">{%- endif -%}
               <h3>{{ section.settings.promo_title }}</h3>
               <p>{{ section.settings.promo_text }}</p>
@@ -165,7 +168,7 @@
     { "type": "text", "id": "type_bar_label", "label": "Product-type bar label", "default": "Shop" },
     { "type": "checkbox", "id": "show_desc", "label": "Show description", "default": true },
     { "type": "link_list", "id": "strip_menu", "label": "Thumbnail strip menu", "info": "Collections shown as image thumbnails above the grid" },
-    { "type": "range", "id": "cols", "label": "Columns", "min": 3, "max": 4, "step": 1, "default": 4 },
+    { "type": "range", "id": "cols", "label": "Columns", "min": 2, "max": 5, "step": 1, "default": 4 },
     { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 36 },
     { "type": "range", "id": "open_filters", "label": "Filters open by default", "min": 0, "max": 6, "step": 1, "default": 3 },
     { "type": "checkbox", "id": "show_anime_side", "label": "Show \"Shop by anime\" in sidebar", "default": true },
@@ -174,7 +177,7 @@
     { "type": "text", "id": "promo_title", "label": "Title", "default": "Design your own" },
     { "type": "text", "id": "promo_text", "label": "Text", "default": "Your art, your name, your anime. Printed in Dubai from AED 39." },
     { "type": "text", "id": "promo_btn", "label": "Button", "default": "Custom print" },
-    { "type": "url", "id": "promo_link", "label": "Link", "default": "/pages/customize-your-print" },
+    { "type": "url", "id": "promo_link", "label": "Link" },
     { "type": "image_picker", "id": "promo_image", "label": "Image" },
     { "type": "product", "id": "promo_product", "label": "Or use a product photo" },
     { "type": "range", "id": "promo_image_n", "label": "Product photo number", "min": 1, "max": 10, "step": 1, "default": 1 }

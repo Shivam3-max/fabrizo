@@ -1,0 +1,30 @@
+{%- comment -%} Holds app blocks (Judge.me reviews, etc.) with the theme's spacing and heading. {%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+<section class="section{% if section.settings.tight %} section--tight{% endif %}">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="sec-head">
+        <div>
+          {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+          <h2 class="h-sec h-sec--lg">{{ section.settings.title }}</h2>
+        </div>
+      </div>
+    {%- endif -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == '@app' -%}<div {{ block.shopify_attributes }}>{% render block %}</div>{%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Apps",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "title", "label": "Heading" },
+    { "type": "checkbox", "id": "tight", "label": "Less spacing", "default": false }
+  ],
+  "blocks": [ { "type": "@app" } ],
+  "presets": [ { "name": "Apps" } ]
+}
+{% endschema %}

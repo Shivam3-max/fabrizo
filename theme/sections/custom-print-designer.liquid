@@ -1,0 +1,216 @@
+{%- assign cp_handles = 'custom-print-regular-t-shirt,custom-print-oversized-t-shirt,custom-print-hoodie,custom-print-polo' | split: ',' -%}
+{%- assign cp_started = false -%}
+<script type="application/json" id="cpx-data-{{ section.id }}">
+[{%- for h in cp_handles -%}{%- assign p = all_products[h] -%}{%- if p.id -%}{%- if cp_started -%},{%- endif -%}{%- assign cp_started = true -%}{"handle":{{ h | json }},"title":{{ p.title | json }},"variants":[{%- for v in p.variants -%}{"id":{{ v.id }},"size":{{ v.option1 | json }},"area":{{ v.option2 | json }},"tier":{{ v.option3 | json }},"price":{{ v.price }},"available":{{ v.available | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]}{%- endif -%}{%- endfor -%}]
+</script>
+<style>
+.cpx{--cpx-accent:{{ section.settings.accent }};--cpx-line:#e3e0d9;--cpx-soft:#f5f3ee;color:#161616;padding:36px 16px 64px}
+.cpx *{box-sizing:border-box}
+.cpx__wrap{max-width:1200px;margin:0 auto}
+.cpx__head{text-align:center;margin-bottom:28px}
+.cpx__title{margin:0 0 8px;font-size:clamp(26px,4.4vw,40px);line-height:1.15}
+.cpx__sub{margin:0 auto;max-width:620px;opacity:.7}
+.cpx__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
+@media(min-width:900px){.cpx__grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px}.cpx__stage{position:sticky;top:96px}}
+.cpx__stage{background:var(--cpx-soft);border-radius:20px;padding:18px}
+.cpx__view{background:#fff;border-radius:16px;padding:8px;box-shadow:inset 0 0 0 1px var(--cpx-line)}
+.cpx__svg{display:block;width:100%;height:auto;max-height:560px;touch-action:pan-y}
+.cpx__tabs{display:flex;gap:8px;justify-content:center;margin:14px 0 6px}
+.cpx__tab{border:1px solid var(--cpx-line);background:#fff;border-radius:999px;padding:8px 20px;font:inherit;font-size:14px;cursor:pointer;transition:all .2s ease}
+.cpx__tab.is-on{background:var(--cpx-accent);border-color:var(--cpx-accent);color:#fff}
+.cpx__tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:13px}
+.cpx__tools input[type=range]{width:160px;accent-color:var(--cpx-accent)}
+.cpx__link{background:none;border:0;padding:0;font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;color:inherit;opacity:.75}
+.cpx__hint{text-align:center;font-size:12px;opacity:.6;margin:8px 0 0}
+.cpx__step{margin:0 0 22px}
+.cpx__h{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;margin:0 0 10px}
+.cpx__n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--cpx-accent);color:#fff;font-size:12px}
+.cpx__row{display:flex;flex-wrap:wrap;gap:10px}
+.cpx__pick{flex:1 1 calc(50% - 10px);min-width:140px;text-align:left;border:1.5px solid var(--cpx-line);background:#fff;border-radius:14px;padding:12px 14px;font:inherit;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease}
+.cpx__pick b{display:block;font-size:15px}
+.cpx__pick span{font-size:13px;opacity:.65}
+.cpx__pick:hover{border-color:#bdb8ab}
+.cpx__pick.is-on{border-color:var(--cpx-accent);box-shadow:0 0 0 1px var(--cpx-accent)}
+.cpx__sw{width:38px;height:38px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--cpx-line);cursor:pointer;padding:0;transition:transform .2s ease}
+.cpx__sw:hover{transform:scale(1.08)}
+.cpx__sw.is-on{box-shadow:0 0 0 2px var(--cpx-accent)}
+.cpx__cn{font-size:14px;margin:8px 0 0;opacity:.75}
+.cpx__tiers{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap}
+.cpx__tier{flex:1 1 90px;border:1.5px solid var(--cpx-line);border-radius:12px;padding:8px 10px;background:#fff;text-align:center;font-size:12px;transition:border-color .2s ease,background .2s ease}
+.cpx__tier b{display:block;font-size:14px}
+.cpx__tier.is-on{border-color:var(--cpx-accent);box-shadow:0 0 0 1px var(--cpx-accent);background:var(--cpx-soft)}
+.cpx__sizeinfo{font-size:13px;margin:10px 0 0;opacity:.8}
+.cpx__upw{flex:1 1 100%}
+.cpx__up{display:flex;align-items:center;gap:12px;border:1.5px dashed #bdb8ab;border-radius:14px;padding:12px 14px;background:#fff;cursor:pointer;transition:border-color .2s ease,background .2s ease}
+.cpx__up:hover{border-color:var(--cpx-accent);background:var(--cpx-soft)}
+.cpx__up input{position:absolute;opacity:0;width:1px;height:1px}
+.cpx__up.is-done{border-style:solid;border-color:#25a05a}
+.cpx__thumb{width:46px;height:46px;border-radius:8px;background:var(--cpx-soft) center/contain no-repeat;flex:0 0 46px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.cpx__ut{display:block;font-weight:600;font-size:14px}
+.cpx__us{display:block;font-size:12px;opacity:.65;word-break:break-all}
+.cpx__warn{display:block;font-size:12px;color:#a15c00;margin-top:2px}
+.cpx__rm{margin:6px 2px 0}
+.cpx__sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.cpx__sz{border:1.5px solid var(--cpx-line);border-radius:12px;padding:8px;background:#fff;text-align:center}
+.cpx__szl{display:block;font-weight:600;margin-bottom:6px}
+.cpx__q{display:flex;align-items:center;justify-content:center;gap:4px}
+.cpx__q button{width:30px;height:30px;border-radius:8px;border:1px solid var(--cpx-line);background:var(--cpx-soft);font-size:18px;line-height:1;cursor:pointer}
+.cpx__q input{width:40px;height:30px;text-align:center;border:1px solid var(--cpx-line);border-radius:8px;font:inherit;-moz-appearance:textfield}
+.cpx__q input::-webkit-outer-spin-button,.cpx__q input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.cpx__sz.has-q{border-color:var(--cpx-accent)}
+.cpx textarea{width:100%;min-height:80px;border:1.5px solid var(--cpx-line);border-radius:12px;padding:10px 12px;font:inherit;resize:vertical}
+.cpx__sum{background:var(--cpx-soft);border-radius:16px;padding:16px;margin-top:6px}
+.cpx__line{display:flex;justify-content:space-between;font-size:14px;margin:0 0 6px}
+.cpx__total{font-size:20px;font-weight:700;margin:8px 0 12px}
+.cpx__btn{width:100%;border:0;border-radius:12px;background:var(--cpx-accent);color:#fff;padding:15px 18px;font:inherit;font-weight:600;font-size:16px;cursor:pointer;transition:opacity .2s ease,transform .2s ease}
+.cpx__btn:hover:not(:disabled){transform:translateY(-1px)}
+.cpx__btn:disabled{opacity:.4;cursor:not-allowed}
+.cpx__msg{margin:10px 0 0;font-size:14px;min-height:1.2em}
+.cpx__msg.is-err{color:#b3261e}
+.cpx__msg.is-ok{color:#1a7f45}
+.cpx__note{font-size:12px;opacity:.6;margin:10px 0 0;line-height:1.5}
+.cpx__empty{text-align:center;padding:40px 0;opacity:.7}
+.cpx [hidden]{display:none!important}
+</style>
+<div class="cpx" id="cpx-{{ section.id }}">
+  <div class="cpx__wrap">
+    <div class="cpx__head">
+      <h1 class="cpx__title">{{ section.settings.heading | escape }}</h1>
+      {%- if section.settings.subheading != blank -%}<p class="cpx__sub">{{ section.settings.subheading | escape }}</p>{%- endif -%}
+    </div>
+    <p class="cpx__empty" hidden>The custom print products are not set up yet.</p>
+    <div class="cpx__grid">
+      <div class="cpx__stage">
+        <div class="cpx__view"><svg class="cpx__svg" id="cpx-svg-{{ section.id }}" viewBox="0 -16 400 456" role="img" aria-label="Live preview of your design"></svg></div>
+        <div class="cpx__tabs"><button type="button" class="cpx__tab" data-view="front">Front</button><button type="button" class="cpx__tab" data-view="back">Back</button></div>
+        <div class="cpx__tools"><label>Design size <input type="range" min="25" max="100" value="100" data-scale></label><button type="button" class="cpx__link" data-reset>Reset position</button></div>
+        <p class="cpx__hint">Drag your design to move it inside the dashed print area. A bigger design costs a bit more, so the price updates as you resize. The preview shows placement only; colours may vary slightly when printed.</p>
+      </div>
+      <div class="cpx__form" data-form></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+var root=document.getElementById('cpx-{{ section.id }}');if(!root)return;
+var $=function(s){return root.querySelector(s);};
+var data=[];try{data=JSON.parse(document.getElementById('cpx-data-{{ section.id }}').textContent);}catch(e){}
+var CUR={{ cart.currency.iso_code | json }};
+var SMALL={{ section.settings.small_max | default: 15 }},MED={{ section.settings.medium_max | default: 30 }};
+var TIERS=['Small','Medium','Large'];
+var COLORS={'White':'#f7f8fc','Black':'#121317','Marine Green':'#505f45','Beige':'#c2baab','Charcoal':'#2e313b','Coyote Tan':'#78765f','Graphite':'#5f6475','Grey':'#aab1c6','Green':'#178878','Maroon':'#5d2f4b','Navy Blue':'#2b3049','Opal':'#a6efe6','Orange':'#f99d68','Pink':'#d8afbf','Ponderosa Pine':'#1f353a','Purple':'#7c5784','Red':'#d93a62','Royal Blue':'#3a63b8','Sky Blue':'#72a0d6','Yellow':'#eab74c','Off White':'#ebe8de'};
+var STD=['Black','White','Off White','Marine Green','Beige','Charcoal','Coyote Tan','Graphite','Grey','Green','Maroon','Navy Blue','Opal','Orange','Pink','Ponderosa Pine','Purple','Red','Royal Blue','Sky Blue','Yellow'];
+var CONF={'custom-print-oversized-t-shirt':{shape:'oversized',label:'Oversized T-Shirt',colors:['Black','White','Off White']},'custom-print-regular-t-shirt':{shape:'regular',label:'Regular T-Shirt',colors:STD},'custom-print-hoodie':{shape:'hoodie',label:'Hoodie',colors:['Black','White','Navy Blue','Maroon','Grey']},'custom-print-polo':{shape:'polo',label:'Polo Shirt',colors:['Black','White','Navy Blue','Sky Blue','Grey']}};
+var AREAS={regular:{front:{x:138,y:104,w:124,h:150},back:{x:118,y:92,w:164,h:230}},oversized:{front:{x:134,y:104,w:132,h:158},back:{x:112,y:92,w:176,h:240}},hoodie:{front:{x:140,y:112,w:120,h:116},back:{x:112,y:96,w:176,h:240}},polo:{front:{x:222,y:104,w:62,h:62},back:{x:116,y:92,w:168,h:220}}};
+var AREAS_CM={regular:{front:{w:28,h:36},back:{w:32,h:42}},oversized:{front:{w:30,h:38},back:{w:35,h:45}},hoodie:{front:{w:28,h:30},back:{w:35,h:45}},polo:{front:{w:10,h:10},back:{w:30,h:40}}};
+var ORDER=['Front','Back','Front + Back'];
+data=data.filter(function(p){return CONF[p.handle];});
+if(!data.length){$('.cpx__empty').hidden=false;$('.cpx__grid').hidden=true;return;}
+data.forEach(function(p){var c=CONF[p.handle];p.shape=c.shape;p.label=c.label;p.colors=c.colors;p.sizes=[];p.areas=[];p.tiers=[];p.variants.forEach(function(v){if(p.sizes.indexOf(v.size)<0)p.sizes.push(v.size);if(p.areas.indexOf(v.area)<0)p.areas.push(v.area);if(v.tier&&p.tiers.indexOf(v.tier)<0)p.tiers.push(v.tier);});p.areas.sort(function(a,b){return ORDER.indexOf(a)-ORDER.indexOf(b);});p.tiers.sort(function(a,b){return TIERS.indexOf(a)-TIERS.indexOf(b);});p.min=Math.min.apply(null,p.variants.map(function(v){return v.price;}))/100;});
+var state={pi:0,color:null,area:'Front',view:'front',qty:{},notes:'',art:{front:null,back:null},busy:false};
+try{var qp=new URLSearchParams(location.search).get('product');if(qp){data.forEach(function(p,i){if(p.handle.indexOf(qp)>-1||p.shape===qp){state.pi=i;}});}}catch(e){}
+state.color=data[state.pi].colors[0];
+function cur(){return data[state.pi];}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function money(n){return CUR+' '+n.toFixed(2);}
+function vFor(size,area,tier){var p=cur();for(var i=0;i<p.variants.length;i++){var v=p.variants[i];if(v.size===size&&v.area===area&&(!tier||!v.tier||v.tier===tier))return v;}return null;}
+function needs(side){return state.area==='Front + Back'||state.area===(side==='front'?'Front':'Back');}
+function artOk(){return (!needs('front')||state.art.front)&&(!needs('back')||state.art.back);}
+function lum(hex){var n=parseInt(hex.slice(1),16),r=n>>16&255,g=n>>8&255,b=n&255;return (0.299*r+0.587*g+0.114*b)/255;}
+function bodyPath(shape,view){var f=view==='front';
+ if(shape==='regular')return 'M160,40 L100,62 L28,118 L62,160 L98,138 L98,400 L302,400 L302,138 L338,160 L372,118 L300,62 L240,40 Q200,'+(f?90:58)+' 160,40 Z';
+ if(shape==='oversized')return 'M158,40 L86,58 L12,138 L50,186 L84,150 L78,408 L322,408 L316,150 L350,186 L388,138 L314,58 L242,40 Q200,'+(f?90:58)+' 158,40 Z';
+ if(shape==='hoodie')return 'M150,50 L88,70 L18,236 L64,254 L92,160 L86,408 L314,408 L308,160 L336,254 L382,236 L312,70 L250,50 Q200,'+(f?96:64)+' 150,50 Z';
+ return 'M160,40 L100,62 L28,118 L62,160 L98,138 L98,400 L302,400 L302,138 L338,160 L372,118 L300,62 L240,40 Q200,'+(f?74:58)+' 160,40 Z';}
+function garment(shape,view,fill){var f=view==='front',d=bodyPath(shape,view),ln=lum(fill)>0.6?'rgba(0,0,0,.28)':'rgba(255,255,255,.22)',out='';
+ if(shape==='hoodie'){out+='<path d="M146,58 Q138,-6 200,-12 Q262,-6 254,58 Q200,112 146,58 Z" fill="'+fill+'" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/><path d="M164,50 Q200,96 236,50 Q200,12 164,50 Z" fill="rgba(0,0,0,.35)"/>';}
+ out+='<path d="'+d+'" fill="'+fill+'" stroke="rgba(0,0,0,.3)" stroke-width="1.5" stroke-linejoin="round"/><path d="'+d+'" fill="url(#cpxg)"/>';
+ var neck=f?(shape==='hoodie'?96:(shape==='polo'?74:90)):(shape==='hoodie'?64:58);
+ if(shape==='hoodie'){if(f){out+='<path d="M128,300 L272,300 L296,366 L104,366 Z" fill="none" stroke="'+ln+'" stroke-width="2"/><path d="M178,86 L176,152 M222,86 L224,152" stroke="'+ln+'" stroke-width="2.5" fill="none" stroke-linecap="round"/>';}}
+ else if(shape==='polo'){if(f){out+='<path d="M160,40 L186,40 L200,78 L168,94 Z M240,40 L214,40 L200,78 L232,94 Z" fill="'+fill+'" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/><path d="M200,78 L200,176" stroke="'+ln+'" stroke-width="2"/><circle cx="200" cy="104" r="3" fill="'+ln+'"/><circle cx="200" cy="130" r="3" fill="'+ln+'"/><circle cx="200" cy="156" r="3" fill="'+ln+'"/>';}else{out+='<path d="M160,40 Q200,70 240,40 L236,52 Q200,82 164,52 Z" fill="'+fill+'" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>';}}
+ else{out+='<path d="M160,40 Q200,'+neck+' 240,40" fill="none" stroke="'+ln+'" stroke-width="5" stroke-linecap="round"/>';}
+ return out;}
+function defs(a){return '<defs><linearGradient id="cpxg" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".12"/><stop offset=".5" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient><clipPath id="cpxclip"><rect x="'+a.x+'" y="'+a.y+'" width="'+a.w+'" height="'+a.h+'"/></clipPath></defs>';}
+function dims(art,a){var base=Math.min(a.w/art.nw,a.h/art.nh),w=art.nw*base*art.scale,h=art.nh*base*art.scale;return {w:w,h:h,mx:Math.max(0,(a.w-w)/2),my:Math.max(0,(a.h-h)/2)};}
+function clampArt(art,a){var d=dims(art,a);art.dx=Math.max(-d.mx,Math.min(d.mx,art.dx));art.dy=Math.max(-d.my,Math.min(d.my,art.dy));return d;}
+function cmSize(view){var art=state.art[view];if(!art)return null;var p=cur(),a=AREAS[p.shape][view],d=dims(art,a),c=AREAS_CM[p.shape][view];return {w:d.w*c.w/a.w,h:d.h*c.w/a.w};}
+function tierOf(view){var s=cmSize(view);if(!s)return null;var m=Math.max(s.w,s.h);return m<=SMALL?'Small':(m<=MED?'Medium':'Large');}
+function curTier(){var best=null;['front','back'].forEach(function(v){if(!needs(v))return;var t=tierOf(v);if(t&&(best===null||TIERS.indexOf(t)>TIERS.indexOf(best)))best=t;});return best;}
+function useTier(){var p=cur();if(!p.tiers.length)return null;var t=curTier();return (t&&p.tiers.indexOf(t)>-1)?t:p.tiers[0];}
+function fmtCm(s){return (Math.round(s.w*10)/10)+' × '+(Math.round(s.h*10)/10)+' cm';}
+function sizeInfo(){var parts=[];['front','back'].forEach(function(v){if(!needs(v))return;var s=cmSize(v);if(s)parts.push((v==='front'?'Front':'Back')+': '+fmtCm(s)+' ('+tierOf(v)+')');});return parts.length?'Print size — '+parts.join(' · '):'Upload a design to see its print size and price.';}
+function refreshPrice(){if(!$('[data-form]')||!$('[data-pieces]'))return;var p=cur(),t=useTier(),ct=curTier();
+ [].forEach.call(root.querySelectorAll('[data-areaprice]'),function(el){var v=vFor(p.sizes[0],el.getAttribute('data-areaprice'),t);el.textContent=v?money(v.price/100)+' each':'';});
+ [].forEach.call(root.querySelectorAll('[data-tierchip]'),function(el){var tn=el.getAttribute('data-tierchip'),v=vFor(p.sizes[0],state.area,tn);el.querySelector('span').textContent=v?money(v.price/100):'';el.classList.toggle('is-on',!!ct&&tn===ct);});
+ var si=$('[data-sizeinfo]');if(si)si.textContent=sizeInfo();var pt=$('[data-ptier]');if(pt)pt.textContent=ct||'—';summary();}
+function renderStage(){var p=cur(),fill=COLORS[state.color]||'#171717',a=AREAS[p.shape][state.view],art=state.art[state.view],use=needs(state.view),dark=lum(fill)<0.5;
+ var s=defs(a)+garment(p.shape,state.view,fill);
+ if(use){s+='<rect x="'+a.x+'" y="'+a.y+'" width="'+a.w+'" height="'+a.h+'" rx="4" fill="none" stroke="'+(dark?'rgba(255,255,255,.55)':'rgba(0,0,0,.45)')+'" stroke-width="1.2" stroke-dasharray="5 4"/>';
+  if(!art){s+='<text x="'+(a.x+a.w/2)+'" y="'+(a.y+a.h/2)+'" text-anchor="middle" font-size="11" fill="'+(dark?'rgba(255,255,255,.7)':'rgba(0,0,0,.55)')+'">Your design here</text>';}
+  else{s+='<image id="cpx-art" href="'+art.url+'" preserveAspectRatio="none" style="cursor:grab;touch-action:none"/>';}}
+ else{s+='<text x="200" y="'+(a.y+a.h/2)+'" text-anchor="middle" font-size="11" fill="'+(dark?'rgba(255,255,255,.45)':'rgba(0,0,0,.4)')+'">No print on this side</text>';}
+ $('.cpx__svg').innerHTML=s;placeArt();syncTools();}
+function placeArt(){var el=document.getElementById('cpx-art');var art=state.art[state.view];if(el&&art){var a=AREAS[cur().shape][state.view],d=clampArt(art,a);el.setAttribute('x',a.x+a.w/2+art.dx-d.w/2);el.setAttribute('y',a.y+a.h/2+art.dy-d.h/2);el.setAttribute('width',d.w);el.setAttribute('height',d.h);}refreshPrice();}
+function syncTools(){var art=state.art[state.view];var r=$('[data-scale]');r.disabled=!art;r.value=art?Math.round(art.scale*100):100;$('[data-reset]').hidden=!art;[].forEach.call(root.querySelectorAll('.cpx__tab'),function(t){t.classList.toggle('is-on',t.getAttribute('data-view')===state.view);});}
+function renderForm(){var p=cur(),h='';
+ h+='<div class="cpx__step"><p class="cpx__h"><span class="cpx__n">1</span>Choose your product</p><div class="cpx__row">'+data.map(function(q,i){return '<button type="button" class="cpx__pick'+(i===state.pi?' is-on':'')+'" data-product="'+i+'"><b>'+esc(q.label)+'</b><span>from '+money(q.min)+'</span></button>';}).join('')+'</div></div>';
+ h+='<div class="cpx__step"><p class="cpx__h"><span class="cpx__n">2</span>Pick a colour</p><div class="cpx__row">'+p.colors.map(function(c){return '<button type="button" class="cpx__sw'+(c===state.color?' is-on':'')+'" data-color="'+esc(c)+'" style="background:'+COLORS[c]+'" aria-label="'+esc(c)+'" title="'+esc(c)+'"></button>';}).join('')+'</div><p class="cpx__cn">'+esc(state.color)+'</p></div>';
+ h+='<div class="cpx__step"><p class="cpx__h"><span class="cpx__n">3</span>Print area &amp; artwork</p><div class="cpx__row">'+p.areas.map(function(a){return '<button type="button" class="cpx__pick'+(a===state.area?' is-on':'')+'" data-area="'+esc(a)+'"><b>'+esc(a)+'</b><span data-areaprice="'+esc(a)+'"></span></button>';}).join('')+'</div>'
+  +(p.tiers.length?'<div class="cpx__tiers">'+p.tiers.map(function(tn){var lim=tn==='Small'?'up to '+SMALL+' cm':(tn==='Medium'?'up to '+MED+' cm':'over '+MED+' cm');return '<div class="cpx__tier" data-tierchip="'+tn+'"><b>'+tn+' print</b>'+lim+'<span style="display:block;font-weight:600;margin-top:2px"></span></div>';}).join('')+'</div><p class="cpx__sizeinfo" data-sizeinfo></p>':'')
+  +'<div class="cpx__row" style="margin-top:12px">'+['front','back'].filter(needs).map(function(side){var a=state.art[side];return '<div class="cpx__upw"><label class="cpx__up'+(a?' is-done':'')+'"><input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" data-file="'+side+'"><span class="cpx__thumb"'+(a?' style="background-image:url('+a.url+')"':'')+'>'+(a?'':'↑')+'</span><span><span class="cpx__ut">'+(a?(side==='front'?'Front':'Back')+' design added':'Upload '+side+' design')+'</span><span class="cpx__us">'+(a?esc(a.file.name)+' — tap to replace':'PNG, JPG, WEBP or SVG, up to 10 MB. Transparent PNG works best.')+'</span>'+(a&&a.low?'<span class="cpx__warn">⚠ Low resolution ('+a.nw+'×'+a.nh+'px). It may look blurry when printed. A larger file is better.</span>':'')+'</span></label>'+(a?'<button type="button" class="cpx__link cpx__rm" data-remove="'+side+'">Remove '+side+' design</button>':'')+'</div>';}).join('')+'</div></div>';
+ h+='<div class="cpx__step"><p class="cpx__h"><span class="cpx__n">4</span>Sizes &amp; quantity</p><div class="cpx__sizes">'+p.sizes.map(function(s){var q=state.qty[s]||0;return '<div class="cpx__sz'+(q?' has-q':'')+'" data-sz="'+esc(s)+'"><span class="cpx__szl">'+esc(s)+'</span><div class="cpx__q"><button type="button" data-dec="'+esc(s)+'" aria-label="Decrease '+esc(s)+'">−</button><input type="number" min="0" max="99" inputmode="numeric" value="'+q+'" data-qty="'+esc(s)+'" aria-label="Quantity '+esc(s)+'"><button type="button" data-inc="'+esc(s)+'" aria-label="Increase '+esc(s)+'">+</button></div></div>';}).join('')+'</div></div>';
+ h+='<div class="cpx__step"><p class="cpx__h"><span class="cpx__n">5</span>Instructions <span style="font-weight:400;opacity:.6">(optional)</span></p><textarea data-notes maxlength="500" placeholder="Anything we should know? e.g. exact placement, colours, deadline">'+esc(state.notes)+'</textarea></div>';
+ h+='<div class="cpx__sum"><div class="cpx__line"><span>Pieces</span><b data-pieces>0</b></div><div class="cpx__line"><span>Print area</span><b>'+esc(state.area)+'</b></div><div class="cpx__line"><span>Print size</span><b data-ptier>—</b></div><div class="cpx__line"><span>Colour</span><b>'+esc(state.color)+'</b></div><div class="cpx__total" data-total>'+money(0)+'</div><button type="button" class="cpx__btn" data-add disabled>Add to cart</button><p class="cpx__msg" data-msg role="status"></p><p class="cpx__note">Your preview image and the exact placement are sent with your order, and our team reviews every design before printing.</p></div>';
+ $('[data-form]').innerHTML=h;refreshPrice();}
+function summary(){var p=cur(),t=useTier(),pcs=0,tot=0;p.sizes.forEach(function(s){var q=state.qty[s]||0;if(q>0){var v=vFor(s,state.area,t);if(v){pcs+=q;tot+=q*v.price/100;}}});
+ $('[data-pieces]').textContent=pcs;$('[data-total]').textContent=money(tot);var b=$('[data-add]');b.disabled=state.busy||!pcs||!artOk();
+ if(!state.busy){if(!artOk()){b.textContent='Upload your design to continue';}else if(!pcs){b.textContent='Choose at least one size';}else{b.textContent='Add to cart — '+money(tot);}}}
+function msg(t,cls){var m=$('[data-msg]');if(m){m.textContent=t||'';m.className='cpx__msg'+(cls?' '+cls:'');}}
+function setArt(side,file){if(!file)return;if(file.type.indexOf('image/')!==0){msg('Please upload an image file (PNG, JPG, WEBP or SVG).','is-err');return;}if(file.size>10*1024*1024){msg('That file is over 10 MB. Please upload a smaller one.','is-err');return;}
+ var url=URL.createObjectURL(file),img=new Image();img.onload=function(){var nw=img.naturalWidth||300,nh=img.naturalHeight||300,isSvg=file.type.indexOf('svg')>-1;if(state.art[side]){try{URL.revokeObjectURL(state.art[side].url);}catch(e){}}state.art[side]={file:file,url:url,nw:nw,nh:nh,scale:1,dx:0,dy:0,low:!isSvg&&Math.min(nw,nh)<600};state.view=side;msg('');renderForm();renderStage();};img.onerror=function(){msg('We could not read that image. Try a PNG or JPG.','is-err');};img.src=url;}
+function checkJson(r){return r.json().then(function(j){if(!r.ok||j.status){throw new Error(j.description||j.message||'Could not add to cart');}return j;});}
+function loadImg(src){return new Promise(function(res,rej){var i=new Image();i.onload=function(){res(i);};i.onerror=rej;i.src=src;});}
+function artDataUrl(art){return loadImg(art.url).then(function(i){var m=1200,k=Math.min(1,m/Math.max(i.naturalWidth||m,i.naturalHeight||m)),c=document.createElement('canvas');c.width=Math.max(1,Math.round((i.naturalWidth||art.nw)*k));c.height=Math.max(1,Math.round((i.naturalHeight||art.nh)*k));c.getContext('2d').drawImage(i,0,0,c.width,c.height);return c.toDataURL('image/png');});}
+function previewBlob(view){var art=state.art[view];if(!needs(view)||!art)return Promise.resolve(null);
+ return artDataUrl(art).then(function(du){var p=cur(),a=AREAS[p.shape][view],fill=COLORS[state.color]||'#171717',d=clampArt(art,a),sz=cmSize(view);
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -16 400 456" width="800" height="912"><rect x="0" y="-16" width="400" height="456" fill="#f5f3ee"/>'+defs(a)+garment(p.shape,view,fill)+'<rect x="'+a.x+'" y="'+a.y+'" width="'+a.w+'" height="'+a.h+'" rx="4" fill="none" stroke="rgba(128,128,128,.55)" stroke-width="1" stroke-dasharray="5 4"/><image href="'+du+'" x="'+(a.x+a.w/2+art.dx-d.w/2)+'" y="'+(a.y+a.h/2+art.dy-d.h/2)+'" width="'+d.w+'" height="'+d.h+'" preserveAspectRatio="none"/><text x="12" y="428" font-size="12" fill="rgba(0,0,0,.55)" font-family="sans-serif">'+esc(p.label)+' / '+esc(state.color)+' / '+view+(sz?' / '+esc(fmtCm(sz))+' ('+tierOf(view)+')':'')+'</text></svg>';
+  return loadImg('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)).then(function(i){var c=document.createElement('canvas');c.width=800;c.height=912;c.getContext('2d').drawImage(i,0,0,800,912);return new Promise(function(r){c.toBlob(function(b){r(b);},'image/png');});});}).catch(function(){return null;});}
+function placement(view){var art=state.art[view],a=AREAS[cur().shape][view];if(!art)return '';var sz=cmSize(view);return 'offset x '+Math.round(art.dx/a.w*100)+'%, y '+Math.round(art.dy/a.h*100)+'%; size '+Math.round(art.scale*100)+'% of print area; about '+fmtCm(sz);}
+function addToCart(){var p=cur(),t=useTier(),lines=[];p.sizes.forEach(function(s){var q=state.qty[s]||0,v=vFor(s,state.area,t);if(q>0&&v){lines.push({id:v.id,qty:q});}});if(!lines.length||!artOk()||state.busy)return;
+ state.busy=true;var b=$('[data-add]');b.disabled=true;b.textContent='Preparing your preview…';msg('');
+ var sz=[];['front','back'].forEach(function(v){if(needs(v)){var s=cmSize(v);if(s)sz.push(v+' '+fmtCm(s));}});
+ var props={'Colour':state.color,'Print area':state.area,'Print size':(t||sz.join(', ')),'_Print dimensions':sz.join(', '),'_Design':'Custom artwork'};if(state.notes.trim())props['Instructions']=state.notes.trim();
+ if(needs('front'))props['_Placement front']=placement('front');if(needs('back'))props['_Placement back']=placement('back');
+ Promise.all([previewBlob('front'),previewBlob('back')]).then(function(pv){b.textContent='Uploading your design…';
+  var fd=new FormData();fd.append('id',lines[0].id);fd.append('quantity',lines[0].qty);Object.keys(props).forEach(function(k){fd.append('properties['+k+']',props[k]);});
+  if(needs('front'))fd.append('properties[_Artwork front]',state.art.front.file,state.art.front.file.name);
+  if(needs('back'))fd.append('properties[_Artwork back]',state.art.back.file,state.art.back.file.name);
+  if(pv[0])fd.append('properties[_Preview front]',pv[0],'preview-front.png');
+  if(pv[1])fd.append('properties[_Preview back]',pv[1],'preview-back.png');
+  return fetch('/cart/add.js',{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(checkJson);})
+ .then(function(item){var rest=lines.slice(1);if(!rest.length)return item;var pr=JSON.parse(JSON.stringify(item.properties||{}));return fetch('/cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items:rest.map(function(l){return {id:l.id,quantity:l.qty,properties:pr};})})}).then(checkJson);})
+ .then(function(){state.busy=false;summary();msg('Added to your cart ✓','is-ok');var cb=document.querySelector('a.cart-drawer-button,.cart-drawer-button');if(cb){cb.click();}else{window.location.href='/cart';}})
+ .catch(function(e){state.busy=false;summary();msg(e.message||'Something went wrong. Please try again.','is-err');});}
+root.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
+ if(t.hasAttribute('data-product')){state.pi=+t.getAttribute('data-product');var p=cur();if(p.colors.indexOf(state.color)<0)state.color=p.colors[0];if(p.areas.indexOf(state.area)<0)state.area=p.areas[0];state.qty={};renderForm();renderStage();}
+ else if(t.hasAttribute('data-color')){state.color=t.getAttribute('data-color');renderForm();renderStage();}
+ else if(t.hasAttribute('data-area')){state.area=t.getAttribute('data-area');if(!needs(state.view)){state.view=needs('front')?'front':'back';}renderForm();renderStage();}
+ else if(t.hasAttribute('data-view')){state.view=t.getAttribute('data-view');renderStage();}
+ else if(t.hasAttribute('data-reset')){var a=state.art[state.view];if(a){a.dx=0;a.dy=0;a.scale=1;renderStage();}}
+ else if(t.hasAttribute('data-remove')){var sd=t.getAttribute('data-remove');if(state.art[sd]){try{URL.revokeObjectURL(state.art[sd].url);}catch(x){}state.art[sd]=null;}msg('');renderForm();renderStage();}
+ else if(t.hasAttribute('data-inc')||t.hasAttribute('data-dec')){var s=t.getAttribute('data-inc')||t.getAttribute('data-dec'),q=(state.qty[s]||0)+(t.hasAttribute('data-inc')?1:-1);q=Math.max(0,Math.min(99,q));state.qty[s]=q;var cell=t.closest('.cpx__sz');cell.querySelector('input').value=q;cell.classList.toggle('has-q',q>0);msg('');summary();}
+ else if(t.hasAttribute('data-add')){addToCart();}});
+root.addEventListener('input',function(e){var t=e.target;if(t.hasAttribute('data-qty')){var q=Math.max(0,Math.min(99,parseInt(t.value,10)||0));state.qty[t.getAttribute('data-qty')]=q;t.closest('.cpx__sz').classList.toggle('has-q',q>0);msg('');summary();}
+ else if(t.hasAttribute('data-notes')){state.notes=t.value;}
+ else if(t.hasAttribute('data-scale')){var a=state.art[state.view];if(a){a.scale=Math.max(0.25,Math.min(1,(+t.value)/100));placeArt();}}});
+root.addEventListener('change',function(e){var t=e.target;if(t.hasAttribute('data-file')){setArt(t.getAttribute('data-file'),t.files&&t.files[0]);}});
+var svg=$('.cpx__svg'),drag=null;
+svg.addEventListener('pointerdown',function(e){var a=state.art[state.view];if(!a||!e.target.closest('#cpx-art'))return;drag={x:e.clientX,y:e.clientY,dx:a.dx,dy:a.dy};try{svg.setPointerCapture(e.pointerId);}catch(x){}e.preventDefault();});
+svg.addEventListener('pointermove',function(e){if(!drag)return;var a=state.art[state.view],k=svg.getScreenCTM(),sc=k?k.a:1;a.dx=drag.dx+(e.clientX-drag.x)/sc;a.dy=drag.dy+(e.clientY-drag.y)/sc;placeArt();});
+var end=function(){drag=null;};svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+renderForm();renderStage();
+})();
+</script>
+{% schema %}
+{"name":"Custom print designer","settings":[{"type":"text","id":"heading","label":"Heading","default":"Design your own print"},{"type":"textarea","id":"subheading","label":"Subheading","default":"Upload your artwork, see it on the garment and order in minutes. Perfect for teams, events, gifts and brands."},{"type":"color","id":"accent","label":"Accent colour","default":"#111111"},{"type":"range","id":"small_max","min":5,"max":40,"step":1,"unit":"cm","label":"Small print: up to (longest side)","default":15},{"type":"range","id":"medium_max","min":10,"max":60,"step":1,"unit":"cm","label":"Medium print: up to (longest side)","default":30}],"presets":[{"name":"Custom print designer"}]}
+{% endschema %}

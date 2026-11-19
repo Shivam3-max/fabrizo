@@ -34,12 +34,6 @@
       assign has_fit = true
     endif
   endfor
-  assign b1 = settings.offer_buy_1 | plus: settings.offer_free_1
-  assign b2 = settings.offer_buy_2 | plus: settings.offer_free_2
-  assign tees_price_1 = v.price | times: settings.offer_buy_1
-  assign tees_price_2 = v.price | times: settings.offer_buy_2
-  assign each_1 = tees_price_1 | divided_by: b1
-  assign each_2 = tees_price_2 | divided_by: b2
 -%}
 <div class="page-width pdp" data-pdp{% if uni != blank %} style="--uni: {{ uni_accent }}"{% endif %}>
   <nav class="crumbs" aria-label="Breadcrumb">
@@ -99,31 +93,29 @@
       <span class="price__now">{{ v.price | money }}</span>
       {%- if on_sale -%}<s class="price__was">{{ cp | money }}</s><span class="price__off">-{{ off }}%</span>{%- endif -%}
     </div>
-    {%- if settings.tabby_enabled -%}<p class="pinfo__tax">Or 4 interest-free payments of <b data-tabby>{{ v.price | divided_by: 4 | money }}</b> with Tabby</p>{%- endif -%}
+    {%- for block in section.blocks -%}{%- if block.type == '@app' -%}<div class="pinfo__app" {{ block.shopify_attributes }}>{% render block %}</div>{%- endif -%}{%- endfor -%}
+    {%- if settings.tabby_enabled -%}<p class="pinfo__tax">Or 4 interest-free payments of <b data-tabby>{{ v.price | divided_by: 4 | money }}</b> with Tabby or Tamara</p>{%- endif -%}
 
-    {%- assign offer_types = settings.offer_types | default: 'T-Shirt' | downcase -%}{%- assign ptype = product.type | downcase -%}
-    {%- liquid
-      assign tl = product.title | downcase
-      assign not_tee = false
-      if tl contains 'hoodie' or tl contains 'jogger' or tl contains 'polo' or tl contains 'shorts' or tl contains ' set'
-        assign not_tee = true
-      endif
-    -%}
-    {%- if settings.offer_enabled and section.settings.show_offer and ptype != blank and offer_types contains ptype and not_tee == false -%}
+    {%- if settings.offer_enabled and section.settings.show_offer -%}
+      {%- liquid
+        assign tier_spends = settings.offer_1_spend | append: ',' | append: settings.offer_2_spend | append: ',' | append: settings.offer_3_spend | split: ','
+        assign tier_rewards = settings.offer_1_reward | append: '|' | append: settings.offer_2_reward | append: '|' | append: settings.offer_3_reward | split: '|'
+        assign n_tiers = 0
+      -%}
       <div class="offer" data-offer>
         <div class="offer__slides">
-          <div class="offer__slide is-on">
-            <p class="offer__t">Buy {{ settings.offer_buy_1 }}, get {{ settings.offer_free_1 }} <em>free</em></p>
-            <p class="offer__s">On all tees. Mix any designs. Applied automatically in bag.</p>
-            <p class="offer__calc">{{ b1 }} tees for <b>{{ tees_price_1 | money_without_trailing_zeros }}</b> · just {{ each_1 | money_without_trailing_zeros }} each</p>
-          </div>
-          <div class="offer__slide">
-            <p class="offer__t">Buy {{ settings.offer_buy_2 }}, get {{ settings.offer_free_2 }} <em>free</em></p>
-            <p class="offer__s">Squad deal. Mix any designs. Applied automatically in bag.</p>
-            <p class="offer__calc">{{ b2 }} tees for <b>{{ tees_price_2 | money_without_trailing_zeros }}</b> · just {{ each_2 | money_without_trailing_zeros }} each</p>
-          </div>
+          {%- for sp in tier_spends -%}
+            {%- assign spn = sp | plus: 0 -%}
+            {%- if spn > 0 -%}
+              {%- assign n_tiers = n_tiers | plus: 1 -%}
+              <div class="offer__slide{% if n_tiers == 1 %} is-on{% endif %}">
+                <p class="offer__t">Spend {{ spn | times: 100 | money_without_trailing_zeros }}, get <em>{{ tier_rewards[forloop.index0] }}</em></p>
+                <p class="offer__s">Mix any designs. Applied automatically at checkout.</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
         </div>
-        <div class="offer__dots"><i class="is-on"></i><i></i></div>
+        <div class="offer__dots">{%- for i in (1..n_tiers) -%}<i{% if forloop.first %} class="is-on"{% endif %}></i>{%- endfor -%}</div>
       </div>
     {%- endif -%}
 
@@ -158,7 +150,7 @@
       {%- endunless -%}
 
       <div class="ship-bar">
-        <span data-ship-text>Add {{ settings.free_shipping_threshold | times: 100 | money }} more to unlock free delivery</span>
+        <span data-ship-text>{% if settings.offer_enabled %}Spend {{ settings.offer_1_spend | times: 100 | money }} to get {{ settings.offer_1_reward }}{% else %}Free UAE delivery on every order{% endif %}</span>
         <div class="ship-bar__track"><div class="ship-bar__fill" data-ship-fill></div></div>
       </div>
 
@@ -181,8 +173,8 @@
 
     <p class="pinfo__eta">{% render 'icon', name: 'truck', class: 'ico--sm' %}<span>Order within <b data-cutoff="{{ section.settings.cutoff_hour }}">–</b> for same-day dispatch · {{ settings.delivery_eta | default: 'Fast UAE delivery' }}</span></p>
     <div class="pinfo__trust">
-      <div>{% render 'icon', name: 'truck' %}Free delivery over AED {{ settings.free_shipping_threshold }}</div>
-      <div>{% render 'icon', name: 'exchange' %}Easy exchange</div>
+      <div>{% render 'icon', name: 'truck' %}{% if settings.free_shipping_threshold > 0 %}Free delivery over AED {{ settings.free_shipping_threshold }}{% else %}Free UAE delivery{% endif %}</div>
+      <div>{% render 'icon', name: 'exchange' %}7-day returns</div>
       <div>{% render 'icon', name: 'card' %}Cash on delivery</div>
       <div>{% render 'icon', name: 'shield' %}Secure checkout</div>
     </div>
@@ -226,23 +218,29 @@
   <div class="drawer__head"><span class="drawer__title">Size guide</span><button type="button" class="hdr__icon" data-close aria-label="Close">{% render 'icon', name: 'close' %}</button></div>
   <div class="drawer__body rte" style="padding-top:16px;padding-bottom:24px">
     {%- assign sg = pages[section.settings.size_page] -%}
-    {%- if sg.content != blank -%}{{ sg.content }}{%- else -%}<p>Size chart coming soon. Send us your height and weight on WhatsApp and we’ll tell you your size.</p>{%- endif -%}
+    {%- assign sg2 = pages[section.settings.size_page_2] -%}
+    {%- if sg.content != blank or sg2.content != blank -%}
+      {%- if sg.content != blank -%}<h2>{{ sg.title }}</h2>{{ sg.content }}{%- endif -%}
+      {%- if sg2.content != blank -%}<h2>{{ sg2.title }}</h2>{{ sg2.content }}{%- endif -%}
+    {%- else -%}<p>Size chart coming soon. Send us your height and weight on WhatsApp and we’ll tell you your size.</p>{%- endif -%}
   </div>
 </aside>
 
 {% schema %}
 {
   "name": "Product",
+  "blocks": [ { "type": "@app" } ],
   "settings": [
-    { "type": "url", "id": "hub_url", "label": "Anime hub link", "default": "/pages/anime" },
-    { "type": "checkbox", "id": "show_offer", "label": "Show bundle offer box", "default": true },
+    { "type": "url", "id": "hub_url", "label": "Anime hub link" },
+    { "type": "checkbox", "id": "show_offer", "label": "Show spend-offer box", "default": true },
     { "type": "text", "id": "fit_tip", "label": "Fit tip under sizes", "default": "Fit tip: Oversized runs big. Take your usual size for the relaxed, boxy look." },
     { "type": "range", "id": "cutoff_hour", "label": "Same-day dispatch cut-off (24h)", "min": 10, "max": 22, "step": 1, "default": 16 },
     { "type": "text", "id": "review_text", "label": "Review snippet", "info": "Use a real review" },
     { "type": "text", "id": "review_name", "label": "Reviewer", "default": "Verified buyer" },
-    { "type": "richtext", "id": "delivery_text", "label": "Delivery & exchange", "default": "<p>Delivery across all seven emirates, with cash on delivery. Wrong size? Message us on WhatsApp and we will arrange an exchange.</p>" },
+    { "type": "richtext", "id": "delivery_text", "label": "Delivery & exchange", "default": "<p>Free delivery across the UAE in 1–3 business days, with cash on delivery available. Returns are accepted within 7 days of delivery for unused items in their original packaging. Need a different size? Message us on WhatsApp.</p>" },
     { "type": "richtext", "id": "care_text", "label": "Print care", "default": "<p>Wash inside out in cold water. Do not iron directly on the print. Do not tumble dry.</p>" },
-    { "type": "text", "id": "size_page", "label": "Size guide page handle", "default": "size-guide" }
+    { "type": "text", "id": "size_page", "label": "Size guide page handle", "default": "mens-oversize-t-shirt-size-chart" },
+    { "type": "text", "id": "size_page_2", "label": "Second size guide page handle", "default": "regular-t-shirts-size-chart" }
   ]
 }
 {% endschema %}

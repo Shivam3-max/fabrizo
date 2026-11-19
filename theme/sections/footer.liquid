@@ -2,6 +2,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
 -%}
 <section class="news" aria-label="Newsletter">
@@ -55,7 +58,7 @@
     </div>
     <div class="foot__bottom">
       <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}</span>
-      <div class="foot__pay" aria-label="Payment methods"><span>VISA</span><span>MC</span><span>AMEX</span><span>APPLE PAY</span>{% if settings.tabby_enabled %}<span>TABBY</span>{% endif %}<span>COD</span></div>
+      <div class="foot__pay" aria-label="Payment methods"><span>VISA</span><span>MC</span><span>AMEX</span><span>APPLE PAY</span>{% if settings.tabby_enabled %}<span>TABBY</span><span>TAMARA</span>{% endif %}<span>COD</span></div>
     </div>
   </div>
 </footer>
@@ -67,10 +70,10 @@
     { "type": "text", "id": "news_text", "label": "Newsletter text", "default": "Early access to new anime drops and members-only codes." },
     { "type": "image_picker", "id": "logo", "label": "Footer logo (shown white)" },
     { "type": "textarea", "id": "about", "label": "About line", "default": "Anime, Arabic calligraphy and streetwear tees, printed in Dubai. New designs every week." },
-    { "type": "link_list", "id": "menu_1", "label": "Column 1", "default": "footer-help" },
-    { "type": "link_list", "id": "menu_2", "label": "Column 2", "default": "footer-shop" },
-    { "type": "link_list", "id": "menu_3", "label": "Column 3", "default": "footer-anime" },
-    { "type": "link_list", "id": "menu_4", "label": "Column 4", "default": "footer-fabrizo" },
+    { "type": "link_list", "id": "menu_1", "label": "Column 1" },
+    { "type": "link_list", "id": "menu_2", "label": "Column 2" },
+    { "type": "link_list", "id": "menu_3", "label": "Column 3" },
+    { "type": "link_list", "id": "menu_4", "label": "Column 4" },
     { "type": "text", "id": "copyright", "label": "Copyright line", "default": "Made in Dubai." }
   ]
 }

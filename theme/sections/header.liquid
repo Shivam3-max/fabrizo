@@ -16,6 +16,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
   assign chars_menu = section.settings.anime_characters_menu
 
@@ -271,7 +274,7 @@
         <div>
           <div class="sec-head" style="margin-bottom:14px">
             <h4 class="eyebrow">Pick your anime</h4>
-            <a class="sec-head__link" href="{{ section.settings.anime_hub_url }}">All anime</a>
+            <a class="sec-head__link" href="{{ section.settings.anime_hub_url | default: '/pages/anime' }}">All anime</a>
           </div>
           <div class="mega__unis">
             {%- for u in anime_menu.links limit: 10 -%}{% render 'uni-tile', link: u %}{%- endfor -%}
@@ -309,7 +312,7 @@
     { "type": "link_list", "id": "anime_characters_menu", "label": "Characters menu (anime mega menu)" },
     { "type": "text", "id": "mobile_hide_tabs", "label": "Tabs hidden on phones", "default": "Reviews", "info": "Comma separated tab titles. They stay in the menu drawer." },
     { "type": "checkbox", "id": "anime_first", "label": "Home page opens on the Anime tab", "info": "The row under the tabs shows anime chips on the home page", "default": true },
-    { "type": "url", "id": "anime_hub_url", "label": "\"All anime\" link", "default": "/pages/anime" },
+    { "type": "url", "id": "anime_hub_url", "label": "\"All anime\" link" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search Naruto, Spider-Man, Overthinker…" },
     { "type": "text", "id": "search_hints", "label": "Rotating search hints", "default": "Itachi,Spider-Man,Gojo,Iron Man,Overthinker,Arabic calligraphy", "info": "Comma separated" },
     { "type": "header", "content": "Anime mega menu" },

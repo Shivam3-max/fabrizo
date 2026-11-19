@@ -7,6 +7,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
 -%}
 {%- assign m = section.settings.menu | default: anime_menu -%}
@@ -18,7 +21,7 @@
         <h2 class="h-sec h-sec--lg">{{ section.settings.title }}</h2>
         {%- if section.settings.text != blank -%}<p class="sub">{{ section.settings.text }}</p>{%- endif -%}
       </div>
-      {%- if section.settings.link != blank -%}<a class="sec-head__link" href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>{%- endif -%}
+      <a class="sec-head__link" href="{{ section.settings.link | default: '/pages/anime' }}">{{ section.settings.link_label }}</a>
     </div>
     <div class="uni-hub__rail" style="--cols: {{ m.links.size | at_most: 9 }}">
       {%- for u in m.links -%}{% render 'uni-tile', link: u %}{%- endfor -%}
@@ -40,8 +43,8 @@
     { "type": "text", "id": "title", "label": "Heading", "default": "Pick your anime" },
     { "type": "text", "id": "text", "label": "Text", "default": "Every anime has its own home. Tap one to see all its designs." },
     { "type": "link_list", "id": "menu", "label": "Anime menu", "info": "Defaults to the theme's anime universes menu" },
-    { "type": "link_list", "id": "characters", "label": "Characters menu", "default": "anime-characters" },
-    { "type": "url", "id": "link", "label": "Link", "default": "/pages/anime" },
+    { "type": "link_list", "id": "characters", "label": "Characters menu" },
+    { "type": "url", "id": "link", "label": "Link" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "All anime" },
     { "type": "checkbox", "id": "tight", "label": "Less spacing", "default": false }
   ],

@@ -2,6 +2,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
 -%}
 <div class="srch" data-drawer="search" aria-hidden="true" role="dialog" aria-label="Search">

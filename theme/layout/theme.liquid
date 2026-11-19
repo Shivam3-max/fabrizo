@@ -38,9 +38,9 @@
     window.Fabrizo = {
       routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | append: '.js' | json }}, cartChange: {{ routes.cart_change_url | append: '.js' | json }}, search: {{ routes.search_url | json }}, suggest: {{ routes.predictive_search_url | append: '.json' | json }} },
       moneyFormat: {{ shop.money_format | json }},
-      freeShipping: {{ settings.free_shipping_threshold | default: 99 | times: 100 }},
+      freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 }},
       whatsapp: {{ settings.whatsapp_number | json }},
-      offerTiers: [{ buy: {{ settings.offer_buy_1 | default: 3 }}, free: {{ settings.offer_free_1 | default: 1 }} }, { buy: {{ settings.offer_buy_2 | default: 5 }}, free: {{ settings.offer_free_2 | default: 2 }} }],
+      offerTiers: [{ spend: {{ settings.offer_1_spend | default: 0 | times: 100 }}, reward: {{ settings.offer_1_reward | json }} }, { spend: {{ settings.offer_2_spend | default: 0 | times: 100 }}, reward: {{ settings.offer_2_reward | json }} }, { spend: {{ settings.offer_3_spend | default: 0 | times: 100 }}, reward: {{ settings.offer_3_reward | json }} }],
       offerOn: {{ settings.offer_enabled | json }}
     };
   </script>

@@ -1,8 +1,17 @@
 {%- liquid
-  assign main = linklists['main-menu']
+  assign main = settings.drawer_menu
+  if main.links == blank
+    assign main = linklists[settings.drawer_menu]
+  endif
+  if main.links == blank
+    assign main = linklists['main-menu']
+  endif
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
 -%}
 <aside class="drawer drawer--left" data-drawer="mnav" aria-hidden="true" aria-label="Menu" tabindex="-1">

@@ -3,10 +3,6 @@
     "title": "Anime",
     "template": "page.anime"
   },
-  "reviews": {
-    "title": "Reviews",
-    "template": "page.reviews"
-  },
   "about-us": {
     "title": "About us",
     "template": "page.about"
@@ -27,5 +23,15 @@
   "customize-your-print": {
     "title": "Custom Print",
     "template": "page.custom-print"
+  },
+  "mens-oversize-t-shirt-size-chart": {
+    "title": "Men's Oversize T-Shirt Size Chart",
+    "template": "page",
+    "content": "<p>(Preview) The store's real oversized size chart shows here.</p>"
+  },
+  "regular-t-shirts-size-chart": {
+    "title": "Regular T-Shirts Size Chart",
+    "template": "page",
+    "content": "<p>(Preview) The store's real regular size chart shows here.</p>"
   }
 }

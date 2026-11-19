@@ -1,5 +1,5 @@
 {
-  "main-menu": {
+  "fz-main-menu": {
     "title": "Main menu",
     "links": [
       {
@@ -17,7 +17,7 @@
             "links": [
               {
                 "title": "Oversized Tees",
-                "url": "/collections/oversized"
+                "url": "/collections/unisex-oversized"
               },
               {
                 "title": "Graphic Tees",
@@ -45,7 +45,7 @@
               },
               {
                 "title": "All T-Shirts",
-                "url": "/collections/t-shirts"
+                "url": "/collections/all?filter.p.product_type=T-Shirt"
               }
             ]
           },
@@ -82,11 +82,6 @@
           {
             "title": "Couples",
             "url": "/collections/couples-collection",
-            "links": []
-          },
-          {
-            "title": "Custom Print",
-            "url": "/pages/customize-your-print",
             "links": []
           }
         ]
@@ -248,13 +243,8 @@
         ]
       },
       {
-        "title": "Reviews",
-        "url": "/pages/reviews",
-        "links": []
-      },
-      {
-        "title": "Sale",
-        "url": "/collections/sale",
+        "title": "Custom Print",
+        "url": "/pages/customize-your-print",
         "links": []
       }
     ]
@@ -361,23 +351,23 @@
       }
     ]
   },
-  "footer-help": {
+  "fz-footer-help": {
     "title": "Help",
     "links": [
       {
-        "title": "Track your order",
+        "title": "Contact & order help",
         "url": "/pages/contact"
       },
       {
-        "title": "Size guide",
-        "url": "/pages/size-guide"
+        "title": "Oversized size chart",
+        "url": "/pages/mens-oversize-t-shirt-size-chart"
       },
       {
-        "title": "FAQs",
-        "url": "/pages/faq"
+        "title": "Regular size chart",
+        "url": "/pages/regular-t-shirts-size-chart"
       },
       {
-        "title": "Exchange & returns",
+        "title": "Refund policy",
         "url": "/policies/refund-policy"
       },
       {
@@ -394,12 +384,16 @@
       }
     ]
   },
-  "footer-shop": {
+  "fz-footer-shop": {
     "title": "Shop",
     "links": [
       {
         "title": "New In",
         "url": "/collections/new-arrivals"
+      },
+      {
+        "title": "Oversized Tees",
+        "url": "/collections/unisex-oversized"
       },
       {
         "title": "Marvel",
@@ -408,10 +402,6 @@
       {
         "title": "Mood Tees",
         "url": "/collections/mood-tees"
-      },
-      {
-        "title": "Oversized Tees",
-        "url": "/collections/oversized"
       },
       {
         "title": "Hoodies",
@@ -435,7 +425,7 @@
       }
     ]
   },
-  "footer-anime": {
+  "fz-footer-anime": {
     "title": "Anime",
     "links": [
       {
@@ -464,7 +454,7 @@
       }
     ]
   },
-  "footer-fabrizo": {
+  "fz-footer-fabrizo": {
     "title": "Fabrizo",
     "links": [
       {
@@ -472,12 +462,12 @@
         "url": "/pages/about-us"
       },
       {
-        "title": "Reviews",
-        "url": "/pages/reviews"
-      },
-      {
         "title": "Contact us",
         "url": "/pages/contact"
+      },
+      {
+        "title": "Download the app",
+        "url": "https://play.google.com/store/apps/details?id=com.fabrizofashion.appyantra"
       }
     ]
   }

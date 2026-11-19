@@ -36,10 +36,13 @@ const checkSettingDefs = (where, defs = []) => {
     ok(!ids.has(d.id), `${where}: duplicate setting id ${d.id}`); ids.add(d.id);
     if (d.type === 'range') {
       ok(d.default !== undefined, `${where}.${d.id}: range needs default`);
+      ok((d.max - d.min) / d.step >= 2, `${where}.${d.id}: Shopify needs at least 3 range steps`);
       ok((d.max - d.min) / d.step <= 101, `${where}.${d.id}: range has more than 101 steps`);
       ok(Number.isInteger(Math.round(((d.default - d.min) / d.step) * 1e6) / 1e6), `${where}.${d.id}: default ${d.default} not on step`);
       ok(d.default >= d.min && d.default <= d.max, `${where}.${d.id}: default out of range`);
     }
+    if (d.type === 'url' && d.default !== undefined) ok(['/collections', '/collections/all'].includes(d.default), `${where}.${d.id}: Shopify only allows /collections or /collections/all as a url default`);
+    if (d.type === 'link_list' && d.default !== undefined) ok(['main-menu', 'footer'].includes(d.default), `${where}.${d.id}: Shopify only allows main-menu or footer as a link_list default`);
     if (d.type === 'select') ok(d.options.some((o) => o.value === d.default), `${where}.${d.id}: select default not an option`);
     if (d.type === 'link_list' && d.default) ok(['main-menu', 'footer'].includes(d.default) || true, '');
   }
@@ -60,6 +63,7 @@ const checkSectionUse = (where, key, def) => {
     ok(!(typeof v === 'string' && v.startsWith('product:')), `${where}/${key}.${k}: local-only image ref`);
   }
   for (const [bk, b] of Object.entries(def.blocks || {})) {
+    if (String(b.type).startsWith('shopify://apps/')) { ok((schemas[def.type].blocks || []).some((x) => x.type === '@app'), `${where}/${key}/${bk}: app block in a section without @app`); continue; }
     ok(!!blockIds[def.type][b.type], `${where}/${key}/${bk}: unknown block type ${b.type}`);
     for (const k of Object.keys(b.settings || {})) ok(blockIds[def.type][b.type]?.has(k), `${where}/${key}/${bk}: unknown block setting "${k}"`);
   }
@@ -88,12 +92,12 @@ async function rendered() {
   const get = async (u) => { const r = await fetch(BASE + u); return { status: r.status, html: await r.text() }; };
   const count = (html, re) => (html.match(re) || []).length;
   const PDP = '/products/goku-ultra-instinct-oversized-t-shirt-dragon-ball-anime-streetwear-fabrizo-fashion';
-  const routes = ['/', '/collections/naruto', '/collections/marvel', '/collections/mood-tees', '/collections/all', '/collections/anime-collection', '/collections/hoodies', '/collections', PDP, '/products/custom-print-hoodie', '/search?q=itachi', '/search', '/cart', '/pages/anime', '/pages/reviews', '/pages/about-us', '/pages/contact', '/pages/faq', '/pages/size-guide', '/pages/customize-your-print'];
+  const routes = ['/', '/collections/naruto', '/collections/marvel', '/collections/mood-tees', '/collections/all', '/collections/anime-collection', '/collections/hoodies', '/collections', PDP, '/products/custom-print-hoodie', '/search?q=itachi', '/search', '/cart', '/pages/anime', '/pages/about-us', '/pages/contact', '/pages/faq', '/pages/size-guide', '/pages/customize-your-print'];
   for (const r of routes) {
     const { status, html } = await get(r);
     ok(status === 200, `${r}: status ${status}`);
     ok(!/Render error|Liquid error|undefined filter/i.test(html), `${r}: render error`);
-    ok(count(html, /class="hdr__tab[ "]/g) === 6, `${r}: 6 header tabs (Shop, Anime, Marvel, Mood Tees, Reviews, Sale)`);
+    ok(count(html, /class="hdr__tab[ "]/g) === 5, `${r}: 5 header tabs (Shop, Anime, Marvel, Mood Tees, Custom Print)`);
     ok(count(html, /hdr__sublink hdr__sublink--uni[^"]*" style="--uni/g) === 10, `${r}: 10 anime chips (All Anime + 9)`);
     ok(/All Marvel<span/.test(html) && /All Mood Tees<span/.test(html), `${r}: Marvel + Mood Tees chip rows`);
     ok(/data-mega="w3"/.test(html) && /data-mega="w4"/.test(html), `${r}: Marvel + Mood Tees mega menus`);
@@ -133,6 +137,13 @@ async function rendered() {
   const hood = (await get('/products/naruto-anime-premium-hoodie-black-fabrizo-fashion')).html;
   ok(/\/collections\/naruto\?filter\.p\.product_type=Hoodie">Hoodies</.test(hood), 'pdp breadcrumb: Naruto / Hoodies');
   ok(/tlinks--panel/.test(home) && /tlinks--mega/.test(home) && /tlinks--drawer/.test(home), 'home: type links in spotlight, mega, drawer');
+  ok(!/SAMPLE REVIEW/.test(home), 'home: no sample reviews');
+  ok(/Spend AED 150, get 10% off/.test(home) && !/Buy 3 Get 1/i.test(home), 'home: real spend offers in announcement');
+  const tee = (await get(PDP)).html;
+  ok(/Spend AED 150, get <em>10% off<\/em>/.test(tee) && /Spend AED 450, get <em>20% off<\/em>/.test(tee), 'pdp: three spend-offer slides');
+  ok(/7-day returns/.test(tee) && /Tabby or Tamara/.test(tee), 'pdp: returns + instalments copy');
+  const cp = (await get('/pages/customize-your-print')).html;
+  ok(/class="cpx"/.test(cp), 'custom print page uses the store designer');
   const all = (await get('/collections/all')).html;
   ok(/<details class="facet"/.test(all) && /filter\.v\.option\.size/.test(all), 'all: filters render');
   const xl = (await get('/collections/anime-collection?filter.v.option.size=XL')).html;

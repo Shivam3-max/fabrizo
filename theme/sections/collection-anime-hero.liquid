@@ -7,6 +7,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
   assign h = collection.handle
   capture accent
@@ -67,7 +70,7 @@
 <nav class="uni-switch" aria-label="Switch anime">
   <div class="page-width uni-switch__row" data-uni-switch>
     <span class="uni-switch__label">Switch anime</span>
-    <a class="pill{% if h == 'anime-collection' %} is-on{% endif %}" href="{{ section.settings.all_url }}">All anime</a>
+    <a class="pill{% if h == 'anime-collection' %} is-on{% endif %}" href="{{ section.settings.all_url | default: '/collections/anime-collection' }}">All anime</a>
     {%- for u in anime_menu.links -%}
       {%- capture a2 -%}{% render 'uni', handle: u.object.handle, get: 'accent', collection: u.object %}{%- endcapture -%}
       <a class="pill pill--uni{% if u.object.handle == h %} is-on{% endif %}" style="--uni: {{ a2 }}" href="{{ u.url }}"{% if u.object.handle == h %} aria-current="page"{% endif %}><span class="uni-dot"></span>{{ u.title }}<span class="hdr__sublink-count">{{ u.object.products_count }}</span></a>
@@ -80,9 +83,9 @@
   "name": "Anime collection hero",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Leave empty to use the world's own label (Anime universe, Marvel universe, Mood Tees)" },
-    { "type": "url", "id": "hub_url", "label": "Anime hub link", "default": "/pages/anime" },
+    { "type": "url", "id": "hub_url", "label": "Anime hub link" },
     { "type": "checkbox", "id": "switcher", "label": "Show sticky anime switcher", "default": true },
-    { "type": "url", "id": "all_url", "label": "\"All anime\" link", "default": "/collections/anime-collection" }
+    { "type": "url", "id": "all_url", "label": "\"All anime\" link" }
   ]
 }
 {% endschema %}

@@ -24,8 +24,53 @@
       "type": "world-tiles",
       "settings": {
         "title": "Shop by world",
-        "eyebrow": "Keep exploring"
-      }
+        "eyebrow": "Keep exploring",
+        "tight": true
+      },
+      "blocks": {
+        "w1": {
+          "type": "world",
+          "settings": {
+            "collection": "anime-collection",
+            "label": "Anime",
+            "image_product": "itachi-uchiha-red-moon-oversized-t-shirt-anime-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "w2": {
+          "type": "world",
+          "settings": {
+            "collection": "marvel",
+            "label": "Marvel",
+            "image_product": "spider-man-web-oversized-t-shirt-marvel-streetwear-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "w3": {
+          "type": "world",
+          "settings": {
+            "collection": "mood-tees",
+            "label": "Mood Tees",
+            "image_product": "mentally-offline-oversized-t-shirt-streetwear-graphic-tee-fabrizo-fashion",
+            "image_n": 1
+          }
+        },
+        "w4": {
+          "type": "world",
+          "settings": {
+            "collection": "new-arrivals-arabic-calligraphy",
+            "label": "Arabic",
+            "image_product": "haq-arabic-calligraphy-oversized-t-shirt-premium-streetwear-collection",
+            "image_n": 3
+          }
+        }
+      },
+      "block_order": [
+        "w1",
+        "w2",
+        "w3",
+        "w4"
+      ]
     }
   },
   "order": [

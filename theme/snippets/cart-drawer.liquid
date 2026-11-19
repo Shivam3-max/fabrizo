@@ -3,6 +3,9 @@
   assign anime_menu = settings.anime_menu
   if anime_menu.links == blank
     assign anime_menu = linklists[settings.anime_menu]
+    if anime_menu.links == blank
+      assign anime_menu = linklists['anime']
+    endif
   endif
 -%}
 <aside class="drawer" id="cart-drawer" data-drawer="cart" aria-label="Your bag" aria-hidden="true" tabindex="-1">
@@ -11,10 +14,10 @@
     <button type="button" class="hdr__icon" data-close aria-label="Close bag">{% render 'icon', name: 'close' %}</button>
   </div>
   <div class="cart-progress" data-ship-bar>
-    <span data-ship-text>Add {{ settings.free_shipping_threshold | default: 99 | times: 100 | money }} more to unlock free delivery</span>
+    <span data-ship-text>{% if settings.offer_enabled %}Spend {{ settings.offer_1_spend | times: 100 | money }} to get {{ settings.offer_1_reward }}{% else %}Free UAE delivery on every order{% endif %}</span>
     <div class="ship-bar__track"><div class="ship-bar__fill" data-ship-fill></div></div>
   </div>
-  {%- if settings.offer_enabled -%}<div class="cart-offer" data-offer-line>{% render 'icon', name: 'gift', class: 'ico--sm' %}<span data-offer-text>Buy {{ settings.offer_buy_1 }} get {{ settings.offer_free_1 }} free on tees. <b>Applied automatically.</b></span></div>{%- endif -%}
+  <div class="cart-offer">{% render 'icon', name: 'truck', class: 'ico--sm' %}<span>{% if settings.free_shipping_threshold > 0 %}Free UAE delivery over {{ settings.free_shipping_threshold | times: 100 | money_without_trailing_zeros }}{% else %}<b>Free UAE delivery</b> on every order{% endif %} · Cash on delivery available</span></div>
   <div class="drawer__body" data-cart-lines></div>
   <div class="drawer__foot" data-cart-foot>
     <div class="cart-sum"><span>Subtotal</span><span data-cart-total>{{ cart.total_price | money }}</span></div>

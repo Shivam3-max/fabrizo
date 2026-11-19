@@ -161,23 +161,29 @@
   /* ---------------- cart ---------------- */
   const countEls = () => $$('[data-cart-count]');
   async function getCart() { const r = await fetch(`${F.routes.cart}.js`, { headers: { Accept: 'application/json' } }); return r.json(); }
-  function offerText(count) {
-    if (!F.offerOn) return '';
-    const [t1, t2] = F.offerTiers;
-    if (count >= t2.buy + t2.free) return `<b>${t2.free} free tees unlocked.</b> Applied at checkout.`;
-    if (count >= t1.buy + t1.free) return `<b>${t1.free} free tee unlocked.</b> Add ${t2.buy + t2.free - count} more for ${t2.free} free.`;
-    const need = t1.buy + t1.free - count;
-    return `Add ${need} more tee${need === 1 ? '' : 's'} and get <b>${t1.free} free</b>. Applied automatically.`;
+  /* spend offers (e.g. AED 150 → 10% off, 250 → free tee, 450 → 20% off) */
+  const tiers = () => (F.offerTiers || []).filter((t) => t.spend > 0).sort((a, b) => a.spend - b.spend);
+  function progress(total) {
+    if (F.offerOn && tiers().length) {
+      const next = tiers().find((t) => total < t.spend);
+      const got = [...tiers()].reverse().find((t) => total >= t.spend);
+      if (next) return { pct: Math.min(100, (total / next.spend) * 100), html: `Spend <b>${money(next.spend - total)}</b> more to get <b>${esc(next.reward)}</b>${got ? ` · ${esc(got.reward)} unlocked` : ''}` };
+      return { pct: 100, html: `<b>${esc(got.reward)} unlocked</b> · applied at checkout` };
+    }
+    if (F.freeShipping > 0) {
+      const left = Math.max(0, F.freeShipping - total);
+      return { pct: Math.min(100, (total / F.freeShipping) * 100), html: left > 0 ? `Add <b>${money(left)}</b> more to unlock free delivery` : '<b>Free UAE delivery unlocked</b>' };
+    }
+    return { pct: 100, html: '<b>Free UAE delivery on every order</b>' };
   }
   async function renderCart(cart) {
     cart = cart || await getCart();
     countEls().forEach((el) => { el.textContent = cart.item_count; el.dataset.count = cart.item_count; });
     const cnt = $('[data-cart-count-text]'); if (cnt) cnt.textContent = `(${cart.item_count})`;
     const total = $('[data-cart-total]'); if (total) total.textContent = money(cart.total_price);
-    const left = Math.max(0, F.freeShipping - cart.total_price);
-    $$('[data-ship-text]').forEach((el) => { el.innerHTML = left > 0 ? `Add <b>${money(left)}</b> more to unlock free delivery` : '<b>Free UAE delivery unlocked</b>'; });
-    $$('[data-ship-fill]').forEach((el) => { el.style.width = `${Math.min(100, (cart.total_price / F.freeShipping) * 100)}%`; });
-    const ot = $('[data-offer-text]'); if (ot) ot.innerHTML = offerText(cart.item_count);
+    const pr = progress(cart.total_price);
+    $$('[data-ship-text]').forEach((el) => { el.innerHTML = pr.html; });
+    $$('[data-ship-fill]').forEach((el) => { el.style.width = `${pr.pct}%`; });
     const box = $('[data-cart-lines]');
     const foot = $('[data-cart-foot]');
     if (!box) return cart;

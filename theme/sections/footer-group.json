@@ -2,7 +2,17 @@
   "type": "footer",
   "name": "Footer group",
   "sections": {
-    "footer": { "type": "footer", "settings": {} }
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "menu_1": "fz-footer-help",
+        "menu_2": "fz-footer-shop",
+        "menu_3": "fz-footer-anime",
+        "menu_4": "fz-footer-fabrizo"
+      }
+    }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

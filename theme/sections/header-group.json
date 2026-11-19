@@ -5,14 +5,65 @@
     "announcement": {
       "type": "announcement-bar",
       "blocks": {
-        "a1": { "type": "message", "settings": { "text": "Buy 3 Get 1 Free on all tees", "link": "/collections/t-shirts" } },
-        "a2": { "type": "message", "settings": { "text": "New anime drop: Goku Ultra Instinct is live", "link": "/collections/dragon-ball" } },
-        "a3": { "type": "message", "settings": { "text": "Free UAE delivery over AED 99", "link": "" } },
-        "a4": { "type": "message", "settings": { "text": "Cash on delivery all over the UAE", "link": "" } }
+        "a1": {
+          "type": "message",
+          "settings": {
+            "text": "Free delivery across the UAE on every order",
+            "link": ""
+          }
+        },
+        "a2": {
+          "type": "message",
+          "settings": {
+            "text": "Spend AED 150, get 10% off",
+            "link": "/collections/new-arrivals"
+          }
+        },
+        "a3": {
+          "type": "message",
+          "settings": {
+            "text": "Spend AED 250, get a FREE Regular Tee",
+            "link": "/collections/new-arrivals"
+          }
+        },
+        "a4": {
+          "type": "message",
+          "settings": {
+            "text": "Spend AED 450, get 20% off",
+            "link": "/collections/new-arrivals"
+          }
+        },
+        "a5": {
+          "type": "message",
+          "settings": {
+            "text": "Tabby and Tamara available · Split into 4 payments",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["a1", "a2", "a3", "a4"]
+      "block_order": [
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5"
+      ]
     },
-    "header": { "type": "header", "settings": { "menu": "main-menu", "anime_characters_menu": "anime-characters", "mega_image_product": "naruto-anime-premium-hoodie-black-fabrizo-fashion", "mega_image_n": 4, "mega_image_label": "Naruto premium hoodie", "mega_image_link": "/collections/naruto" } }
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "fz-main-menu",
+        "anime_characters_menu": "anime-characters",
+        "mega_image_product": "naruto-anime-premium-hoodie-black-fabrizo-fashion",
+        "mega_image_n": 4,
+        "mega_image_label": "Naruto premium hoodie",
+        "mega_image_link": "/collections/naruto",
+        "mobile_hide_tabs": "Custom Print"
+      }
+    }
   },
-  "order": ["announcement", "header"]
+  "order": [
+    "announcement",
+    "header"
+  ]
 }

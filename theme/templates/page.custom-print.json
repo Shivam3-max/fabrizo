@@ -1,14 +1,11 @@
 {
   "sections": {
-    "hero": { "type": "hero-slider", "settings": { "height": 440, "height_mobile": 480, "autoplay": 0 },
-      "blocks": { "s1": { "type": "slide", "settings": { "image_product": "custom-print-oversized-t-shirt", "image_n": 1, "badge": "Custom print", "title": "Design your own", "text": "Your art, your name, your anime. Printed in Dubai.", "btn1": "Oversized tee", "btn1_link": "/products/custom-print-oversized-t-shirt", "btn1_red": true, "btn2": "Hoodie", "btn2_link": "/products/custom-print-hoodie" } } }, "block_order": ["s1"] },
-    "steps": { "type": "steps", "settings": { "title": "How it works", "btn": "Start with an oversized tee", "link": "/products/custom-print-oversized-t-shirt" },
-      "blocks": {
-        "a": { "type": "step", "settings": { "title": "Pick the garment", "text": "Oversized tee, regular tee, hoodie or polo." } },
-        "b": { "type": "step", "settings": { "title": "Choose print area and size", "text": "Front, back or both. Small, medium or large print." } },
-        "c": { "type": "step", "settings": { "title": "Send your design", "text": "Upload it or send it on WhatsApp after ordering. We confirm before printing." } }
-      }, "block_order": ["a", "b", "c"] },
-    "products": { "type": "product-carousel", "settings": { "collection": "custom-print", "title": "Choose your base", "limit": 4, "per_row": 4, "tight": true } }
+    "main": {
+      "type": "custom-print-designer",
+      "settings": {}
+    }
   },
-  "order": ["hero", "steps", "products"]
+  "order": [
+    "main"
+  ]
 }
